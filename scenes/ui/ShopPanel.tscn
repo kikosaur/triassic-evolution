@@ -1,0 +1,79 @@
+[gd_scene load_steps=11 format=3 uid="uid://c5xetkp3c7xg"]
+
+[ext_resource type="PackedScene" uid="uid://crywa5p3pvw1t" path="res://scenes/ui/ShopItem.tscn" id="1_8d4ti"]
+[ext_resource type="Resource" uid="uid://p8ukqi65mh8o" path="res://resources/dinos/00_Archosaur.tres" id="2_0afna"]
+[ext_resource type="Resource" uid="uid://bekjfxkah4yxd" path="res://resources/dinos/01_Lagosuchus.tres" id="3_72rgm"]
+[ext_resource type="Resource" uid="uid://nyylx8d6ovjs" path="res://resources/dinos/02_Eoraptor.tres" id="4_do0se"]
+[ext_resource type="Resource" uid="uid://dq68eang4ywvi" path="res://resources/dinos/03_Herrerasaurus.tres" id="5_k0b4r"]
+[ext_resource type="Resource" uid="uid://dluy8jn0imcw8" path="res://resources/dinos/04_Panphagia.tres" id="6_4vjsq"]
+[ext_resource type="Resource" uid="uid://cegl2eoxainc0" path="res://resources/dinos/05_Coelophysis.tres" id="7_0jjce"]
+[ext_resource type="Resource" uid="uid://0onbpuep2kdd" path="res://resources/dinos/06_Plateosaurus.tres" id="8_0pf5p"]
+[ext_resource type="Resource" uid="uid://dpqhonnoddjno" path="res://resources/dinos/07_Liliensternus.tres" id="9_00oct"]
+[ext_resource type="Resource" uid="uid://clcnqyunc53nh" path="res://resources/dinos/08_Riojasaurus.tres" id="10_s6rdr"]
+
+[node name="ShopPanel" type="Panel"]
+offset_right = 1000.0
+offset_bottom = 600.0
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "DINO MARKET"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 27.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemGrid" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="Item_Archosaur" parent="ScrollContainer/ItemGrid" instance=ExtResource("1_8d4ti")]
+layout_mode = 2
+species_data = ExtResource("2_0afna")
+required_research_id = "node_archosaur"
+
+[node name="Item_Lagosuchus" parent="ScrollContainer/ItemGrid" instance=ExtResource("1_8d4ti")]
+layout_mode = 2
+species_data = ExtResource("3_72rgm")
+required_research_id = "node_lagosuchus"
+
+[node name="Item_Eoraptor" parent="ScrollContainer/ItemGrid" instance=ExtResource("1_8d4ti")]
+layout_mode = 2
+species_data = ExtResource("4_do0se")
+required_research_id = "node_eoraptor"
+
+[node name="Item_Herrera" parent="ScrollContainer/ItemGrid" instance=ExtResource("1_8d4ti")]
+layout_mode = 2
+species_data = ExtResource("5_k0b4r")
+required_research_id = "node_herrera"
+
+[node name="Item_Panphagia" parent="ScrollContainer/ItemGrid" instance=ExtResource("1_8d4ti")]
+layout_mode = 2
+species_data = ExtResource("6_4vjsq")
+required_research_id = "node_panphagia"
+
+[node name="Item_Coelo" parent="ScrollContainer/ItemGrid" instance=ExtResource("1_8d4ti")]
+layout_mode = 2
+species_data = ExtResource("7_0jjce")
+required_research_id = "node_coelo"
+
+[node name="Item_Plateo" parent="ScrollContainer/ItemGrid" instance=ExtResource("1_8d4ti")]
+layout_mode = 2
+species_data = ExtResource("8_0pf5p")
+required_research_id = "node_plateo"
+
+[node name="Item_Lilien" parent="ScrollContainer/ItemGrid" instance=ExtResource("1_8d4ti")]
+layout_mode = 2
+species_data = ExtResource("9_00oct")
+required_research_id = "node_lilien"
+
+[node name="Item_Rioja" parent="ScrollContainer/ItemGrid" instance=ExtResource("1_8d4ti")]
+layout_mode = 2
+species_data = ExtResource("10_s6rdr")
+required_research_id = "node_riojasaurus"

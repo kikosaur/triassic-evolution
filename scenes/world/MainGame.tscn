@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bm35tyebotbck"]
+[gd_scene load_steps=14 format=3 uid="uid://bm35tyebotbck"]
 
 [ext_resource type="Script" uid="uid://ca1ywh1c2458h" path="res://scenes/world/MainGame.gd" id="1_o1bk3"]
 [ext_resource type="PackedScene" uid="uid://c338ymwmyekeu" path="res://scenes/ui/TopPanel.tscn" id="2_70oxy"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://lmy01cu6ufgi" path="res://scenes/ui/HabitatPanel.tscn" id="8_kyv22"]
 [ext_resource type="PackedScene" uid="uid://d1pvlplrkkm5d" path="res://scenes/ui/ResearchMenu.tscn" id="9_740hf"]
 [ext_resource type="PackedScene" uid="uid://rc6mwphwcjrk" path="res://scenes/ui/ExtinctionPanel.tscn" id="10_ue8bh"]
+[ext_resource type="PackedScene" uid="uid://c5xetkp3c7xg" path="res://scenes/ui/ShopPanel.tscn" id="12_emtlf"]
 
 [sub_resource type="Resource" id="Resource_lnpaj"]
 script = ExtResource("7_emtlf")
@@ -47,27 +48,34 @@ mouse_filter = 1
 
 [node name="TopPanel" parent="UI_Layer" instance=ExtResource("2_70oxy")]
 
-[node name="BtnSpawnArchosaur" type="Button" parent="UI_Layer"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -31.0
-offset_right = 193.0
-grow_vertical = 0
-text = "Buy Archosaur (10 DNA)"
-
 [node name="HabitatPanel" parent="UI_Layer" instance=ExtResource("8_kyv22")]
 
 [node name="ResearchMenu" parent="UI_Layer" instance=ExtResource("9_740hf")]
 visible = false
 
 [node name="BtnToggleResearch" type="Button" parent="UI_Layer"]
-offset_left = 197.0
+offset_left = 105.0
 offset_top = 689.0
-offset_right = 276.0
+offset_right = 184.0
 offset_bottom = 720.0
 text = "Research
 "
 
 [node name="ExtinctionPanel" parent="UI_Layer" instance=ExtResource("10_ue8bh")]
 visible = false
+
+[node name="ShopPanel" parent="UI_Layer" instance=ExtResource("12_emtlf")]
+visible = false
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_vertical = 2
+
+[node name="BtnToggleShop" type="Button" parent="UI_Layer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 8.0
+grow_vertical = 0
+text = "Dino Market"

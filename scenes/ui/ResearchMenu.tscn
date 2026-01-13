@@ -1,51 +1,276 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1pvlplrkkm5d"]
+[gd_scene load_steps=25 format=3 uid="uid://d1pvlplrkkm5d"]
 
 [ext_resource type="PackedScene" uid="uid://c00m4rc8me8mk" path="res://scenes/ui/ResearchNode.tscn" id="1_227w5"]
 [ext_resource type="Resource" uid="uid://fx47e8phptlw" path="res://resources/research/Res_Archosaur.tres" id="2_gfy1o"]
 [ext_resource type="Resource" uid="uid://8io20j1xjreq" path="res://resources/research/Res_UprightStance.tres" id="3_nfsx2"]
 [ext_resource type="Resource" uid="uid://cgwit1labfvwm" path="res://resources/research/Res_Lagosuchus.tres" id="4_0wg30"]
-[ext_resource type="Resource" uid="uid://b44xm7t2vwv6m" path="res://resources/research/Res_Apex.tres" id="5_nfsx2"]
+[ext_resource type="Resource" uid="uid://bialkqdb5tb62" path="res://resources/research/Res_PerforateAcetabulum.tres" id="4_4kojt"]
+[ext_resource type="Resource" uid="uid://cg54mtrh5wsin" path="res://resources/research/Res_SerratedTeeth.tres" id="5_8k568"]
+[ext_resource type="Resource" uid="uid://dbp8euycw0w57" path="res://resources/research/Res_Pools.tres" id="7_73oii"]
+[ext_resource type="Resource" uid="uid://bykmvr4llfrg" path="res://resources/research/Res_Intramandibular.tres" id="8_3oy8e"]
+[ext_resource type="Resource" uid="uid://dscotii4shv6t" path="res://resources/research/Res_Herrerasaurus.tres" id="9_i47bq"]
+[ext_resource type="Resource" uid="uid://c4l4bkowuw5ay" path="res://resources/research/Res_HollowBones.tres" id="10_r1lwx"]
+[ext_resource type="Resource" uid="uid://c0syean16w5p2" path="res://resources/research/Res_Coelophysis.tres" id="11_l60p0"]
+[ext_resource type="Resource" uid="uid://bpq45tje4l0hw" path="res://resources/research/Res_CranialCrest.tres" id="12_xej3i"]
+[ext_resource type="Resource" uid="uid://8knb2eqbd36g" path="res://resources/research/Res_Liliensternus.tres" id="13_ojvhf"]
+[ext_resource type="Resource" uid="uid://y6dvy44354se" path="res://resources/research/Res_LeafShapedTeeth.tres" id="14_n8xt4"]
+[ext_resource type="Resource" uid="uid://ccrmcdysa765t" path="res://resources/research/Res_Eoraptor.tres" id="15_kqhru"]
+[ext_resource type="Resource" uid="uid://bjm8e6r15of0n" path="res://resources/research/Res_Ferns.tres" id="16_37e72"]
+[ext_resource type="Resource" uid="uid://ckainrtb3skft" path="res://resources/research/Res_Panphagia.tres" id="17_qj14m"]
+[ext_resource type="Resource" uid="uid://dqpvaomvoc54q" path="res://resources/research/Res_River.tres" id="18_03cs3"]
+[ext_resource type="Resource" uid="uid://dokfn21d77bsq" path="res://resources/research/Res_Gastroliths.tres" id="19_4r7it"]
+[ext_resource type="Resource" uid="uid://ceui3yrw45r6k" path="res://resources/research/Res_Plateosaurus.tres" id="20_yvj5v"]
+[ext_resource type="Resource" uid="uid://bieatstnxlvki" path="res://resources/research/Res_Cycads.tres" id="21_ha6hh"]
+[ext_resource type="Resource" uid="uid://cdqs1216c16xt" path="res://resources/research/Res_Quadrupedalism.tres" id="22_kw27y"]
+[ext_resource type="Resource" uid="uid://5oqoew1xql4g" path="res://resources/research/Res_Gigantism.tres" id="23_pwsc5"]
+[ext_resource type="Resource" uid="uid://cnip6u6ff77pd" path="res://resources/research/Res_Forest.tres" id="24_hsv2h"]
 
-[node name="ResearchMenu" type="Panel"]
+[node name="ResearchMenu" type="ScrollContainer"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -250.0
-offset_right = 400.0
-offset_bottom = 250.0
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 360.0
+offset_bottom = 240.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Node_Archosaur" parent="." instance=ExtResource("1_227w5")]
+[node name="TreeContainer" type="Control" parent="."]
+custom_minimum_size = Vector2(2500, 800)
+layout_mode = 2
+
+[node name="Node_Archosaur" parent="TreeContainer" instance=ExtResource("1_227w5")]
 layout_mode = 0
-offset_left = 100.0
-offset_top = 250.0
-offset_right = 100.0
-offset_bottom = 250.0
+offset_left = 50.0
+offset_top = 350.0
+offset_right = 50.0
+offset_bottom = 350.0
 my_data = ExtResource("2_gfy1o")
 
-[node name="Node_Upright" parent="." node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Upright" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
-offset_left = 300.0
-offset_top = 250.0
-offset_right = 300.0
-offset_bottom = 250.0
+offset_left = 200.0
+offset_top = 350.0
+offset_right = 200.0
+offset_bottom = 350.0
 my_data = ExtResource("3_nfsx2")
 parent_node = NodePath("../Node_Archosaur")
 
-[node name="Node_Lagosuchus" parent="." node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Perforate" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
-offset_left = 500.0
-offset_top = 250.0
-offset_right = 500.0
-offset_bottom = 250.0
-my_data = ExtResource("4_0wg30")
+offset_left = 350.0
+offset_top = 350.0
+offset_right = 350.0
+offset_bottom = 350.0
+my_data = ExtResource("4_4kojt")
 parent_node = NodePath("../Node_Upright")
 
-[node name="Node_Apex" parent="." node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Serrated" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
-my_data = ExtResource("5_nfsx2")
+offset_left = 500.0
+offset_top = 200.0
+offset_right = 500.0
+offset_bottom = 200.0
+my_data = ExtResource("5_8k568")
+parent_node = NodePath("../Node_Perforate")
+
+[node name="Node_Lagosuchus" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 200.0
+offset_right = 650.0
+offset_bottom = 200.0
+my_data = ExtResource("4_0wg30")
+parent_node = NodePath("../Node_Serrated")
+
+[node name="Node_Pools" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 800.0
+offset_top = 200.0
+offset_right = 800.0
+offset_bottom = 200.0
+my_data = ExtResource("7_73oii")
 parent_node = NodePath("../Node_Lagosuchus")
+
+[node name="Node_Intra" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 950.0
+offset_top = 200.0
+offset_right = 950.0
+offset_bottom = 200.0
+my_data = ExtResource("8_3oy8e")
+parent_node = NodePath("../Node_Pools")
+
+[node name="Node_Herrera" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 200.0
+offset_right = 1100.0
+offset_bottom = 200.0
+my_data = ExtResource("9_i47bq")
+parent_node = NodePath("../Node_Intra")
+
+[node name="Node_Hollow" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1250.0
+offset_top = 200.0
+offset_right = 1250.0
+offset_bottom = 200.0
+my_data = ExtResource("10_r1lwx")
+parent_node = NodePath("../Node_Herrera")
+
+[node name="Node_Coelo" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1400.0
+offset_top = 200.0
+offset_right = 1400.0
+offset_bottom = 200.0
+my_data = ExtResource("11_l60p0")
+parent_node = NodePath("../Node_Hollow")
+
+[node name="Node_Fused" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1550.0
+offset_top = 200.0
+offset_right = 1550.0
+offset_bottom = 200.0
+my_data = ExtResource("11_l60p0")
+parent_node = NodePath("../Node_Coelo")
+
+[node name="Node_Crest" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1700.0
+offset_top = 200.0
+offset_right = 1700.0
+offset_bottom = 200.0
+my_data = ExtResource("12_xej3i")
+parent_node = NodePath("../Node_Fused")
+
+[node name="Node_Lilien" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1850.0
+offset_top = 200.0
+offset_right = 1850.0
+offset_bottom = 200.0
+my_data = ExtResource("13_ojvhf")
+parent_node = NodePath("../Node_Crest")
+
+[node name="Node_Leaf" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 500.0
+offset_right = 500.0
+offset_bottom = 500.0
+my_data = ExtResource("14_n8xt4")
+parent_node = NodePath("../Node_Perforate")
+
+[node name="Node_Eoraptor" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 500.0
+offset_right = 650.0
+offset_bottom = 500.0
+my_data = ExtResource("15_kqhru")
+parent_node = NodePath("../Node_Leaf")
+
+[node name="Node_Ferns" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 800.0
+offset_top = 500.0
+offset_right = 800.0
+offset_bottom = 500.0
+my_data = ExtResource("16_37e72")
+parent_node = NodePath("../Node_Eoraptor")
+
+[node name="Node_LongNeck" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 950.0
+offset_top = 500.0
+offset_right = 950.0
+offset_bottom = 500.0
+my_data = ExtResource("16_37e72")
+parent_node = NodePath("../Node_Leaf")
+
+[node name="Node_Panphagia" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 500.0
+offset_right = 1100.0
+offset_bottom = 500.0
+my_data = ExtResource("17_qj14m")
+parent_node = NodePath("../Node_LongNeck")
+
+[node name="Node_River" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1250.0
+offset_top = 500.0
+offset_right = 1250.0
+offset_bottom = 500.0
+my_data = ExtResource("18_03cs3")
+parent_node = NodePath("../Node_Panphagia")
+
+[node name="Node_Gastro" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1400.0
+offset_top = 500.0
+offset_right = 1400.0
+offset_bottom = 500.0
+my_data = ExtResource("19_4r7it")
+parent_node = NodePath("../Node_River")
+
+[node name="Node_Plateo" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1550.0
+offset_top = 500.0
+offset_right = 1550.0
+offset_bottom = 500.0
+my_data = ExtResource("20_yvj5v")
+parent_node = NodePath("../Node_Gastro")
+
+[node name="Node_Cycads" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1700.0
+offset_top = 500.0
+offset_right = 1700.0
+offset_bottom = 500.0
+my_data = ExtResource("21_ha6hh")
+parent_node = NodePath("../Node_Plateo")
+
+[node name="Node_Quadruped" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 1850.0
+offset_top = 500.0
+offset_right = 1850.0
+offset_bottom = 500.0
+my_data = ExtResource("22_kw27y")
+parent_node = NodePath("../Node_Cycads")
+
+[node name="Node_Giant" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 2000.0
+offset_top = 500.0
+offset_right = 2000.0
+offset_bottom = 500.0
+my_data = ExtResource("22_kw27y")
+parent_node = NodePath("../Node_Quadruped")
+
+[node name="Node_Rioja" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 2150.0
+offset_top = 500.0
+offset_right = 2150.0
+offset_bottom = 500.0
+my_data = ExtResource("23_pwsc5")
+parent_node = NodePath("../Node_Giant")
+
+[node name="Node_Forest" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 2150.0
+offset_top = 500.0
+offset_right = 2150.0
+offset_bottom = 500.0
+my_data = ExtResource("24_hsv2h")
+parent_node = NodePath("../Node_Rioja")

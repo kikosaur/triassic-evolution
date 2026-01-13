@@ -2,7 +2,6 @@ extends Node2D
 
 @onready var click_zone = $ClickZone
 @onready var dino_container = $DinoContainer
-@onready var btn_spawn = $UI_Layer/BtnSpawnArchosaur
 @onready var background = $Background
 
 # DRAG TEXTURES HERE IN INSPECTOR!
@@ -18,20 +17,32 @@ extends Node2D
 @onready var research_menu = $UI_Layer/ResearchMenu
 @onready var btn_research = $UI_Layer/BtnToggleResearch
 
+# DINO SHOP
+@onready var shop_panel = $UI_Layer/ShopPanel
+@onready var btn_shop = $UI_Layer/BtnToggleShop
+
 @onready var extinction_panel = $UI_Layer/ExtinctionPanel
 
 func _ready():
 	print("Main Game Started")
 	click_zone.pressed.connect(_on_background_clicked)
-	btn_spawn.pressed.connect(_on_buy_pressed)
-	
 	# Listen for Habitat Changes
 	GameManager.connect("habitat_updated", _check_phase_change)
 	
 	btn_research.pressed.connect(func(): research_menu.visible = !research_menu.visible)
 	
 	GameManager.connect("extinction_triggered", _show_extinction)
-
+	
+	GameManager.connect("dinosaur_spawned", _spawn_dino)
+	
+	# --- TOGGLE LOGIC ---
+	# Open/Close the Shop
+	btn_shop.pressed.connect(func(): 
+		shop_panel.visible = !shop_panel.visible
+		# Optional: Close Research if opening Shop (to avoid overlap)
+		if shop_panel.visible:
+			research_menu.visible = false
+		)
 func _on_background_clicked():
 	GameManager.add_dna(5) # Increased to 5 to make testing faster!
 
@@ -57,3 +68,9 @@ func _check_phase_change(veg, _critter):
 func _show_extinction():
 	extinction_panel.visible = true
 	# Optional: Play a sound or shake screen here
+
+func _spawn_dino(species_res: DinosaurSpecies):
+	var new_dino = load("res://scenes/units/DinoUnit.tscn").instantiate()
+	new_dino.species_data = species_res
+	new_dino.position = Vector2(500, 300) # Center spawn
+	dino_container.add_child(new_dino)
