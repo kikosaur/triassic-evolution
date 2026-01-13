@@ -4,6 +4,7 @@ var species_data: DinosaurSpecies
 var target_pos: Vector2
 var is_dead: bool = false
 var hunger_timer: float = 0.0
+var passive_timer: Timer # We will create this in code
 
 func _ready():
 	if species_data:
@@ -19,6 +20,8 @@ func _ready():
 	life.timeout.connect(_on_death)
 	add_child(life)
 	life.start()
+	
+	_setup_passive_income()
 
 func _physics_process(delta):
 	if is_dead: return
@@ -103,3 +106,22 @@ func _on_button_pressed():
 # Helper for debug text (optional)
 func show_popup(text):
 	print(species_data.species_name + ": " + text)
+	
+func _setup_passive_income():
+	passive_timer = Timer.new()
+	passive_timer.wait_time = 1.0 # Income every 1 second
+	passive_timer.autostart = true
+	passive_timer.one_shot = false
+	add_child(passive_timer)
+	
+	# Connect the timer to a function
+	passive_timer.timeout.connect(_on_passive_income_tick)
+
+func _on_passive_income_tick():
+	if is_dead: 
+		passive_timer.stop() # Dead dinos don't pay taxes
+		return
+		
+	if species_data:
+		GameManager.add_dna(species_data.passive_dna_yield)
+		# Optional: Add a tiny floating text effect here later!

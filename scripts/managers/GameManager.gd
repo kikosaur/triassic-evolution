@@ -88,3 +88,9 @@ func try_unlock_research(research_def: ResearchDef):
 	if try_spend_dna(research_def.dna_cost):
 		unlocked_research_ids.append(research_def.id)
 		print("Unlocked: ", research_def.display_name)
+
+func trigger_dino_spawn(species_data: DinosaurSpecies):
+	emit_signal("dinosaur_spawned", species_data)
+
+func trigger_extinction():
+	emit_signal("extinction_triggered")

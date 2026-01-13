@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bc2k2eafgc0rt"]
+
+[ext_resource type="Script" uid="uid://dq7of5jpf5ow6" path="res://scripts/resources/HabitatProduct.gd" id="1_8h6la"]
+
+[resource]
+script = ExtResource("1_8h6la")
+name = "Dragonfly Swarm"
+type = 1
+dna_cost = 150
+density_gain = 60.0

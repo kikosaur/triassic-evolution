@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://iufdnll41717" path="res://scripts/ui/ShopItem.gd" id="1_vo1yd"]
 
 [node name="ShopItem" type="PanelContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_vo1yd")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]

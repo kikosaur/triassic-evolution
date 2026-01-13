@@ -7,4 +7,5 @@
 script = ExtResource("2_pwtho")
 species_name = "Herrerasaurus"
 base_dna_cost = 400
+passive_dna_yield = 12
 icon = ExtResource("2_04bue")

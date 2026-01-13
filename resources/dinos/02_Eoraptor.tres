@@ -7,4 +7,5 @@
 script = ExtResource("2_h0g60")
 species_name = "Eoraptor"
 base_dna_cost = 150
+passive_dna_yield = 5
 icon = ExtResource("2_phpln")

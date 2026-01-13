@@ -1,0 +1,8 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://d23sfn362qkgb"]
+
+[ext_resource type="Script" uid="uid://dq7of5jpf5ow6" path="res://scripts/resources/HabitatProduct.gd" id="1_326am"]
+
+[resource]
+script = ExtResource("1_326am")
+name = "Fern Bundle"
+dna_cost = 25

@@ -26,9 +26,26 @@ phase_3_tex = ExtResource("4_ue8bh")
 dino_scene = ExtResource("2_yr4w4")
 archosaur_res = SubResource("Resource_lnpaj")
 
-[node name="Background" type="Sprite2D" parent="."]
+[node name="WorldArt" type="Node2D" parent="."]
+
+[node name="BaseTerrain" type="Sprite2D" parent="WorldArt"]
 scale = Vector2(0.4651163, 0.46809897)
 texture = ExtResource("2_yugiq")
+centered = false
+
+[node name="Layer_Water" type="Sprite2D" parent="WorldArt"]
+visible = false
+scale = Vector2(0.4651163, 0.46809897)
+centered = false
+
+[node name="Layer_Ferns" type="Sprite2D" parent="WorldArt"]
+visible = false
+scale = Vector2(0.4651163, 0.46809897)
+centered = false
+
+[node name="Layer_Trees" type="Sprite2D" parent="WorldArt"]
+visible = false
+scale = Vector2(0.4651163, 0.46809897)
 centered = false
 
 [node name="ClickZone" type="Button" parent="."]
@@ -64,13 +81,6 @@ text = "Research
 [node name="ExtinctionPanel" parent="UI_Layer" instance=ExtResource("10_ue8bh")]
 visible = false
 
-[node name="ShopPanel" parent="UI_Layer" instance=ExtResource("12_emtlf")]
-visible = false
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-grow_vertical = 2
-
 [node name="BtnToggleShop" type="Button" parent="UI_Layer"]
 anchors_preset = 2
 anchor_top = 1.0
@@ -79,3 +89,10 @@ offset_top = -8.0
 offset_right = 8.0
 grow_vertical = 0
 text = "Dino Market"
+
+[node name="ShopPanel" parent="UI_Layer" instance=ExtResource("12_emtlf")]
+visible = false
+offset_left = 2.0
+offset_top = 287.0
+offset_right = -778.0
+offset_bottom = -33.0

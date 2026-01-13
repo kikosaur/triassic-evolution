@@ -7,4 +7,5 @@
 script = ExtResource("2_iysgw")
 species_name = "Panphagia"
 base_dna_cost = 600
+passive_dna_yield = 25
 icon = ExtResource("2_uk15t")

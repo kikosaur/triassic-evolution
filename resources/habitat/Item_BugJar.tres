@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://jx4uf6mca1ap"]
+
+[ext_resource type="Script" uid="uid://dq7of5jpf5ow6" path="res://scripts/resources/HabitatProduct.gd" id="1_ckt5l"]
+
+[resource]
+script = ExtResource("1_ckt5l")
+name = "Jar of Beetles"
+type = 1
+dna_cost = 40
+density_gain = 15.0
