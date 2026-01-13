@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3 uid="uid://d1pvlplrkkm5d"]
+
+[ext_resource type="PackedScene" uid="uid://c00m4rc8me8mk" path="res://scenes/ui/ResearchNode.tscn" id="1_227w5"]
+[ext_resource type="Resource" uid="uid://fx47e8phptlw" path="res://resources/research/Res_Archosaur.tres" id="2_gfy1o"]
+[ext_resource type="Resource" uid="uid://8io20j1xjreq" path="res://resources/research/Res_UprightStance.tres" id="3_nfsx2"]
+[ext_resource type="Resource" uid="uid://cgwit1labfvwm" path="res://resources/research/Res_Lagosuchus.tres" id="4_0wg30"]
+[ext_resource type="Resource" uid="uid://b44xm7t2vwv6m" path="res://resources/research/Res_Apex.tres" id="5_nfsx2"]
+
+[node name="ResearchMenu" type="Panel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -250.0
+offset_right = 400.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Node_Archosaur" parent="." instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 250.0
+offset_right = 100.0
+offset_bottom = 250.0
+my_data = ExtResource("2_gfy1o")
+
+[node name="Node_Upright" parent="." node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 250.0
+offset_right = 300.0
+offset_bottom = 250.0
+my_data = ExtResource("3_nfsx2")
+parent_node = NodePath("../Node_Archosaur")
+
+[node name="Node_Lagosuchus" parent="." node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 250.0
+offset_right = 500.0
+offset_bottom = 250.0
+my_data = ExtResource("4_0wg30")
+parent_node = NodePath("../Node_Upright")
+
+[node name="Node_Apex" parent="." node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+layout_mode = 0
+my_data = ExtResource("5_nfsx2")
+parent_node = NodePath("../Node_Lagosuchus")

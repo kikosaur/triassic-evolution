@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://0onbpuep2kdd"]
+
+[ext_resource type="Texture2D" uid="uid://bauv5gps40veq" path="res://assets/dinosaurs/06-2.png" id="2_216op"]
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_lttrv"]
+
+[resource]
+script = ExtResource("2_lttrv")
+species_name = "Plateosaurus"
+base_dna_cost = 1000
+icon = ExtResource("2_216op")

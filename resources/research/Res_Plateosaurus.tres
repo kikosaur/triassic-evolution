@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://ceui3yrw45r6k"]
+
+[ext_resource type="Texture2D" uid="uid://dvkyye7bon1ss" path="res://assets/dino_icon/Plateosaurus.png" id="1_01m3a"]
+[ext_resource type="Resource" uid="uid://dokfn21d77bsq" path="res://resources/research/Res_Gastroliths.tres" id="2_bf430"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_ap4xn"]
+[ext_resource type="Resource" uid="uid://0onbpuep2kdd" path="res://resources/dinos/06_Plateosaurus.tres" id="4_ap4xn"]
+
+[resource]
+script = ExtResource("3_ap4xn")
+id = "node_plateo"
+display_name = "Plateosaurus"
+icon = ExtResource("1_01m3a")
+dna_cost = 2000
+parent_research = ExtResource("2_bf430")
+unlock_species = ExtResource("4_ap4xn")

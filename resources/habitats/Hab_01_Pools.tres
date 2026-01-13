@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="HabitatFeature" load_steps=3 format=3 uid="uid://cdcn6r8re6be"]
+
+[ext_resource type="Texture2D" uid="uid://ksnh5hdlfxt4" path="res://assets/Habitats/H01_Ephemeral_Pools.png" id="1_2xh4n"]
+[ext_resource type="Script" uid="uid://cayoyhhwt40hs" path="res://scripts/resources/HabitatFeature.gd" id="1_bime3"]
+
+[resource]
+script = ExtResource("1_bime3")
+icon = ExtResource("1_2xh4n")
+feature_name = "Ephemeral Pools"
+dna_cost = 500
+unlocks_tag = "WATER_SOURCE"
+unlocks_page_index = 1
+metadata/_custom_type_script = "uid://cayoyhhwt40hs"

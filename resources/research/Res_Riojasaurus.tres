@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://c38wg5mjivw52"]
+
+[ext_resource type="Texture2D" uid="uid://vk8ggd1bvjm2" path="res://assets/dino_icon/Riojasaurus.png" id="1_w8cck"]
+[ext_resource type="Resource" uid="uid://5oqoew1xql4g" path="res://resources/research/Res_Gigantism.tres" id="2_bu23l"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_0ldrg"]
+[ext_resource type="Resource" uid="uid://clcnqyunc53nh" path="res://resources/dinos/08_Riojasaurus.tres" id="4_0ldrg"]
+
+[resource]
+script = ExtResource("3_0ldrg")
+id = "node_riojasaurus"
+display_name = "Riojasaurus"
+icon = ExtResource("1_w8cck")
+dna_cost = 10000
+parent_research = ExtResource("2_bu23l")
+unlock_species = ExtResource("4_0ldrg")

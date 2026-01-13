@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://cegl2eoxainc0"]
+
+[ext_resource type="Texture2D" uid="uid://c5rigtjl7b135" path="res://assets/dinosaurs/05-1.png" id="2_efy8r"]
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_x52go"]
+
+[resource]
+script = ExtResource("2_x52go")
+species_name = "Coelophysis"
+base_dna_cost = 850
+icon = ExtResource("2_efy8r")

@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bulp1yfpkcn1v"]
+
+[ext_resource type="Script" uid="uid://bsbkimtwdosw3" path="res://scripts/units/DinoUnit.gd" id="1_y6qrp"]
+[ext_resource type="Texture2D" uid="uid://cph040cstd880" path="res://assets/dinosaurs/00-1.png" id="2_ooqy5"]
+
+[node name="DinoUnit" type="CharacterBody2D" groups=["dinos"]]
+script = ExtResource("1_y6qrp")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ooqy5")
+
+[node name="Button" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

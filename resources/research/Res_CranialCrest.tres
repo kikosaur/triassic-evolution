@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://bpq45tje4l0hw"]
+
+[ext_resource type="Texture2D" uid="uid://fyxefsnrxrju" path="res://assets/traits/T010_Cranial_Crest.png" id="1_i278h"]
+[ext_resource type="Resource" uid="uid://cunf8a2an238l" path="res://resources/research/Res_FusedAnkles.tres" id="2_os6js"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_k6rss"]
+
+[resource]
+script = ExtResource("3_k6rss")
+id = "node_crest"
+display_name = "Display Crests"
+icon = ExtResource("1_i278h")
+type = 1
+dna_cost = 5000
+parent_research = ExtResource("2_os6js")

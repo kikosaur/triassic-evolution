@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://bieatstnxlvki"]
+
+[ext_resource type="Texture2D" uid="uid://gked186bsph6" path="res://assets/habitat_traits/H04_Cycad_Grove.png" id="1_kfiv5"]
+[ext_resource type="Resource" uid="uid://ceui3yrw45r6k" path="res://resources/research/Res_Plateosaurus.tres" id="2_mtupt"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_k8b0o"]
+
+[resource]
+script = ExtResource("3_k8b0o")
+id = "node_cycads"
+display_name = "Cycad Groves"
+icon = ExtResource("1_kfiv5")
+type = 2
+dna_cost = 3000
+parent_research = ExtResource("2_mtupt")

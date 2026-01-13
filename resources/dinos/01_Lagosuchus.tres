@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://bekjfxkah4yxd"]
+
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_0xooo"]
+[ext_resource type="Texture2D" uid="uid://c32abtluguyp1" path="res://assets/dinosaurs/01-1.png" id="5_2fcaj"]
+
+[resource]
+script = ExtResource("2_0xooo")
+species_name = "Lagosuchus"
+base_dna_cost = 100
+icon = ExtResource("5_2fcaj")

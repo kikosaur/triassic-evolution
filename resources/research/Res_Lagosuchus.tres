@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://cgwit1labfvwm"]
+
+[ext_resource type="Texture2D" uid="uid://ctl6fwsvrjlvf" path="res://assets/dino_icon/Lagosuchus.png" id="1_l06k7"]
+[ext_resource type="Resource" uid="uid://8io20j1xjreq" path="res://resources/research/Res_UprightStance.tres" id="2_uqy7p"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_y3n17"]
+[ext_resource type="Resource" uid="uid://bekjfxkah4yxd" path="res://resources/dinos/01_Lagosuchus.tres" id="4_xlqpx"]
+
+[resource]
+script = ExtResource("3_y3n17")
+id = "node_lagosuchus"
+display_name = "Lagosuchus"
+icon = ExtResource("1_l06k7")
+dna_cost = 400
+parent_research = ExtResource("2_uqy7p")
+unlock_species = ExtResource("4_xlqpx")

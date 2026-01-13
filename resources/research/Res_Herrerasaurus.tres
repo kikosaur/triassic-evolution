@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://dscotii4shv6t"]
+
+[ext_resource type="Texture2D" uid="uid://bhh7msdin2j5g" path="res://assets/dino_icon/Herrerasaurus.png" id="1_emtk7"]
+[ext_resource type="Resource" uid="uid://bykmvr4llfrg" path="res://resources/research/Res_Intramandibular.tres" id="2_q0qjt"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_q0qjt"]
+[ext_resource type="Resource" uid="uid://dq68eang4ywvi" path="res://resources/dinos/03_Herrerasaurus.tres" id="4_23yna"]
+
+[resource]
+script = ExtResource("3_q0qjt")
+id = "node_herrera"
+display_name = "Herrerasaurus"
+icon = ExtResource("1_emtk7")
+dna_cost = 1200
+parent_research = ExtResource("2_q0qjt")
+unlock_species = ExtResource("4_23yna")

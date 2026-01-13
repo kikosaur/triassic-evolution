@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://c0syean16w5p2"]
+
+[ext_resource type="Texture2D" uid="uid://cfl22synvfqad" path="res://assets/dino_icon/Coelophysis.png" id="1_gpm26"]
+[ext_resource type="Resource" uid="uid://c4l4bkowuw5ay" path="res://resources/research/Res_HollowBones.tres" id="2_vwcln"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_vwcln"]
+[ext_resource type="Resource" uid="uid://cegl2eoxainc0" path="res://resources/dinos/05_Coelophysis.tres" id="4_q4v2t"]
+
+[resource]
+script = ExtResource("3_vwcln")
+id = "node_coelo"
+display_name = "Coelophysis"
+icon = ExtResource("1_gpm26")
+dna_cost = 3000
+parent_research = ExtResource("2_vwcln")
+unlock_species = ExtResource("4_q4v2t")

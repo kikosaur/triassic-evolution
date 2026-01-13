@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BiologicalTrait" load_steps=3 format=3 uid="uid://o1bvp3hdq55v"]
+
+[ext_resource type="Texture2D" uid="uid://ka1mugtswd73" path="res://assets/Traits/T05_Intramandibular_Joint.png" id="1_ao2vs"]
+[ext_resource type="Script" uid="uid://b6l8bktt8lxwp" path="res://scripts/resources/BiologicalTrait.gd" id="1_n44fq"]
+
+[resource]
+script = ExtResource("1_n44fq")
+icon = ExtResource("1_ao2vs")
+trait_name = "Intramandibular Joint"
+description = "A sliding jaw hinge to grapple struggling prey."
+dna_cost = 10000
+tier = 3
+metadata/_custom_type_script = "uid://b6l8bktt8lxwp"

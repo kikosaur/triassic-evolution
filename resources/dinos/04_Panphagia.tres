@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://dluy8jn0imcw8"]
+
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_iysgw"]
+[ext_resource type="Texture2D" uid="uid://dg3cnn564ubxy" path="res://assets/dinosaurs/04-1.png" id="2_uk15t"]
+
+[resource]
+script = ExtResource("2_iysgw")
+species_name = "Panphagia"
+base_dna_cost = 600
+icon = ExtResource("2_uk15t")

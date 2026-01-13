@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://5oqoew1xql4g"]
+
+[ext_resource type="Texture2D" uid="uid://tqa08enqpgwc" path="res://assets/traits/T012_Gigantism.png" id="1_n8gfo"]
+[ext_resource type="Resource" uid="uid://cdqs1216c16xt" path="res://resources/research/Res_Quadrupedalism.tres" id="2_c3s5p"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_6n0r8"]
+
+[resource]
+script = ExtResource("3_6n0r8")
+id = "node_giant"
+display_name = "True Gigantism"
+icon = ExtResource("1_n8gfo")
+type = 1
+dna_cost = 6000
+parent_research = ExtResource("2_c3s5p")

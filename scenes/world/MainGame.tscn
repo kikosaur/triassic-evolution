@@ -1,0 +1,73 @@
+[gd_scene load_steps=13 format=3 uid="uid://bm35tyebotbck"]
+
+[ext_resource type="Script" uid="uid://ca1ywh1c2458h" path="res://scenes/world/MainGame.gd" id="1_o1bk3"]
+[ext_resource type="PackedScene" uid="uid://c338ymwmyekeu" path="res://scenes/ui/TopPanel.tscn" id="2_70oxy"]
+[ext_resource type="PackedScene" uid="uid://bulp1yfpkcn1v" path="res://scenes/units/DinoUnit.tscn" id="2_yr4w4"]
+[ext_resource type="Texture2D" uid="uid://cgin5evn4e8d5" path="res://assets/habitats/bg_desert.png" id="2_yugiq"]
+[ext_resource type="Texture2D" uid="uid://dcops6jik1ahp" path="res://assets/habitats/bg_oasis.png" id="3_740hf"]
+[ext_resource type="Texture2D" uid="uid://dkrl0gjw4xeec" path="res://assets/habitats/bg_jungle.png" id="4_ue8bh"]
+[ext_resource type="Texture2D" uid="uid://cph040cstd880" path="res://assets/dinosaurs/00-1.png" id="6_kyv22"]
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="7_emtlf"]
+[ext_resource type="PackedScene" uid="uid://lmy01cu6ufgi" path="res://scenes/ui/HabitatPanel.tscn" id="8_kyv22"]
+[ext_resource type="PackedScene" uid="uid://d1pvlplrkkm5d" path="res://scenes/ui/ResearchMenu.tscn" id="9_740hf"]
+[ext_resource type="PackedScene" uid="uid://rc6mwphwcjrk" path="res://scenes/ui/ExtinctionPanel.tscn" id="10_ue8bh"]
+
+[sub_resource type="Resource" id="Resource_lnpaj"]
+script = ExtResource("7_emtlf")
+species_name = "Archosaur"
+icon = ExtResource("6_kyv22")
+
+[node name="MainGame" type="Node2D"]
+script = ExtResource("1_o1bk3")
+phase_1_tex = ExtResource("2_yugiq")
+phase_2_tex = ExtResource("3_740hf")
+phase_3_tex = ExtResource("4_ue8bh")
+dino_scene = ExtResource("2_yr4w4")
+archosaur_res = SubResource("Resource_lnpaj")
+
+[node name="Background" type="Sprite2D" parent="."]
+scale = Vector2(0.4651163, 0.46809897)
+texture = ExtResource("2_yugiq")
+centered = false
+
+[node name="ClickZone" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="DinoContainer" type="Node2D" parent="."]
+
+[node name="UI_Layer" type="CanvasLayer" parent="."]
+
+[node name="TopPanel" parent="UI_Layer" instance=ExtResource("2_70oxy")]
+
+[node name="BtnSpawnArchosaur" type="Button" parent="UI_Layer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 193.0
+grow_vertical = 0
+text = "Buy Archosaur (10 DNA)"
+
+[node name="HabitatPanel" parent="UI_Layer" instance=ExtResource("8_kyv22")]
+
+[node name="ResearchMenu" parent="UI_Layer" instance=ExtResource("9_740hf")]
+visible = false
+
+[node name="BtnToggleResearch" type="Button" parent="UI_Layer"]
+offset_left = 197.0
+offset_top = 689.0
+offset_right = 276.0
+offset_bottom = 720.0
+text = "Research
+"
+
+[node name="ExtinctionPanel" parent="UI_Layer" instance=ExtResource("10_ue8bh")]
+visible = false

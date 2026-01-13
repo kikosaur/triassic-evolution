@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://p8ukqi65mh8o"]
+
+[ext_resource type="Texture2D" uid="uid://cph040cstd880" path="res://assets/dinosaurs/00-1.png" id="1_iro2c"]
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_iro2c"]
+
+[resource]
+script = ExtResource("2_iro2c")
+species_name = "Archosaur"
+icon = ExtResource("1_iro2c")

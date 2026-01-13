@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://y6dvy44354se"]
+
+[ext_resource type="Texture2D" uid="uid://bkp1t4y2ncf76" path="res://assets/traits/T04_Leaf-Shaped_Teeth.png" id="1_2gg7l"]
+[ext_resource type="Resource" uid="uid://bialkqdb5tb62" path="res://resources/research/Res_PerforateAcetabulum.tres" id="2_tqjq8"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_trmog"]
+
+[resource]
+script = ExtResource("3_trmog")
+id = "node_leafteeth"
+display_name = "Leaf-Shaped Teeth"
+icon = ExtResource("1_2gg7l")
+type = 1
+dna_cost = 200
+parent_research = ExtResource("2_tqjq8")

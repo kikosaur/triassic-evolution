@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://nyylx8d6ovjs"]
+
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_h0g60"]
+[ext_resource type="Texture2D" uid="uid://bero8kmgap2v5" path="res://assets/dinosaurs/02-1.png" id="2_phpln"]
+
+[resource]
+script = ExtResource("2_h0g60")
+species_name = "Eoraptor"
+base_dna_cost = 150
+icon = ExtResource("2_phpln")

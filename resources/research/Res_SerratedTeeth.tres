@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://cg54mtrh5wsin"]
+
+[ext_resource type="Texture2D" uid="uid://b22d5i5jx01ny" path="res://assets/traits/T03_Serrated_Teeth.png" id="1_sowuq"]
+[ext_resource type="Resource" uid="uid://bialkqdb5tb62" path="res://resources/research/Res_PerforateAcetabulum.tres" id="2_ar62x"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_ts4eq"]
+
+[resource]
+script = ExtResource("3_ts4eq")
+id = "node_serrated"
+display_name = "Serrated Teeth"
+icon = ExtResource("1_sowuq")
+type = 1
+dna_cost = 200
+parent_research = ExtResource("2_ar62x")

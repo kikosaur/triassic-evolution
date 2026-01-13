@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="HabitatFeature" load_steps=3 format=3 uid="uid://bx3a05idtj327"]
+
+[ext_resource type="Texture2D" uid="uid://gked186bsph6" path="res://assets/Habitats/H04_Cycad_Grove.png" id="1_3ucra"]
+[ext_resource type="Script" uid="uid://cayoyhhwt40hs" path="res://scripts/resources/HabitatFeature.gd" id="1_fl71h"]
+
+[resource]
+script = ExtResource("1_fl71h")
+icon = ExtResource("1_3ucra")
+feature_name = "Cycad Grove"
+dna_cost = 15000
+unlocks_tag = "DENSE_VEGETATION"
+required_tag = "FLOWING_WATER"
+metadata/_custom_type_script = "uid://cayoyhhwt40hs"

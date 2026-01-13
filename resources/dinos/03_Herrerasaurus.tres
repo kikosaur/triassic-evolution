@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://dq68eang4ywvi"]
+
+[ext_resource type="Texture2D" uid="uid://dsb2xxckgjc7r" path="res://assets/dinosaurs/03-1.png" id="2_04bue"]
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_pwtho"]
+
+[resource]
+script = ExtResource("2_pwtho")
+species_name = "Herrerasaurus"
+base_dna_cost = 400
+icon = ExtResource("2_04bue")

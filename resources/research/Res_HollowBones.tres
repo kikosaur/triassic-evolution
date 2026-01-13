@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://c4l4bkowuw5ay"]
+
+[ext_resource type="Texture2D" uid="uid://c6m8178iliger" path="res://assets/traits/T07_Hollo_Bones.png" id="1_cfedc"]
+[ext_resource type="Resource" uid="uid://dscotii4shv6t" path="res://resources/research/Res_Herrerasaurus.tres" id="2_2mevh"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_shwx3"]
+
+[resource]
+script = ExtResource("3_shwx3")
+id = "node_hollow"
+display_name = "Hollow Bones"
+icon = ExtResource("1_cfedc")
+type = 1
+dna_cost = 1800
+parent_research = ExtResource("2_2mevh")

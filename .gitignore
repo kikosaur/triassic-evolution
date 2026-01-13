@@ -14,3 +14,9 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# Ignore Builds and APKs
+*.apk
+*.aab
+android/build/
+Builds/

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://bialkqdb5tb62"]
+
+[ext_resource type="Texture2D" uid="uid://t6wymhtw6285" path="res://assets/traits/T02_Perforate_Acetabulum.png" id="1_frb77"]
+[ext_resource type="Resource" uid="uid://8io20j1xjreq" path="res://resources/research/Res_UprightStance.tres" id="2_covam"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_iffyh"]
+
+[resource]
+script = ExtResource("3_iffyh")
+id = "node_perforate"
+display_name = "Open Hip Socket"
+icon = ExtResource("1_frb77")
+type = 1
+dna_cost = 100
+parent_research = ExtResource("2_covam")

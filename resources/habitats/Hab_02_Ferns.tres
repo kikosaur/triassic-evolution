@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="HabitatFeature" load_steps=3 format=3 uid="uid://buwvr1t8rw5ar"]
+
+[ext_resource type="Script" uid="uid://cayoyhhwt40hs" path="res://scripts/resources/HabitatFeature.gd" id="1_078mt"]
+[ext_resource type="Texture2D" uid="uid://cxds7kiutbgwv" path="res://assets/Habitats/H02_Fern_Scrubland.png" id="1_ftb3h"]
+
+[resource]
+script = ExtResource("1_078mt")
+icon = ExtResource("1_ftb3h")
+feature_name = "Fern Scrubland"
+dna_cost = 1500
+unlocks_tag = "LOW_FOLIAGE"
+required_tag = "WATER_SOURCE"
+metadata/_custom_type_script = "uid://cayoyhhwt40hs"

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BiologicalTrait" load_steps=3 format=3 uid="uid://lwepw1i883gn"]
+
+[ext_resource type="Script" uid="uid://b6l8bktt8lxwp" path="res://scripts/resources/BiologicalTrait.gd" id="1_6fehk"]
+[ext_resource type="Texture2D" uid="uid://btmvse0jjc1se" path="res://assets/Traits/T09_Fused_Ankles.png" id="1_xoyks"]
+
+[resource]
+script = ExtResource("1_6fehk")
+icon = ExtResource("1_xoyks")
+trait_name = "Fused Ankles"
+description = "Increases stability for larger, agile predators."
+dna_cost = 75000
+tier = 5
+metadata/_custom_type_script = "uid://b6l8bktt8lxwp"

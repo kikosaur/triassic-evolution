@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://ccrmcdysa765t"]
+
+[ext_resource type="Texture2D" uid="uid://bl80ju7fkfbdx" path="res://assets/dino_icon/Eoraptor.png" id="1_6tt03"]
+[ext_resource type="Resource" uid="uid://y6dvy44354se" path="res://resources/research/Res_LeafShapedTeeth.tres" id="2_7ggre"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_b8xu2"]
+[ext_resource type="Resource" uid="uid://nyylx8d6ovjs" path="res://resources/dinos/02_Eoraptor.tres" id="4_b8xu2"]
+
+[resource]
+script = ExtResource("3_b8xu2")
+id = "node_eoraptor"
+display_name = "Eoraptor"
+icon = ExtResource("1_6tt03")
+dna_cost = 300
+parent_research = ExtResource("2_7ggre")
+unlock_species = ExtResource("4_b8xu2")

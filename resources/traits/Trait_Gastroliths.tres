@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BiologicalTrait" load_steps=3 format=3 uid="uid://807y2hlr1poy"]
+
+[ext_resource type="Script" uid="uid://b6l8bktt8lxwp" path="res://scripts/resources/BiologicalTrait.gd" id="1_gg2ob"]
+[ext_resource type="Texture2D" uid="uid://ddiwy60bxpjo0" path="res://assets/Traits/T06_Gastroliths.png" id="1_hua2u"]
+
+[resource]
+script = ExtResource("1_gg2ob")
+icon = ExtResource("1_hua2u")
+trait_name = "Gastroliths"
+description = "\"Stomach Stones\" to help grind tough plant matter."
+dna_cost = 10000
+tier = 3
+metadata/_custom_type_script = "uid://b6l8bktt8lxwp"

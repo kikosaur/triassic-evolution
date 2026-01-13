@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://8knb2eqbd36g"]
+
+[ext_resource type="Texture2D" uid="uid://cnay6vflbum05" path="res://assets/dino_icon/Liliensternus.png" id="1_wipg7"]
+[ext_resource type="Resource" uid="uid://bpq45tje4l0hw" path="res://resources/research/Res_CranialCrest.tres" id="2_ryd3b"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_x5vw2"]
+[ext_resource type="Resource" uid="uid://cegl2eoxainc0" path="res://resources/dinos/05_Coelophysis.tres" id="4_8xmog"]
+
+[resource]
+script = ExtResource("3_x5vw2")
+id = "node_lilien"
+display_name = "Liliensternus"
+icon = ExtResource("1_wipg7")
+dna_cost = 6000
+parent_research = ExtResource("2_ryd3b")
+unlock_species = ExtResource("4_8xmog")

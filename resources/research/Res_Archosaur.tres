@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://fx47e8phptlw"]
+
+[ext_resource type="Texture2D" uid="uid://ej8s8d67j5pc" path="res://assets/dino_icon/Archosaur.png" id="1_6y145"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="2_4bykm"]
+
+[sub_resource type="Resource" id="Resource_763dp"]
+metadata/__load_path__ = "res://resources/dinos/Archosaur.tres"
+
+[resource]
+script = ExtResource("2_4bykm")
+id = "node_archosaur"
+display_name = "Archosaur"
+icon = ExtResource("1_6y145")
+dna_cost = 0
+unlock_species = SubResource("Resource_763dp")

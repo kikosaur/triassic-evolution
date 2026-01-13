@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://ckainrtb3skft"]
+
+[ext_resource type="Texture2D" uid="uid://batehr4kvrjp3" path="res://assets/dino_icon/Panphagia.png" id="1_7urub"]
+[ext_resource type="Resource" uid="uid://bvwceav5k370" path="res://resources/research/Res_ElongatedNeck.tres" id="2_442b3"]
+[ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_2hn6d"]
+[ext_resource type="Resource" uid="uid://dluy8jn0imcw8" path="res://resources/dinos/04_Panphagia.tres" id="4_2hn6d"]
+
+[resource]
+script = ExtResource("3_2hn6d")
+id = "node_panphagia"
+display_name = "Panphagia"
+icon = ExtResource("1_7urub")
+dna_cost = 800
+parent_research = ExtResource("2_442b3")
+unlock_species = ExtResource("4_2hn6d")

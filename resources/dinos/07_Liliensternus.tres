@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://dpqhonnoddjno"]
+
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_4kg8i"]
+[ext_resource type="Texture2D" uid="uid://crwt6silivjb1" path="res://assets/dinosaurs/07-1.png" id="2_57mc7"]
+
+[resource]
+script = ExtResource("2_4kg8i")
+species_name = "Liliensternus"
+base_dna_cost = 2500
+icon = ExtResource("2_57mc7")
