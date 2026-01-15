@@ -1,0 +1,177 @@
+[gd_scene load_steps=12 format=3 uid="uid://ifcqyuyvc104"]
+
+[ext_resource type="Script" uid="uid://cyvc4imibflhu" path="res://scripts/ui/MuseumScene.gd" id="1_81hgk"]
+[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_dub3s"]
+[ext_resource type="Resource" uid="uid://p8ukqi65mh8o" path="res://resources/dinos/00_Archosaur.tres" id="3_pg7n5"]
+[ext_resource type="Resource" uid="uid://bekjfxkah4yxd" path="res://resources/dinos/01_Lagosuchus.tres" id="4_cfkgp"]
+[ext_resource type="Resource" uid="uid://nyylx8d6ovjs" path="res://resources/dinos/02_Eoraptor.tres" id="5_2w7la"]
+[ext_resource type="Resource" uid="uid://dq68eang4ywvi" path="res://resources/dinos/03_Herrerasaurus.tres" id="6_wh76r"]
+[ext_resource type="Resource" uid="uid://dluy8jn0imcw8" path="res://resources/dinos/04_Panphagia.tres" id="7_v4qxi"]
+[ext_resource type="Resource" uid="uid://cegl2eoxainc0" path="res://resources/dinos/05_Coelophysis.tres" id="8_j5be2"]
+[ext_resource type="Resource" uid="uid://0onbpuep2kdd" path="res://resources/dinos/06_Plateosaurus.tres" id="9_bih5u"]
+[ext_resource type="Resource" uid="uid://dpqhonnoddjno" path="res://resources/dinos/07_Liliensternus.tres" id="10_67mmr"]
+[ext_resource type="Resource" uid="uid://clcnqyunc53nh" path="res://resources/dinos/08_Riojasaurus.tres" id="11_02556"]
+
+[node name="MuseumScene" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_81hgk")
+all_dinosaurs = Array[ExtResource("2_dub3s")]([ExtResource("3_pg7n5"), ExtResource("4_cfkgp"), ExtResource("5_2w7la"), ExtResource("6_wh76r"), ExtResource("7_v4qxi"), ExtResource("8_j5be2"), ExtResource("9_bih5u"), ExtResource("10_67mmr"), ExtResource("11_02556")])
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -250.0
+offset_right = 500.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -101.5
+offset_top = -250.0
+offset_right = 101.5
+offset_bottom = -227.0
+grow_horizontal = 2
+text = "PALEONTOLOGY MUSEUM"
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -245.0
+offset_right = 500.0
+offset_bottom = 249.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+
+[node name="Dinosaurs" type="ScrollContainer" parent="TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Grid" type="GridContainer" parent="TabContainer/Dinosaurs"]
+layout_mode = 2
+columns = 5
+
+[node name="Traits" type="ScrollContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Grid" type="GridContainer" parent="TabContainer/Traits"]
+layout_mode = 2
+columns = 5
+
+[node name="Habitats" type="ScrollContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="Grid" type="GridContainer" parent="TabContainer/Habitats"]
+layout_mode = 2
+columns = 5
+
+[node name="BtnClose" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 465.0
+offset_top = -249.0
+offset_right = 500.0
+offset_bottom = -218.0
+grow_horizontal = 2
+text = "  X  "
+
+[node name="DetailPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -207.0
+offset_top = -130.0
+offset_right = 207.0
+offset_bottom = 130.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="DetailPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07190548, 0.07190548, 0.07190548, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="DetailPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DetailPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="LargeImage" type="TextureRect" parent="DetailPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DetailPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="NameLbl" type="Label" parent="DetailPanel/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+
+[node name="SciNameLbl" type="Label" parent="DetailPanel/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="YearLbl" type="Label" parent="DetailPanel/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DescLbl" type="Label" parent="DetailPanel/MarginContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+
+[node name="BtnClosePopup" type="Button" parent="DetailPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -35.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "  X  "

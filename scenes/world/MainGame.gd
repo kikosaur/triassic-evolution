@@ -3,6 +3,7 @@ extends Node2D
 @onready var click_zone = $ClickZone
 @onready var dino_container = $DinoContainer
 @onready var dna_label = $UI_Layer/TopPanel/DNALabel
+@onready var fossil_label = $UI_Layer/TopPanel/FossilLabel
 
 # DRAG TEXTURES HERE IN INSPECTOR!
 @export var phase_1_tex: Texture2D # Desert [cite: 19]
@@ -28,6 +29,9 @@ extends Node2D
 
 @onready var extinction_panel = $UI_Layer/ExtinctionPanel
 
+@onready var museum = $UI_Layer/MuseumScene
+@onready var btn_museum = $UI_Layer/BtnMuseum
+
 func _ready():
 	print("Main Game Started")
 	click_zone.pressed.connect(_on_background_clicked)
@@ -36,8 +40,8 @@ func _ready():
 	btn_research.pressed.connect(func(): research_menu.visible = !research_menu.visible)
 	
 	GameManager.connect("extinction_triggered", _show_extinction)
-	
 	GameManager.connect("dinosaur_spawned", _spawn_dino)
+	GameManager.connect("fossils_changed", _update_fossils_ui)
 	
 	# --- TOGGLE LOGIC ---
 	# Open/Close the Shop
@@ -47,6 +51,11 @@ func _ready():
 		if shop_panel.visible:
 			research_menu.visible = false
 		)
+		
+	btn_museum.pressed.connect(func(): 
+		museum.visible = true
+		museum.refresh_gallery() # Ensure it updates if we just unlocked something!
+	)
 
 func _on_background_clicked():
 	GameManager.add_dna(5) # Increased to 5 to make testing faster!
@@ -87,3 +96,7 @@ func _process(_delta):
 			total_dps += dino.species_data.passive_dna_yield
 	
 	dna_label.text = "DNA: " + str(GameManager.current_dna) + " (+" + str(total_dps) + "/s)"
+
+func _update_fossils_ui(new_amount):
+	# This updates the text whenever the number changes
+	fossil_label.text = "Fossils: " + str(new_amount)

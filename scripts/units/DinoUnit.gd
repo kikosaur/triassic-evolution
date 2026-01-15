@@ -1,127 +1,133 @@
-extends CharacterBody2D
+extends Node2D
+class_name DinoUnit
 
-var species_data: DinosaurSpecies
-var target_pos: Vector2
+@export var species_data: DinosaurSpecies
+
+# --- STATE VARIABLES ---
 var is_dead: bool = false
-var hunger_timer: float = 0.0
-var passive_timer: Timer # We will create this in code
+var current_age: float = 0.0
+var age_multiplier: float = 1.0
+
+# Movement Variables
+var target_position: Vector2
+var move_speed: float = 30.0
+var move_timer: float = 0.0
+
+# Components
+@onready var sprite = $Sprite2D
+var passive_timer: Timer
 
 func _ready():
+	# 1. SETUP VISUALS
 	if species_data:
-		$Sprite2D.texture = species_data.icon
-		
-	# Random destination start
+		sprite.texture = species_data.icon
+		# Randomize speed slightly so they don't all move in sync
+		move_speed = randf_range(20.0, 40.0) 
+	
+	# 2. PICK FIRST DESTINATION
 	_pick_random_destination()
-
-	# Life Timer (Death)
-	var life = Timer.new()
-	life.wait_time = randf_range(30.0, 60.0) # Increased life so they have time to eat
-	life.one_shot = true
-	life.timeout.connect(_on_death)
-	add_child(life)
-	life.start()
 	
-	_setup_passive_income()
+	# 3. START PASSIVE INCOME & EATING
+	_setup_passive_timer()
 
-func _physics_process(delta):
-	if is_dead: return
+func _process(delta):
+	if is_dead: return 
 	
-	# 1. Move
-	var dir = (target_pos - global_position).normalized()
-	velocity = dir * 50.0
-	if velocity.x < 0: $Sprite2D.flip_h = true
-	else: $Sprite2D.flip_h = false
-	move_and_slide()
-	
-	if global_position.distance_to(target_pos) < 10.0:
-		_pick_random_destination()
+	_handle_aging(delta)
+	_handle_movement(delta)
 
-	# 2. Hunger Check (Every 4 seconds)
-	hunger_timer += delta
-	if hunger_timer > 4.0:
-		hunger_timer = 0
-		_check_hunger()
+# --- MOVEMENT LOGIC (RESTORED) ---
+func _handle_movement(delta):
+	# Move towards target
+	position = position.move_toward(target_position, move_speed * delta)
+	
+	# Flip sprite based on direction
+	if target_position.x < position.x:
+		sprite.flip_h = true
+	else:
+		sprite.flip_h = false
+		
+	# Check if we arrived
+	if position.distance_to(target_position) < 5.0:
+		move_timer -= delta
+		if move_timer <= 0:
+			_pick_random_destination()
 
 func _pick_random_destination():
-	target_pos = Vector2(randf_range(50, 1200), randf_range(300, 650))
+	# Pick a random spot on the screen (adjust numbers to fit your map size)
+	var x = randf_range(100, 1100) # Keep within screen width
+	var y = randf_range(300, 600)  # Keep on the ground
+	target_position = Vector2(x, y)
+	move_timer = randf_range(2.0, 5.0) # Wait 2-5 seconds before moving again
 
-func _check_hunger():
-	# If no data, assume safe
+# --- AGING LOGIC (KEPT) ---
+func _handle_aging(delta):
 	if not species_data: return
 
-	if species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
-		# Try to eat plants (Cost 1.0 density)
-		if GameManager.consume_vegetation(1.0):
-			show_popup("Yum") # Optional visual
-		else:
-			# STARVATION: No plants left!
-			_take_damage()
-
-	elif species_data.diet == DinosaurSpecies.Diet.CARNIVORE:
-		# PRIORITY 1: Eat Critters [cite: 102]
-		if GameManager.consume_critters(1.0):
-			show_popup("Yum")
-		else:
-			# PRIORITY 2: The Desperation Rule (Hunt Herbivores) [cite: 104]
-			_hunt_herbivore()
-
-func _hunt_herbivore():
-	# Find all dinos
-	var all_dinos = get_tree().get_nodes_in_group("dinos")
+	var current_phase = GameManager.get_current_biome_phase()
+	var ideal = species_data.ideal_biome_phase
 	
-	for dino in all_dinos:
-		# Don't eat myself, and don't eat dead things
-		if dino != self and not dino.is_dead:
-			# Check if target is Herbivore
-			if dino.species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
-				dino.die_from_predator()
-				show_popup("HUNTED!")
-				return # Ate one, stop hunting
-	
-	# If we found nothing to eat, we starve
-	_take_damage()
-
-func _take_damage():
-	# Visual feedback for starvation
-	modulate = Color(1, 0, 0) # Flash Red
-	print(name + " is starving!")
-
-func die_from_predator():
-	_on_death() # Trigger normal death logic
-	# Maybe add blood effect here later
-
-# --- EXISTING DEATH/CLICK LOGIC ---
-func _on_death():
-	is_dead = true
-	$Sprite2D.rotation_degrees = 180
-	$Sprite2D.modulate = Color(0.5, 0.5, 0.5)
-
-func _on_button_pressed():
-	if is_dead:
-		GameManager.add_fossils(1)
-		queue_free()
+	if current_phase == ideal:
+		age_multiplier = 1.0
+		sprite.modulate = sprite.modulate.lerp(Color(1, 1, 1), delta * 5.0) 
 	else:
-		GameManager.add_dna(1)
+		var mismatch = abs(current_phase - ideal) 
+		var tolerance = species_data.tolerance
+		age_multiplier = 1.0 + (mismatch * (1.0 - tolerance) * 2.0)
+		sprite.modulate = sprite.modulate.lerp(Color(1, 0.4, 0.4), delta * 5.0)
 
-# Helper for debug text (optional)
-func show_popup(text):
-	print(species_data.species_name + ": " + text)
+	current_age += delta * age_multiplier
 	
-func _setup_passive_income():
+	if current_age >= species_data.base_lifespan:
+		die()
+
+# --- EATING & INCOME LOGIC (RESTORED) ---
+func _setup_passive_timer():
 	passive_timer = Timer.new()
-	passive_timer.wait_time = 1.0 # Income every 1 second
+	passive_timer.wait_time = 1.0
 	passive_timer.autostart = true
-	passive_timer.one_shot = false
 	add_child(passive_timer)
-	
-	# Connect the timer to a function
-	passive_timer.timeout.connect(_on_passive_income_tick)
+	passive_timer.timeout.connect(_on_tick)
 
-func _on_passive_income_tick():
-	if is_dead: 
-		passive_timer.stop() # Dead dinos don't pay taxes
-		return
-		
-	if species_data:
+func _on_tick():
+	if is_dead or not species_data: return
+	
+	# 1. TRY TO EAT
+	var ate_food = false
+	
+	# Check diet (0 = Herbivore, 1 = Carnivore)
+	if species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
+		# Try to eat 1% Vegetation
+		ate_food = GameManager.consume_vegetation(1.0) 
+	else:
+		# Try to eat 1% Critters
+		ate_food = GameManager.consume_critters(1.0)
+	
+	# 2. GENERATE DNA (Only if they ate!)
+	if ate_food:
 		GameManager.add_dna(species_data.passive_dna_yield)
-		# Optional: Add a tiny floating text effect here later!
+	else:
+		# Optional: Take damage or age faster if starving?
+		print(species_data.species_name + " is starving!")
+
+# --- DEATH & HARVESTING (KEPT) ---
+func die():
+	if is_dead: return 
+	is_dead = true
+	
+	sprite.modulate = Color(0.4, 0.35, 0.3) 
+	sprite.rotation_degrees = 180 
+	sprite.position.y += 10 
+	
+	if passive_timer: passive_timer.stop()
+	print("Dino died! Click to harvest fossil.")
+
+func _unhandled_input(event):
+	if is_dead and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if sprite.get_rect().has_point(sprite.to_local(event.position)):
+			_harvest_fossil()
+
+func _harvest_fossil():
+	if GameManager.has_method("add_fossils"):
+		GameManager.add_fossils(1)
+	queue_free()

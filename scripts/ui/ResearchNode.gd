@@ -1,49 +1,75 @@
 extends Control
 
 @export var my_data: ResearchDef
-@export var parent_node: Control # Link this in Inspector!
+@export var parent_node: Control 
 
-@onready var btn = $BtnNode
-@onready var lbl_name = $NameLabel
-@onready var lbl_cost = $CostLabel
+# --- NODE PATHS ---
+# Update these to match your exact Scene Tree!
+# Based on your screenshots, these seem to be direct children, not in a VBox.
+@onready var btn_node = $VBoxContainer/BtnNode
+@onready var name_label = $VBoxContainer/NameLabel
+@onready var cost_label = $VBoxContainer/CostLabel
 @onready var line = $LinkLine
+@onready var icon_rect = $IconRect # Ensure this node exists!
 
 func _ready():
-	btn.pressed.connect(_on_click)
+	# Connect the click
+	btn_node.pressed.connect(_on_click)
 	
 	# Draw line to parent
 	if parent_node:
 		line.clear_points()
 		line.add_point(size / 2) # My Center
-		# Parent Center (Relative)
+		# Calculate Parent Center (Relative to me)
 		var target = parent_node.position - position + (parent_node.size / 2)
 		line.add_point(target)
 
+	# Initial Visual Update
+	_update_visuals()
+
 func _process(_delta):
+	# Keep checking visuals (useful if unlocked status changes)
 	_update_visuals()
 
 func _update_visuals():
 	if not my_data: return
 	
+	# 1. SETUP ICON (Load image from data)
+	if my_data.icon and icon_rect.texture != my_data.icon:
+		icon_rect.texture = my_data.icon
+
+	# 2. CHECK STATUS
 	var is_unlocked = GameManager.is_research_unlocked(my_data)
 	var parent_unlocked = true
 	if my_data.parent_research:
 		parent_unlocked = GameManager.is_research_unlocked(my_data.parent_research)
 	
+	# 3. APPLY VISUALS
 	if is_unlocked:
-		modulate = Color(1, 1, 1) # Normal
-		lbl_cost.text = "OWNED"
-		lbl_name.text = my_data.display_name
+		# --- OWNED STATE ---
+		modulate = Color(1, 1, 1) # Full Color
+		icon_rect.modulate = Color(1, 1, 1) # Normal Icon
+		cost_label.text = "OWNED"
+		name_label.text = my_data.display_name
+		btn_node.disabled = false # Allow clicking (maybe to view details?)
+		
 	elif parent_unlocked:
-		modulate = Color(0.7, 0.7, 0.7) # Gray (Available)
-		# CHANGED: Show DNA Cost
-		lbl_cost.text = str(my_data.dna_cost) + " DNA"
-		lbl_name.text = "???"
+		# --- AVAILABLE STATE ---
+		modulate = Color(1, 1, 1) # Normal brightness
+		icon_rect.modulate = Color(0, 0, 0, 0.8) # Silhouetted Icon (Mystery)
+		
+		cost_label.text = str(my_data.dna_cost) + " DNA"
+		name_label.text = my_data.display_name # Show name so they know what to buy
+		btn_node.disabled = false
+		
 	else:
-		modulate = Color(0.2, 0.2, 0.2) # Dark (Locked)
-		lbl_cost.text = "LOCKED"
-		lbl_name.text = "LOCKED"
+		# --- LOCKED STATE ---
+		modulate = Color(0.5, 0.5, 0.5) # Dimmed
+		icon_rect.modulate = Color(0, 0, 0, 1) # Black Silhouette
+		
+		cost_label.text = "LOCKED"
+		name_label.text = "???"
+		btn_node.disabled = true
 
 func _on_click():
-	# CHANGED: Just call the manager, it handles the spending check now
 	GameManager.try_unlock_research(my_data)

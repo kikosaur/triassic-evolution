@@ -7,3 +7,4 @@
 script = ExtResource("2_iro2c")
 species_name = "Archosaur"
 icon = ExtResource("1_iro2c")
+tolerance = 0.8

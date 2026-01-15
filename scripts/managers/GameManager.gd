@@ -10,6 +10,7 @@ signal extinction_triggered # Needed for Sprint 7
 # --- ECONOMY VARIABLES ---
 var current_dna: int = 0
 var current_fossils: int = 0
+var fossils: int = 0
 var vegetation_density: float = 0.0
 var critter_density: float = 0.0
 var prestige_multiplier: float = 1.0 
@@ -37,8 +38,9 @@ func try_spend_dna(amount: int) -> bool:
 	return false
 
 func add_fossils(amount: int):
-	current_fossils += amount
-	emit_signal("fossils_changed", current_fossils)
+	fossils += amount
+	emit_signal("fossils_changed", fossils)
+	print("Fossils Collected: ", fossils)
 
 func try_spend_fossils(amount: int) -> bool:
 	if current_fossils >= amount:
@@ -94,3 +96,15 @@ func trigger_dino_spawn(species_data: DinosaurSpecies):
 
 func trigger_extinction():
 	emit_signal("extinction_triggered")
+	
+	# --- BIOME HELPERS ---
+func get_current_biome_phase() -> int:
+	# Phase 1: Desert (0-30%)
+	if vegetation_density <= 30.0:
+		return 1
+	# Phase 2: Oasis (31-60%)
+	elif vegetation_density <= 60.0:
+		return 2
+	# Phase 3: Jungle (61%+)
+	else:
+		return 3
