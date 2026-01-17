@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c338ymwmyekeu"]
+[gd_scene load_steps=4 format=3 uid="uid://c338ymwmyekeu"]
 
 [ext_resource type="Script" uid="uid://ch8vttn87iqso" path="res://scripts/ui/TopPanel.gd" id="1_cv8v4"]
+[ext_resource type="Texture2D" uid="uid://crqklpu2efmjm" path="res://assets/ui/currency_holder.png" id="2_xvflj"]
+[ext_resource type="FontFile" uid="uid://bwwxs05nocmm8" path="res://assets/fonts/PressStart2P-Regular.ttf" id="3_xvflj"]
 
 [node name="TopPanel" type="Panel"]
 anchors_preset = 10
@@ -8,22 +10,32 @@ anchor_right = 1.0
 grow_horizontal = 2
 script = ExtResource("1_cv8v4")
 
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 750.0
+offset_bottom = 84.0
+texture = ExtResource("2_xvflj")
+expand_mode = 1
+
 [node name="DNALabel" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 97.0
+offset_top = 26.0
+offset_right = 203.0
+offset_bottom = 71.0
+theme_override_fonts/font = ExtResource("3_xvflj")
 theme_override_font_sizes/font_size = 32
-text = "DNA: 0"
+text = "0"
 
 [node name="FossilLabel" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 23.0
-grow_horizontal = 0
+offset_left = 478.0
+offset_top = 25.0
+offset_right = 615.0
+offset_bottom = 70.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_fonts/font = ExtResource("3_xvflj")
 theme_override_font_sizes/font_size = 32
-text = "Fossils: 0"
+text = "0"

@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("2_4kg8i")
 species_name = "Liliensternus"
+visual_scale = 1.5
 base_dna_cost = 2500
 passive_dna_yield = 250
 icon = ExtResource("2_57mc7")

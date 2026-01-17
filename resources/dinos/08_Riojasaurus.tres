@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("2_hosl5")
 species_name = "Riojasaurus"
+visual_scale = 2.5
 base_dna_cost = 5000
 passive_dna_yield = 500
 icon = ExtResource("2_vw1ga")

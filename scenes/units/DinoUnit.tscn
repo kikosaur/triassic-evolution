@@ -1,13 +1,17 @@
 [gd_scene load_steps=3 format=3 uid="uid://bulp1yfpkcn1v"]
 
 [ext_resource type="Script" uid="uid://bsbkimtwdosw3" path="res://scripts/units/DinoUnit.gd" id="1_y6qrp"]
-[ext_resource type="Texture2D" uid="uid://cph040cstd880" path="res://assets/dinosaurs/00-1.png" id="2_ooqy5"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0l8cr"]
+animations = []
 
 [node name="DinoUnit" type="CharacterBody2D" groups=["dinos"]]
 script = ExtResource("1_y6qrp")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_ooqy5")
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_0l8cr")
+animation = &""
 
 [node name="Button" type="Button" parent="."]
 modulate = Color(1, 1, 1, 0)

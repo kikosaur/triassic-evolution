@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("2_x52go")
 species_name = "Coelophysis"
+visual_scale = 1.1
 base_dna_cost = 850
 passive_dna_yield = 40
 icon = ExtResource("2_efy8r")

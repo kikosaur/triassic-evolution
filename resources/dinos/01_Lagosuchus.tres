@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("2_0xooo")
 species_name = "Lagosuchus"
+visual_scale = 0.5
 base_dna_cost = 100
 passive_dna_yield = 2
 icon = ExtResource("5_2fcaj")

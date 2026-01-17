@@ -12,12 +12,14 @@ config_version=5
 
 config/name="Triassic-EvolutionV2"
 run/main_scene="uid://bm35tyebotbck"
+config/auto_accept_quit=false
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 GameManager="*res://scripts/managers/GameManager.gd"
+AuthManager="*res://scripts/managers/AuthManager.gd"
 
 [display]
 

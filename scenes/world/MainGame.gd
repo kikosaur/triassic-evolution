@@ -4,16 +4,15 @@ extends Node2D
 @onready var dino_container = $DinoContainer
 @onready var dna_label = $UI_Layer/TopPanel/DNALabel
 @onready var fossil_label = $UI_Layer/TopPanel/FossilLabel
+@onready var background_sprite = $WorldArt/Background # Make sure this points to your BG!
 
-# DRAG TEXTURES HERE IN INSPECTOR!
-@export var phase_1_tex: Texture2D # Desert [cite: 19]
-@export var phase_2_tex: Texture2D # Oasis [cite: 21]
-@export var phase_3_tex: Texture2D # Jungle [cite: 23]
-
-# BACKGROUND
-@onready var layer_water = $WorldArt/Layer_Water
-@onready var layer_ferns = $WorldArt/Layer_Ferns
-@onready var layer_trees = $WorldArt/Layer_Trees
+@export_group("Biome Transitions")
+@export var bg_01_base: Texture2D
+@export var bg_02_pools: Texture2D
+@export var bg_03_ferns: Texture2D
+@export var bg_04_rivers: Texture2D
+@export var bg_05_cycads: Texture2D
+@export var bg_06_forest: Texture2D
 
 # EXISTING EXPORTS
 @export var dino_scene: PackedScene 
@@ -42,6 +41,9 @@ func _ready():
 	GameManager.connect("extinction_triggered", _show_extinction)
 	GameManager.connect("dinosaur_spawned", _spawn_dino)
 	GameManager.connect("fossils_changed", _update_fossils_ui)
+	GameManager.connect("research_unlocked", _on_research_unlocked)
+	
+	_update_biome_visuals()
 	
 	# --- TOGGLE LOGIC ---
 	# Open/Close the Shop
@@ -57,8 +59,45 @@ func _ready():
 		museum.refresh_gallery() # Ensure it updates if we just unlocked something!
 	)
 
+func _on_research_unlocked(_id):
+	_update_biome_visuals()
+
+func _update_biome_visuals():
+	# We check from HIGHEST tier to LOWEST tier.
+	# The first one we find is the "best" background we have.
+	
+	var unlocked = GameManager.unlocked_research_ids
+	
+	# 1. CHECK TIER 6 (Forest)
+	if "node_forest" in unlocked:
+		background_sprite.texture = bg_06_forest
+		return
+
+	# 2. CHECK TIER 5 (Cycads)
+	if "node_cycads" in unlocked:
+		background_sprite.texture = bg_05_cycads
+		return
+
+	# 3. CHECK TIER 4 (Rivers - assuming ID is node_rivers)
+	if "node_river" in unlocked:
+		background_sprite.texture = bg_04_rivers
+		return
+
+	# 4. CHECK TIER 3 (Ferns)
+	if "node_ferns" in unlocked:
+		background_sprite.texture = bg_03_ferns
+		return
+
+	# 5. CHECK TIER 2 (Pools)
+	if "node_pools" in unlocked:
+		background_sprite.texture = bg_02_pools
+		return
+
+	# 6. DEFAULT (Base)
+	background_sprite.texture = bg_01_base
+
 func _on_background_clicked():
-	GameManager.add_dna(5) # Increased to 5 to make testing faster!
+	GameManager.add_dna(10000) # Increased to 5 to make testing faster!
 
 func _on_buy_pressed():
 	if GameManager.try_spend_dna(archosaur_res.base_dna_cost):
@@ -82,21 +121,32 @@ func _spawn_dino(species_res: DinosaurSpecies):
 
 func _process(_delta):
 	# Check the unlocked list in GameManager
-	if "node_pools" in GameManager.unlocked_research_ids:
-		layer_water.visible = true
-	
-	if "node_ferns" in GameManager.unlocked_research_ids:
-		layer_ferns.visible = true
-		
-	if "node_forest" in GameManager.unlocked_research_ids:
-		layer_trees.visible = true
 	var total_dps = 0
 	for dino in dino_container.get_children():
 		if not dino.is_dead and dino.species_data:
 			total_dps += dino.species_data.passive_dna_yield
 	
-	dna_label.text = "DNA: " + str(GameManager.current_dna) + " (+" + str(total_dps) + "/s)"
+	dna_label.text = str(GameManager.current_dna)
 
 func _update_fossils_ui(new_amount):
 	# This updates the text whenever the number changes
-	fossil_label.text = "Fossils: " + str(new_amount)
+	fossil_label.text = str(new_amount)
+
+func _on_btn_save_pressed():
+	var data = GameManager.get_save_dictionary()
+	AuthManager.save_game_to_cloud(data)
+
+func _on_btn_load_pressed():
+	AuthManager.load_game_from_cloud()
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		# Give GameManager time to send the save request
+		if AuthManager.user_id != "":
+			print("Saving before quit...")
+			var data = GameManager.get_save_dictionary()
+			AuthManager.save_game_to_cloud(data)
+			# Wait a tiny bit for the request to fire (approximate)
+			await get_tree().create_timer(0.5).timeout
+		
+		get_tree().quit() # Now actually close

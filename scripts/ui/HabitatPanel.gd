@@ -4,13 +4,9 @@ extends Panel
 # even if it is inside a VBoxContainer!
 @onready var veg_bar = %VegBar
 @onready var critter_bar = %CritterBar
-@onready var btn_veg = %BtnBuyVeg
-@onready var btn_critter = %BtnBuyCritter
 
 func _ready():
 	# Connect Buttons
-	btn_veg.pressed.connect(func(): GameManager.buy_vegetation())
-	btn_critter.pressed.connect(func(): GameManager.buy_critters())
 	
 	# Listen for updates
 	GameManager.connect("habitat_updated", _on_update)

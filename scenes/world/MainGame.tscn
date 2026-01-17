@@ -1,18 +1,26 @@
-[gd_scene load_steps=15 format=3 uid="uid://bm35tyebotbck"]
+[gd_scene load_steps=23 format=3 uid="uid://bm35tyebotbck"]
 
 [ext_resource type="Script" uid="uid://ca1ywh1c2458h" path="res://scenes/world/MainGame.gd" id="1_o1bk3"]
 [ext_resource type="PackedScene" uid="uid://c338ymwmyekeu" path="res://scenes/ui/TopPanel.tscn" id="2_70oxy"]
 [ext_resource type="PackedScene" uid="uid://bulp1yfpkcn1v" path="res://scenes/units/DinoUnit.tscn" id="2_yr4w4"]
-[ext_resource type="Texture2D" uid="uid://cgin5evn4e8d5" path="res://assets/habitats/bg_desert.png" id="2_yugiq"]
-[ext_resource type="Texture2D" uid="uid://dcops6jik1ahp" path="res://assets/habitats/bg_oasis.png" id="3_740hf"]
-[ext_resource type="Texture2D" uid="uid://dkrl0gjw4xeec" path="res://assets/habitats/bg_jungle.png" id="4_ue8bh"]
+[ext_resource type="Texture2D" uid="uid://vryllq2qcx8b" path="res://assets/habitat-transition/01 Base.png" id="5_u7f5m"]
+[ext_resource type="Texture2D" uid="uid://b8pliqj6b57t8" path="res://assets/habitat-transition/02 Pools.png" id="6_fur8u"]
 [ext_resource type="Texture2D" uid="uid://cph040cstd880" path="res://assets/dinosaurs/00-1.png" id="6_kyv22"]
 [ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="7_emtlf"]
+[ext_resource type="Texture2D" uid="uid://is5krckgq58o" path="res://assets/habitat-transition/03 Ferns.png" id="7_g2aln"]
+[ext_resource type="Texture2D" uid="uid://6wxof24kbm7p" path="res://assets/habitat-transition/04 Rivers.png" id="8_k8fvk"]
 [ext_resource type="PackedScene" uid="uid://lmy01cu6ufgi" path="res://scenes/ui/HabitatPanel.tscn" id="8_kyv22"]
 [ext_resource type="PackedScene" uid="uid://d1pvlplrkkm5d" path="res://scenes/ui/ResearchMenu.tscn" id="9_740hf"]
+[ext_resource type="Texture2D" uid="uid://blr2a32qtxvbr" path="res://assets/habitat-transition/05 Cycads.png" id="9_g2aln"]
+[ext_resource type="Texture2D" uid="uid://ce201kx6kh82p" path="res://assets/habitat-transition/06 Forest.png" id="10_k8fvk"]
 [ext_resource type="PackedScene" uid="uid://rc6mwphwcjrk" path="res://scenes/ui/ExtinctionPanel.tscn" id="10_ue8bh"]
 [ext_resource type="PackedScene" uid="uid://c5xetkp3c7xg" path="res://scenes/ui/ShopPanel.tscn" id="12_emtlf"]
 [ext_resource type="PackedScene" uid="uid://ifcqyuyvc104" path="res://scenes/ui/MuseumScene.tscn" id="13_lnpaj"]
+[ext_resource type="Texture2D" uid="uid://dr3tojso7ddpw" path="res://assets/ui/research.png" id="14_3sbe1"]
+[ext_resource type="Texture2D" uid="uid://clkgvmn3n5xmt" path="res://assets/ui/market.png" id="16_3sbe1"]
+[ext_resource type="Texture2D" uid="uid://bmg2rghxviulq" path="res://assets/ui/museum.png" id="19_b5gth"]
+[ext_resource type="PackedScene" uid="uid://c0ss5gbri434f" path="res://scenes/ui/AuthPanel.tscn" id="20_jp2mt"]
+[ext_resource type="PackedScene" uid="uid://besvm1u4muhdt" path="res://scenes/ui/WelcomeBackPanel.tscn" id="21_3sbe1"]
 
 [sub_resource type="Resource" id="Resource_lnpaj"]
 script = ExtResource("7_emtlf")
@@ -21,32 +29,20 @@ icon = ExtResource("6_kyv22")
 
 [node name="MainGame" type="Node2D"]
 script = ExtResource("1_o1bk3")
-phase_1_tex = ExtResource("2_yugiq")
-phase_2_tex = ExtResource("3_740hf")
-phase_3_tex = ExtResource("4_ue8bh")
+bg_01_base = ExtResource("5_u7f5m")
+bg_02_pools = ExtResource("6_fur8u")
+bg_03_ferns = ExtResource("7_g2aln")
+bg_04_rivers = ExtResource("8_k8fvk")
+bg_05_cycads = ExtResource("9_g2aln")
+bg_06_forest = ExtResource("10_k8fvk")
 dino_scene = ExtResource("2_yr4w4")
 archosaur_res = SubResource("Resource_lnpaj")
 
 [node name="WorldArt" type="Node2D" parent="."]
 
-[node name="BaseTerrain" type="Sprite2D" parent="WorldArt"]
+[node name="Background" type="Sprite2D" parent="WorldArt"]
 scale = Vector2(0.4651163, 0.46809897)
-texture = ExtResource("2_yugiq")
-centered = false
-
-[node name="Layer_Water" type="Sprite2D" parent="WorldArt"]
-visible = false
-scale = Vector2(0.4651163, 0.46809897)
-centered = false
-
-[node name="Layer_Ferns" type="Sprite2D" parent="WorldArt"]
-visible = false
-scale = Vector2(0.4651163, 0.46809897)
-centered = false
-
-[node name="Layer_Trees" type="Sprite2D" parent="WorldArt"]
-visible = false
-scale = Vector2(0.4651163, 0.46809897)
+texture = ExtResource("5_u7f5m")
 centered = false
 
 [node name="ClickZone" type="Button" parent="."]
@@ -71,25 +67,33 @@ mouse_filter = 1
 [node name="ResearchMenu" parent="UI_Layer" instance=ExtResource("9_740hf")]
 visible = false
 
-[node name="BtnToggleResearch" type="Button" parent="UI_Layer"]
-offset_left = 105.0
-offset_top = 689.0
-offset_right = 184.0
-offset_bottom = 720.0
-text = "Research
-"
+[node name="BtnToggleResearch" type="TextureButton" parent="UI_Layer"]
+custom_minimum_size = Vector2(100, 90)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 106.0
+offset_top = -90.0
+offset_right = 206.0
+grow_vertical = 0
+texture_normal = ExtResource("14_3sbe1")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="ExtinctionPanel" parent="UI_Layer" instance=ExtResource("10_ue8bh")]
 visible = false
 
-[node name="BtnToggleShop" type="Button" parent="UI_Layer"]
+[node name="BtnToggleShop" type="TextureButton" parent="UI_Layer"]
+custom_minimum_size = Vector2(80, 90)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -8.0
-offset_right = 8.0
+offset_top = -90.0
+offset_right = 104.0
 grow_vertical = 0
-text = "Dino Market"
+texture_normal = ExtResource("16_3sbe1")
+ignore_texture_size = true
+stretch_mode = 0
 
 [node name="ShopPanel" parent="UI_Layer" instance=ExtResource("12_emtlf")]
 visible = false
@@ -101,9 +105,32 @@ offset_bottom = -33.0
 [node name="MuseumScene" parent="UI_Layer" instance=ExtResource("13_lnpaj")]
 visible = false
 
-[node name="BtnMuseum" type="Button" parent="UI_Layer"]
-offset_left = 184.0
-offset_top = 689.0
-offset_right = 260.0
-offset_bottom = 720.0
-text = "Museum"
+[node name="BtnMuseum" type="TextureButton" parent="UI_Layer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 208.0
+offset_top = -90.0
+offset_right = 308.0
+grow_vertical = 0
+texture_normal = ExtResource("19_b5gth")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Label" type="Label" parent="UI_Layer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -93.0
+offset_top = -23.0
+offset_right = 93.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Triassic-Evolution-v2.0.0"
+
+[node name="AuthPanel" parent="UI_Layer" instance=ExtResource("20_jp2mt")]
+
+[node name="WelcomePanel" parent="UI_Layer" instance=ExtResource("21_3sbe1")]
+visible = false

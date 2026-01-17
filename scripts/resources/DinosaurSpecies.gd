@@ -5,6 +5,8 @@ enum Diet { HERBIVORE, CARNIVORE }
 
 @export_group("Stats")
 @export var species_name: String = "Dino Name"
+@export var visual_scale: float = 1.0
+@export var animations: SpriteFrames
 @export var diet: Diet = Diet.HERBIVORE
 @export var base_dna_cost: int = 10
 @export var passive_dna_yield: int = 1

@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("2_lttrv")
 species_name = "Plateosaurus"
+visual_scale = 1.8
 base_dna_cost = 1000
 passive_dna_yield = 100
 icon = ExtResource("2_216op")

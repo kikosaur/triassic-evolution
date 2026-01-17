@@ -2,6 +2,7 @@ extends Panel
 
 @onready var dna_label = $DNALabel
 @onready var fossil_label = $FossilLabel # NEW
+@onready var ui = TextureRect
 
 func _ready():
 	GameManager.connect("dna_changed", _update_dna)
@@ -11,7 +12,7 @@ func _ready():
 	_update_fossils(GameManager.current_fossils)
 
 func _update_dna(amount):
-	dna_label.text = "DNA: " + str(amount)
+	dna_label.text = str(amount)
 
 func _update_fossils(amount):
-	fossil_label.text = "Fossils: " + str(amount)
+	fossil_label.text = str(amount)
