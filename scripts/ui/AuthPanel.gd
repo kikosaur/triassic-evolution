@@ -1,10 +1,10 @@
 extends Panel
 
-@onready var email_input = $VBoxContainer/EmailInput
-@onready var pass_input = $VBoxContainer/PassInput
-@onready var status_label = $VBoxContainer/StatusLabel
-@onready var btn_login = $VBoxContainer/HBoxContainer/BtnLogin
-@onready var btn_signup = $VBoxContainer/HBoxContainer/BtnSignup
+@onready var email_input = $MarginContainer/VBoxContainer/EmailInput
+@onready var pass_input = $MarginContainer/VBoxContainer/PassInput
+@onready var status_label = $MarginContainer/VBoxContainer/StatusLabel
+@onready var btn_login = $MarginContainer/VBoxContainer/HBoxContainer/BtnLogin
+@onready var btn_signup = $MarginContainer/VBoxContainer/HBoxContainer/BtnSignup
 
 func _ready():
 	# Connect Buttons
@@ -37,9 +37,6 @@ func _on_auth_result(success, message):
 	status_label.text = message
 	if success:
 		status_label.modulate = Color.GREEN
-		if "Login Successful" in message:
-			await get_tree().create_timer(1.0).timeout
-			visible = false # Hide panel on success
 	else:
 		status_label.modulate = Color.RED
 

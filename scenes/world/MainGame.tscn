@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bm35tyebotbck"]
+[gd_scene load_steps=24 format=3 uid="uid://bm35tyebotbck"]
 
 [ext_resource type="Script" uid="uid://ca1ywh1c2458h" path="res://scenes/world/MainGame.gd" id="1_o1bk3"]
 [ext_resource type="PackedScene" uid="uid://c338ymwmyekeu" path="res://scenes/ui/TopPanel.tscn" id="2_70oxy"]
@@ -19,8 +19,9 @@
 [ext_resource type="Texture2D" uid="uid://dr3tojso7ddpw" path="res://assets/ui/research.png" id="14_3sbe1"]
 [ext_resource type="Texture2D" uid="uid://clkgvmn3n5xmt" path="res://assets/ui/market.png" id="16_3sbe1"]
 [ext_resource type="Texture2D" uid="uid://bmg2rghxviulq" path="res://assets/ui/museum.png" id="19_b5gth"]
-[ext_resource type="PackedScene" uid="uid://c0ss5gbri434f" path="res://scenes/ui/AuthPanel.tscn" id="20_jp2mt"]
 [ext_resource type="PackedScene" uid="uid://besvm1u4muhdt" path="res://scenes/ui/WelcomeBackPanel.tscn" id="21_3sbe1"]
+[ext_resource type="PackedScene" uid="uid://c77xp245t26vp" path="res://scenes/ui/StartScreen.tscn" id="21_b5gth"]
+[ext_resource type="PackedScene" uid="uid://b8io3jmork557" path="res://scenes/ui/SettingsPanel.tscn" id="22_b5gth"]
 
 [sub_resource type="Resource" id="Resource_lnpaj"]
 script = ExtResource("7_emtlf")
@@ -130,7 +131,10 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Triassic-Evolution-v2.0.0"
 
-[node name="AuthPanel" parent="UI_Layer" instance=ExtResource("20_jp2mt")]
-
 [node name="WelcomePanel" parent="UI_Layer" instance=ExtResource("21_3sbe1")]
+visible = false
+
+[node name="StartScreen" parent="UI_Layer" instance=ExtResource("21_b5gth")]
+
+[node name="SettingsPanel" parent="UI_Layer" instance=ExtResource("22_b5gth")]
 visible = false

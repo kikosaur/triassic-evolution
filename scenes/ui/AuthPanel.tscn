@@ -8,48 +8,69 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -150.0
-offset_right = 200.0
-offset_bottom = 150.0
+offset_left = -300.0
+offset_top = -225.0
+offset_right = 300.0
+offset_bottom = 225.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_62k5a")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -200.0
+offset_right = 250.0
+offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
 
-[node name="Label" type="Label" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
-text = "Triassic Cloud Save"
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "SIGN IN"
 horizontal_alignment = 1
 
-[node name="EmailInput" type="LineEdit" parent="VBoxContainer"]
+[node name="EmailInput" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 75)
 layout_mode = 2
 placeholder_text = "Email"
 
-[node name="PassInput" type="LineEdit" parent="VBoxContainer"]
+[node name="PassInput" type="LineEdit" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 placeholder_text = "Password"
 secret = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 20
 alignment = 1
 
-[node name="BtnLogin" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="BtnLogin" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Log In"
 
-[node name="BtnSignup" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="BtnSignup" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Sign Up"
 
-[node name="StatusLabel" type="Label" parent="VBoxContainer"]
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "\"\""
+horizontal_alignment = 1

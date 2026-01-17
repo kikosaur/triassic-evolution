@@ -31,6 +31,9 @@ extends Node2D
 @onready var museum = $UI_Layer/MuseumScene
 @onready var btn_museum = $UI_Layer/BtnMuseum
 
+@onready var settings_panel = $UI_Layer/SettingsPanel
+@onready var btn_settings = $UI_Layer/TopPanel/BtnSettings
+
 func _ready():
 	print("Main Game Started")
 	click_zone.pressed.connect(_on_background_clicked)
@@ -58,6 +61,7 @@ func _ready():
 		museum.visible = true
 		museum.refresh_gallery() # Ensure it updates if we just unlocked something!
 	)
+	btn_settings.pressed.connect(func(): settings_panel.visible = true)
 
 func _on_research_unlocked(_id):
 	_update_biome_visuals()
