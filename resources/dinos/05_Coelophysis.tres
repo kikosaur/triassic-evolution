@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://cegl2eoxainc0"]
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=4 format=3 uid="uid://cegl2eoxainc0"]
 
+[ext_resource type="SpriteFrames" uid="uid://bv21cdyq62sb8" path="res://resources/dino_frames/Frames_Coelophysis.tres" id="1_pb518"]
 [ext_resource type="Texture2D" uid="uid://c5rigtjl7b135" path="res://assets/dinosaurs/05-1.png" id="2_efy8r"]
 [ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_x52go"]
 
@@ -7,6 +8,8 @@
 script = ExtResource("2_x52go")
 species_name = "Coelophysis"
 visual_scale = 1.1
+animations = ExtResource("1_pb518")
 base_dna_cost = 850
 passive_dna_yield = 40
 icon = ExtResource("2_efy8r")
+required_research_id = "node_coelo"

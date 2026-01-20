@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://dpqhonnoddjno"]
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=4 format=3 uid="uid://dpqhonnoddjno"]
 
+[ext_resource type="SpriteFrames" uid="uid://4grne4mo0gq4" path="res://resources/dino_frames/Frames_Liliensternus.tres" id="1_2qbwv"]
 [ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_4kg8i"]
 [ext_resource type="Texture2D" uid="uid://crwt6silivjb1" path="res://assets/dinosaurs/07-1.png" id="2_57mc7"]
 
@@ -7,6 +8,8 @@
 script = ExtResource("2_4kg8i")
 species_name = "Liliensternus"
 visual_scale = 1.5
+animations = ExtResource("1_2qbwv")
 base_dna_cost = 2500
 passive_dna_yield = 250
 icon = ExtResource("2_57mc7")
+required_research_id = "node_lilien"

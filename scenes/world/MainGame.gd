@@ -34,6 +34,9 @@ extends Node2D
 @onready var settings_panel = $UI_Layer/SettingsPanel
 @onready var btn_settings = $UI_Layer/TopPanel/BtnSettings
 
+@onready var btn_tasks = $UI_Layer/BtnTasks
+@onready var quest_panel = $UI_Layer/QuestPanel
+
 func _ready():
 	print("Main Game Started")
 	click_zone.pressed.connect(_on_background_clicked)
@@ -62,6 +65,8 @@ func _ready():
 		museum.refresh_gallery() # Ensure it updates if we just unlocked something!
 	)
 	btn_settings.pressed.connect(func(): settings_panel.visible = true)
+	
+	btn_tasks.pressed.connect(func(): quest_panel.show_panel())
 
 func _on_research_unlocked(_id):
 	_update_biome_visuals()
@@ -101,7 +106,7 @@ func _update_biome_visuals():
 	background_sprite.texture = bg_01_base
 
 func _on_background_clicked():
-	GameManager.add_dna(10000) # Increased to 5 to make testing faster!
+	GameManager.add_dna(1) # Increased to 5 to make testing faster!
 
 func _on_buy_pressed():
 	if GameManager.try_spend_dna(archosaur_res.base_dna_cost):
@@ -154,3 +159,11 @@ func _notification(what):
 			await get_tree().create_timer(0.5).timeout
 		
 		get_tree().quit() # Now actually close
+
+# Inside MainGame.gd (around line 133)
+
+func _on_timer_timeout(): # Or wherever you calculated it
+	var total_dps = GameManager.get_total_dna_per_second()
+	
+	# FIX: Use the variable to update the UI!
+	$UI_Layer/TopPanel/RateLabel.text = "+ " + str(total_dps) + "/s"

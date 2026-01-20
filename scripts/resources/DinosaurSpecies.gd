@@ -12,6 +12,8 @@ enum Diet { HERBIVORE, CARNIVORE }
 @export var passive_dna_yield: int = 1
 @export var icon: Texture2D
 
+@export var required_research_id: String = ""
+
 # --- NEW SURVIVAL STATS ---
 @export_group("Survival Stats")
 @export var ideal_biome_phase: int = 1  # 1=Desert, 2=Oasis, 3=Jungle

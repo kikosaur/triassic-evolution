@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://nyylx8d6ovjs"]
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=4 format=3 uid="uid://nyylx8d6ovjs"]
 
+[ext_resource type="SpriteFrames" uid="uid://18f7trafdej3" path="res://resources/dino_frames/Frames_Eoraptor.tres" id="1_6cycl"]
 [ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_h0g60"]
 [ext_resource type="Texture2D" uid="uid://bero8kmgap2v5" path="res://assets/dinosaurs/02-1.png" id="2_phpln"]
 
@@ -7,6 +8,8 @@
 script = ExtResource("2_h0g60")
 species_name = "Eoraptor"
 visual_scale = 1.2
+animations = ExtResource("1_6cycl")
 base_dna_cost = 150
 passive_dna_yield = 5
 icon = ExtResource("2_phpln")
+required_research_id = "node_eoraptor"

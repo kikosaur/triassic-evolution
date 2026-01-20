@@ -1,6 +1,7 @@
-[gd_scene load_steps=28 format=3 uid="uid://d1pvlplrkkm5d"]
+[gd_scene load_steps=29 format=3 uid="uid://d1pvlplrkkm5d"]
 
 [ext_resource type="PackedScene" uid="uid://c00m4rc8me8mk" path="res://scenes/ui/ResearchNode.tscn" id="1_227w5"]
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_i47bq"]
 [ext_resource type="Resource" uid="uid://fx47e8phptlw" path="res://resources/research/Res_Archosaur.tres" id="2_gfy1o"]
 [ext_resource type="Resource" uid="uid://8io20j1xjreq" path="res://resources/research/Res_UprightStance.tres" id="3_nfsx2"]
 [ext_resource type="Resource" uid="uid://cgwit1labfvwm" path="res://resources/research/Res_Lagosuchus.tres" id="4_0wg30"]
@@ -40,6 +41,11 @@ offset_right = 500.0
 offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(2500, 800)
+layout_mode = 2
+theme = ExtResource("1_i47bq")
 
 [node name="TreeContainer" type="Control" parent="."]
 custom_minimum_size = Vector2(2500, 800)

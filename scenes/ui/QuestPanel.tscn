@@ -1,0 +1,45 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctji0a0bb8gxy"]
+
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_0hnue"]
+[ext_resource type="Script" uid="uid://bdcv1ycvu0qb7" path="res://scripts/ui/QuestPanel.gd" id="2_u50c0"]
+
+[node name="QuestPanel" type="Panel"]
+offset_right = 500.0
+offset_bottom = 500.0
+theme = ExtResource("1_0hnue")
+script = ExtResource("2_u50c0")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -54.0
+offset_top = 6.0
+offset_right = 54.0
+offset_bottom = 29.0
+grow_horizontal = 2
+text = "Current Tasks"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="QuestList" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Close"

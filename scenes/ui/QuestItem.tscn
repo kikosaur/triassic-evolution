@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://mfmmmcurl3d7"]
+
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_dctr4"]
+[ext_resource type="Script" uid="uid://ci3jmaujym0lr" path="res://scripts/ui/QuestItem.gd" id="2_7x4by"]
+
+[node name="QuestItem" type="Panel"]
+offset_right = 400.0
+offset_bottom = 80.0
+theme = ExtResource("1_dctr4")
+script = ExtResource("2_7x4by")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLbl" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Task Title"
+
+[node name="DescLbl" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Description"
+
+[node name="ProgressLbl" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "0 / 100"
+
+[node name="BtnClaim" type="Button" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Claim"
+
+[node name="IconCheck" type="TextureRect" parent="HBoxContainer"]
+visible = false
+layout_mode = 2

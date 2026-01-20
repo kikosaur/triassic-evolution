@@ -1,33 +1,48 @@
-[gd_scene load_steps=2 format=3 uid="uid://crywa5p3pvw1t"]
+[gd_scene load_steps=3 format=3 uid="uid://crywa5p3pvw1t"]
 
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_bj77e"]
 [ext_resource type="Script" uid="uid://iufdnll41717" path="res://scripts/ui/ShopItem.gd" id="1_vo1yd"]
 
-[node name="ShopItem" type="PanelContainer"]
+[node name="ShopItem" type="Panel"]
+custom_minimum_size = Vector2(160, 160)
+offset_right = 200.0
+offset_bottom = 280.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_bj77e")
 script = ExtResource("1_vo1yd")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="Icon" type="TextureRect" parent="HBoxContainer"]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="InfoBox" type="VBoxContainer" parent="HBoxContainer"]
-layout_mode = 2
-
-[node name="NameLabel" type="Label" parent="HBoxContainer/InfoBox"]
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Dino Name"
 
-[node name="StatsLabel" type="Label" parent="HBoxContainer/InfoBox"]
+[node name="IconRect" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PriceLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Cost: 100 | Yield: 5"
 
-[node name="BuyBtn" type="Button" parent="HBoxContainer/InfoBox"]
+[node name="BuyButton" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "BUY
 "

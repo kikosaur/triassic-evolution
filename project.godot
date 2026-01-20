@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 
 GameManager="*res://scripts/managers/GameManager.gd"
 AuthManager="*res://scripts/managers/AuthManager.gd"
+QuestManager="*res://scripts/managers/QuestManager.gd"
 
 [display]
 
@@ -31,6 +32,10 @@ window/stretch/aspect="expand"
 [dotnet]
 
 project/assembly_name="Triassic-EvolutionV2"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
 
 [rendering]
 

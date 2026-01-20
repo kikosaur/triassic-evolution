@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://clcnqyunc53nh"]
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=4 format=3 uid="uid://clcnqyunc53nh"]
 
+[ext_resource type="SpriteFrames" uid="uid://dm43jaqet55cu" path="res://resources/dino_frames/Frames_Riojasaurus.tres" id="1_i374f"]
 [ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_hosl5"]
 [ext_resource type="Texture2D" uid="uid://bub4u3lbssu18" path="res://assets/dinosaurs/08-1.png" id="2_vw1ga"]
 
@@ -7,6 +8,8 @@
 script = ExtResource("2_hosl5")
 species_name = "Riojasaurus"
 visual_scale = 2.5
+animations = ExtResource("1_i374f")
 base_dna_cost = 5000
 passive_dna_yield = 500
 icon = ExtResource("2_vw1ga")
+required_research_id = "node_riojasaurus"

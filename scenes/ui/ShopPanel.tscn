@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://c5xetkp3c7xg"]
+[gd_scene load_steps=16 format=3 uid="uid://c5xetkp3c7xg"]
 
-[ext_resource type="PackedScene" uid="uid://crywa5p3pvw1t" path="res://scenes/ui/ShopItem.tscn" id="1_8d4ti"]
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_1rqtx"]
 [ext_resource type="Resource" uid="uid://p8ukqi65mh8o" path="res://resources/dinos/00_Archosaur.tres" id="2_0afna"]
+[ext_resource type="Script" uid="uid://cvygwj3hg8lc2" path="res://scripts/ui/ShopPanel.gd" id="2_4vjsq"]
 [ext_resource type="Resource" uid="uid://bekjfxkah4yxd" path="res://resources/dinos/01_Lagosuchus.tres" id="3_72rgm"]
 [ext_resource type="Resource" uid="uid://nyylx8d6ovjs" path="res://resources/dinos/02_Eoraptor.tres" id="4_do0se"]
 [ext_resource type="Resource" uid="uid://dq68eang4ywvi" path="res://resources/dinos/03_Herrerasaurus.tres" id="5_k0b4r"]
@@ -16,13 +17,21 @@
 [ext_resource type="Resource" uid="uid://bc2k2eafgc0rt" path="res://resources/habitat/Item_DragonflySwarm.tres" id="14_0pf5p"]
 
 [node name="ShopPanel" type="Panel"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -780.0
-offset_bottom = -320.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -250.0
+offset_right = 500.0
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_1rqtx")
+script = ExtResource("2_4vjsq")
+dino_products = Array[Resource]([ExtResource("2_0afna"), ExtResource("3_72rgm"), ExtResource("4_do0se"), ExtResource("5_k0b4r"), ExtResource("6_4vjsq"), ExtResource("7_0jjce"), ExtResource("8_0pf5p"), ExtResource("9_00oct"), ExtResource("10_s6rdr")])
+habitat_products = Array[Resource]([ExtResource("13_0jjce"), ExtResource("12_4vjsq"), ExtResource("14_0pf5p"), ExtResource("11_k0b4r")])
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 1
@@ -50,79 +59,39 @@ current_tab = 0
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="ItemGrid" type="VBoxContainer" parent="TabContainer/Dinosaurs"]
-custom_minimum_size = Vector2(300, 0)
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Dinosaurs"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="Item_Archosaur" parent="TabContainer/Dinosaurs/ItemGrid" instance=ExtResource("1_8d4ti")]
+[node name="DinoGrid" type="HFlowContainer" parent="TabContainer/Dinosaurs/MarginContainer"]
 layout_mode = 2
-species_data = ExtResource("2_0afna")
-required_research_id = "node_archosaur"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
 
-[node name="Item_Lagosuchus" parent="TabContainer/Dinosaurs/ItemGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-species_data = ExtResource("3_72rgm")
-required_research_id = "node_lagosuchus"
-
-[node name="Item_Eoraptor" parent="TabContainer/Dinosaurs/ItemGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-species_data = ExtResource("4_do0se")
-required_research_id = "node_eoraptor"
-
-[node name="Item_Herrera" parent="TabContainer/Dinosaurs/ItemGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-species_data = ExtResource("5_k0b4r")
-required_research_id = "node_herrera"
-
-[node name="Item_Panphagia" parent="TabContainer/Dinosaurs/ItemGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-species_data = ExtResource("6_4vjsq")
-required_research_id = "node_panphagia"
-
-[node name="Item_Coelo" parent="TabContainer/Dinosaurs/ItemGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-species_data = ExtResource("7_0jjce")
-required_research_id = "node_coelo"
-
-[node name="Item_Plateo" parent="TabContainer/Dinosaurs/ItemGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-species_data = ExtResource("8_0pf5p")
-required_research_id = "node_plateo"
-
-[node name="Item_Lilien" parent="TabContainer/Dinosaurs/ItemGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-species_data = ExtResource("9_00oct")
-required_research_id = "node_lilien"
-
-[node name="Item_Rioja" parent="TabContainer/Dinosaurs/ItemGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-species_data = ExtResource("10_s6rdr")
-required_research_id = "node_riojasaurus"
-
-[node name="Habitat" type="ScrollContainer" parent="TabContainer"]
+[node name="Habitats" type="ScrollContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
-[node name="HabitatGrid" type="VBoxContainer" parent="TabContainer/Habitat"]
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/Habitats"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="Item_FernBundle" parent="TabContainer/Habitat/HabitatGrid" instance=ExtResource("1_8d4ti")]
+[node name="HabGrid" type="HFlowContainer" parent="TabContainer/Habitats/MarginContainer"]
 layout_mode = 2
-habitat_data = ExtResource("11_k0b4r")
-
-[node name="Item_CycadCrate" parent="TabContainer/Habitat/HabitatGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-habitat_data = ExtResource("12_4vjsq")
-required_research_id = "node_cycads"
-
-[node name="Item_BugJar" parent="TabContainer/Habitat/HabitatGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-habitat_data = ExtResource("13_0jjce")
-
-[node name="Item_DragonflySwarm" parent="TabContainer/Habitat/HabitatGrid" instance=ExtResource("1_8d4ti")]
-layout_mode = 2
-habitat_data = ExtResource("14_0pf5p")
-required_research_id = "node_rivers"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20

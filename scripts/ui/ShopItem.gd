@@ -1,13 +1,14 @@
-extends PanelContainer
+extends Panel # Changed from PanelContainer to match the new "Card" root
 
 @export var species_data: DinosaurSpecies
-@export var habitat_data: HabitatProduct # NEW VARIABLE
-@export var required_research_id: String = "" # e.g. "node_eoraptor"
+@export var habitat_data: HabitatProduct
+@export var required_research_id: String = "" 
 
-@onready var icon = $HBoxContainer/Icon
-@onready var name_lbl = $HBoxContainer/InfoBox/NameLabel
-@onready var stats_lbl = $HBoxContainer/InfoBox/StatsLabel
-@onready var buy_btn = $HBoxContainer/InfoBox/BuyBtn
+# --- UPDATED UI REFERENCES (Vertical Layout) ---
+@onready var icon_rect = $MarginContainer/VBoxContainer/IconRect
+@onready var name_lbl = $MarginContainer/VBoxContainer/NameLabel
+@onready var price_lbl = $MarginContainer/VBoxContainer/PriceLabel # We use this for Cost/Stats now
+@onready var buy_btn = $MarginContainer/VBoxContainer/BuyButton
 
 func _ready():
 	buy_btn.pressed.connect(_on_buy)
@@ -17,36 +18,46 @@ func _update_display():
 	# CASE 1: SELLING A DINO
 	if species_data:
 		name_lbl.text = species_data.species_name
-		stats_lbl.text = "Cost: " + str(species_data.base_dna_cost)
-		icon.texture = species_data.icon
+		price_lbl.text = str(species_data.base_dna_cost) + " DNA"
+		if species_data.icon:
+			icon_rect.texture = species_data.icon
 	
-	# CASE 2: SELLING HABITAT (NEW)
+	# CASE 2: SELLING HABITAT
 	elif habitat_data:
 		name_lbl.text = habitat_data.name
-		stats_lbl.text = "Cost: " + str(habitat_data.dna_cost) + " | +" + str(habitat_data.density_gain) + "%"
-		icon.texture = habitat_data.icon
+		# Format: "500 DNA | +10%"
+		price_lbl.text = str(habitat_data.dna_cost) + " DNA\n+" + str(habitat_data.density_gain) + "% Density"
+		if habitat_data.icon:
+			icon_rect.texture = habitat_data.icon
 
 func _process(_delta):
-	# 1. CHECK VISIBILITY (Is it unlocked?)
+	# 1. VISIBILITY CHECK (The "Locked" System)
 	if required_research_id != "":
-		# If we don't own the research, HIDE this item
-		if required_research_id not in GameManager.unlocked_research_ids:
-			visible = false
-		else:
-			visible = true
-			
-	
-	# CHECK AFFORDABILITY
+		# Option A: Hide completely (Cards shift to fill gap)
+		visible = (required_research_id in GameManager.unlocked_research_ids)
+		
+		# Option B: Show as "Locked" (Black silhouette) - UNCOMMENT TO USE
+		# var is_unlocked = (required_research_id in GameManager.unlocked_research_ids)
+		# buy_btn.visible = is_unlocked
+		# if not is_unlocked:
+		# 	icon_rect.modulate = Color(0, 0, 0, 0.5) # Black silhouette
+		# 	name_lbl.text = "???"
+		# 	price_lbl.text = "Locked"
+		# else:
+		# 	icon_rect.modulate = Color(1, 1, 1, 1) # Normal
+		# 	_update_display() # Restore text
+
+	# 2. AFFORDABILITY CHECK
 	var cost = 0
 	if species_data: cost = species_data.base_dna_cost
 	if habitat_data: cost = habitat_data.dna_cost
 	
 	if GameManager.current_dna >= cost:
 		buy_btn.disabled = false
-		buy_btn.text = "BUY"
+		buy_btn.text = "HATCH" if species_data else "BUILD"
 	else:
 		buy_btn.disabled = true
-		buy_btn.text = "NO DNA"
+		buy_btn.text = "NEED DNA"
 
 func _on_buy():
 	# BUYING DINO
@@ -66,5 +77,4 @@ func _on_buy():
 			if GameManager.vegetation_density > 100: GameManager.vegetation_density = 100
 			if GameManager.critter_density > 100: GameManager.critter_density = 100
 			
-			# Notify UI
 			GameManager.emit_signal("habitat_updated", GameManager.vegetation_density, GameManager.critter_density)

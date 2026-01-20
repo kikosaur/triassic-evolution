@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8io3jmork557"]
+[gd_scene load_steps=3 format=3 uid="uid://b8io3jmork557"]
 
-[ext_resource type="Script" uid="uid://clcsiql3jk683" path="res://scenes/ui/SettingsPanel.gd" id="1_741xb"]
+[ext_resource type="Script" uid="uid://clcsiql3jk683" path="res://scripts/ui/SettingsPanel.gd" id="1_741xb"]
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_cjf3c"]
 
 [node name="SettingsPanel" type="Panel"]
 custom_minimum_size = Vector2(500, 400)
@@ -15,6 +16,7 @@ offset_right = 250.0
 offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_cjf3c")
 script = ExtResource("1_741xb")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -71,19 +73,23 @@ value = 1.0
 
 [node name="BtnTutorial" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "How to Play"
 
 [node name="BtnTerms" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Terms & Conditions
 "
 
 [node name="BtnLogout" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Log Out"
 
 [node name="BtnClose" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Close"
 
 [node name="InfoPanel" type="Panel" parent="."]

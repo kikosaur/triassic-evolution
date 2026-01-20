@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://bekjfxkah4yxd"]
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=4 format=3 uid="uid://bekjfxkah4yxd"]
 
+[ext_resource type="SpriteFrames" uid="uid://bfw1aqq6akr22" path="res://resources/dino_frames/Frames_Lagosuchus.tres" id="1_2a15n"]
 [ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_0xooo"]
 [ext_resource type="Texture2D" uid="uid://c32abtluguyp1" path="res://assets/dinosaurs/01-1.png" id="5_2fcaj"]
 
@@ -7,6 +8,9 @@
 script = ExtResource("2_0xooo")
 species_name = "Lagosuchus"
 visual_scale = 0.5
+animations = ExtResource("1_2a15n")
 base_dna_cost = 100
 passive_dna_yield = 2
 icon = ExtResource("5_2fcaj")
+required_research_id = "node_lagosuchus"
+base_lifespan = 120.0

@@ -40,6 +40,13 @@ theme_override_fonts/font = ExtResource("3_xvflj")
 theme_override_font_sizes/font_size = 32
 text = "0"
 
+[node name="RateLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1141.0
+offset_top = 26.0
+offset_right = 1181.0
+offset_bottom = 49.0
+
 [node name="BtnSettings" type="TextureButton" parent="."]
 layout_mode = 1
 anchors_preset = 1

@@ -1,0 +1,67 @@
+[gd_resource type="SpriteFrames" load_steps=12 format=3 uid="uid://bfw1aqq6akr22"]
+
+[ext_resource type="Texture2D" uid="uid://c32abtluguyp1" path="res://assets/dinosaurs/01-1.png" id="1_1swgu"]
+[ext_resource type="Texture2D" uid="uid://bukisahkwgynb" path="res://assets/dinosaurs/01-2.png" id="2_4dbg3"]
+[ext_resource type="Texture2D" uid="uid://baqf281e3hlw6" path="res://assets/dinosaurs/01-3.png" id="3_m0h14"]
+[ext_resource type="Texture2D" uid="uid://c1qybkpxpuvnc" path="res://assets/dinosaurs/01-4.png" id="4_hpssa"]
+[ext_resource type="Texture2D" uid="uid://b7bwk7g7a07y8" path="res://assets/dinosaurs/01-5.png" id="5_lq4dh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yo5pd"]
+atlas = ExtResource("1_1swgu")
+region = Rect2(0, 0, 2816, 1536)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tbehl"]
+atlas = ExtResource("1_1swgu")
+region = Rect2(0, 0, 2816, 1536)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o71o0"]
+atlas = ExtResource("2_4dbg3")
+region = Rect2(0, 0, 1352, 731)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8i6hl"]
+atlas = ExtResource("3_m0h14")
+region = Rect2(0, 0, 1288, 506)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mrxvu"]
+atlas = ExtResource("4_hpssa")
+region = Rect2(0, 0, 1254, 523)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dp28i"]
+atlas = ExtResource("5_lq4dh")
+region = Rect2(0, 0, 1254, 556)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yo5pd")
+}],
+"loop": true,
+"name": &"eat",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tbehl")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o71o0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8i6hl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mrxvu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dp28i")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 6.0
+}]

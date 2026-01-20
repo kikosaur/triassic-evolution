@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://0onbpuep2kdd"]
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=4 format=3 uid="uid://0onbpuep2kdd"]
 
+[ext_resource type="SpriteFrames" uid="uid://rhfpcprqgu8k" path="res://resources/dino_frames/Frames_Plateosaurus.tres" id="1_6rvq4"]
 [ext_resource type="Texture2D" uid="uid://bauv5gps40veq" path="res://assets/dinosaurs/06-2.png" id="2_216op"]
 [ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_lttrv"]
 
@@ -7,6 +8,8 @@
 script = ExtResource("2_lttrv")
 species_name = "Plateosaurus"
 visual_scale = 1.8
+animations = ExtResource("1_6rvq4")
 base_dna_cost = 1000
 passive_dna_yield = 100
 icon = ExtResource("2_216op")
+required_research_id = "node_plateo"

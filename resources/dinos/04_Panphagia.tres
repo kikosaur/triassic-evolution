@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=3 format=3 uid="uid://dluy8jn0imcw8"]
+[gd_resource type="Resource" script_class="DinosaurSpecies" load_steps=4 format=3 uid="uid://dluy8jn0imcw8"]
 
+[ext_resource type="SpriteFrames" uid="uid://ck6vjqtmy7yj2" path="res://resources/dino_frames/Frames_Panphagia.tres" id="1_4ammk"]
 [ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_iysgw"]
 [ext_resource type="Texture2D" uid="uid://dg3cnn564ubxy" path="res://assets/dinosaurs/04-1.png" id="2_uk15t"]
 
 [resource]
 script = ExtResource("2_iysgw")
 species_name = "Panphagia"
+animations = ExtResource("1_4ammk")
 base_dna_cost = 600
 passive_dna_yield = 25
 icon = ExtResource("2_uk15t")
+required_research_id = "node_panphagia"

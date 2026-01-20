@@ -8,3 +8,5 @@ enum ProductType { VEGETATION, CRITTERS }
 @export var dna_cost: int = 50
 @export var density_gain: float = 10.0
 @export var icon: Texture2D
+
+@export var required_research_id: String = ""

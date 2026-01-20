@@ -8,6 +8,7 @@ signal dinosaur_spawned(species_resource)
 signal extinction_triggered # Needed for Sprint 7
 signal research_unlocked(research_id)
 signal offline_earnings_calculated(amount, time_seconds)
+signal dino_spawned(dino_node)
 
 # --- ECONOMY VARIABLES ---
 var current_dna: int = 0
@@ -271,34 +272,33 @@ func _spawn_dino_from_save(d_data):
 		if stats:
 			var new_dino = dino_scene.instantiate()
 			
-			# 1. CRITICAL FIX: Assign Data FIRST
+			# 1. Assign Data FIRST (Prevents crash)
 			new_dino.species_data = stats
 			new_dino.position = Vector2(d_data["pos_x"], d_data["pos_y"])
 			new_dino.current_age = d_data["age"]
 			
-			# 2. Add to Scene LAST (This triggers _ready() safely)
+			# 2. Add to Scene LAST (Triggers _ready)
 			var main_game = get_tree().root.get_node_or_null("MainGame")
 			if main_game:
-				var container = main_game.get_node_or_null("DinoContainer") # Or WorldArt
+				var container = main_game.get_node_or_null("DinoContainer")
 				if container:
 					container.add_child(new_dino)
 					
-					# 3. EXTRA SAFETY: Manually set frames if _ready missed it
+					# 3. EXTRA SAFETY: Check if animations exist before playing
 					if new_dino.has_node("AnimatedSprite"):
 						var anim = new_dino.get_node("AnimatedSprite")
-						if not anim.sprite_frames and stats.animations:
-							anim.sprite_frames = stats.animations
-							anim.play("idle")
-							
-			# 3. EXTRA SAFETY (FIXED): Only play if frames actually exist
-					if new_dino.has_node("AnimatedSprite"):
-						var anim = new_dino.get_node("AnimatedSprite")
-						# CHECK 1: Do we have a SpriteFrames resource?
+						
+						# Ensure frames are loaded
 						if stats.animations:
 							anim.sprite_frames = stats.animations
-							# CHECK 2: Does it actually have the "idle" animation?
+							
+							# Only play if the animation name actually exists
 							if anim.sprite_frames.has_animation("idle"):
 								anim.play("idle")
+
+					# 4. QUEST SYSTEM SIGNAL (Crucial for tracking!)
+					emit_signal("dino_spawned", new_dino)
+
 	else:
 		print("Warning: Unknown dino species: " + str(id))
 

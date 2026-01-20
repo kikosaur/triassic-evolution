@@ -1,0 +1,64 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3 uid="uid://ck6vjqtmy7yj2"]
+
+[ext_resource type="Texture2D" uid="uid://dg3cnn564ubxy" path="res://assets/dinosaurs/04-1.png" id="1_0sea7"]
+[ext_resource type="Texture2D" uid="uid://cdsomuesd5egj" path="res://assets/dinosaurs/04-2.png" id="2_1aafx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bly1v"]
+atlas = ExtResource("1_0sea7")
+region = Rect2(0, 0, 2816, 1536)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8d8uk"]
+atlas = ExtResource("1_0sea7")
+region = Rect2(0, 0, 2816, 1536)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5trjd"]
+atlas = ExtResource("2_1aafx")
+region = Rect2(0, 50, 1408, 679)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yb2su"]
+atlas = ExtResource("2_1aafx")
+region = Rect2(1408, 50, 1408, 679)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ieka2"]
+atlas = ExtResource("2_1aafx")
+region = Rect2(0, 729, 1408, 679)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jqk5r"]
+atlas = ExtResource("2_1aafx")
+region = Rect2(1408, 729, 1408, 679)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bly1v")
+}],
+"loop": true,
+"name": &"eat",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8d8uk")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5trjd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yb2su")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ieka2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jqk5r")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 6.0
+}]
