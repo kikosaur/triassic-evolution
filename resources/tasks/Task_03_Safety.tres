@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_twe4j")
-id = "task_01"
+id = "task_03"
 title = "Safety in Numbers"
 description = "Small reptiles are vulnerable. They need a pack to survive."
 target_id = "Lagosuchus"

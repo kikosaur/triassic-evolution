@@ -8,7 +8,11 @@
 script = ExtResource("2_pwtho")
 species_name = "Herrerasaurus"
 animations = ExtResource("1_a6pxh")
-base_dna_cost = 400
-passive_dna_yield = 12
+diet = 1
+base_dna_cost = 3000
+passive_dna_yield = 35
 icon = ExtResource("2_04bue")
 required_research_id = "node_herrera"
+ideal_biome_phase = 2
+scientific_name = "Herrerasaurus ischigualastensis"
+description = "An agile hunter with a sliding jaw joint designed to grapple and hold onto struggling prey."

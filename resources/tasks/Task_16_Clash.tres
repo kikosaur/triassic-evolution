@@ -4,10 +4,9 @@
 
 [resource]
 script = ExtResource("1_p71r6")
-id = "task_15"
-title = "The Earth Shaker"
-description = "This body mass is too great for two legs. We must shift the center of gravity. (Research Quad)"
-goal_type = "research"
-target_amount = 1
+id = "task_16"
+title = "Clash of Titans"
+description = "Prove the environment can support a family of true giants before the end comes."
+target_amount = 3
 target_id = "Quadrupedalism"
-reward_dna = 250000
+reward_dna = 600000
