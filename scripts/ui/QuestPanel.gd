@@ -1,29 +1,49 @@
 extends Panel
 
-@onready var quest_list = $ScrollContainer/QuestList
-var item_scene = preload("res://scenes/ui/QuestItem.tscn") # Make sure path is right!
+const ITEM_SCENE = preload("res://scenes/ui/QuestItem.tscn")
+
+@onready var list_container = $ScrollContainer/QuestList
+@onready var close_btn = $CloseBtn
 
 func _ready():
-	visible = false
-	QuestManager.connect("quests_updated", _refresh_list)
-	$Button.pressed.connect(func(): visible = false)
+	close_btn.pressed.connect(_on_close_pressed)
+	
+	# Update whenever the manager says so
+	QuestManager.connect("quests_updated", _refresh_ui)
+	
 
-func show_panel():
-	visible = true
-	_refresh_list()
+	# Initial draw
+	_refresh_ui()
 
-func _refresh_list():
-	# Clear old items
-	for child in quest_list.get_children():
+func _refresh_ui():
+	# 1. Clear old items
+	for child in list_container.get_children():
 		child.queue_free()
 	
-	# Create new items
-	# CHANGE 1: Use 'active_quests' instead of 'quests'
-	for i in range(QuestManager.active_quests.size()):
-		var q_state = QuestManager.active_quests[i] # Get the dictionary {data, current, etc}
+	# 2. Create new items
+	var all_quests = QuestManager.active_quests
+	
+	for i in range(all_quests.size()):
+		var q_state = all_quests[i]
 		
-		var item = item_scene.instantiate()
-		quest_list.add_child(item)
+		# Optional: Only show unclaimed quests (remove this if you want to see history)
+		# if q_state.claimed: continue 
 		
-		# CHANGE 2: Pass the whole state object
+		var item = ITEM_SCENE.instantiate()
+		list_container.add_child(item)
 		item.setup(q_state, i)
+
+func show_panel():
+	# 1. Force the manager to re-check everything right now
+	QuestManager._recalculate_all()
+	
+	# 2. Re-draw the visual list
+	_refresh_ui()
+	
+	# 3. Show the window
+	show()
+
+func _on_close_pressed():
+	AudioManager.play_sfx("click")
+	hide() # This is the same as visible = false
+	# Optional: AudioManager.play_sfx("ui_click")

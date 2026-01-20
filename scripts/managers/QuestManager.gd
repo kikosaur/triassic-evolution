@@ -1,172 +1,139 @@
 extends Node
 
-# Signal to tell the UI (QuestPanel) to redraw the list
-signal quests_updated
+signal quests_updated # Tells UI to redraw
 
-# --- CONFIGURATION ---
-# This holds the "Blueprints" (Resources) loaded from the folder
-var task_database: Array[TaskData] = []
-
-# --- STATE ---
-# This holds the "Live" data: { "data": Resource, "current": 0, "completed": false, "claimed": false }
+# Holds the state of every quest
 var active_quests: Array = []
 
 func _ready():
-	# 1. LOAD TASKS AUTOMATICALLY
-	# Scans the folder so you don't have to drag files manually
-	_load_tasks_from_folder()
+	_load_all_tasks()
 	
-	# 2. SETUP LIVE STATE
-	_initialize_quests()
-	
-	# 3. CONNECT SIGNALS
-	# Listen for Money
+	# LISTEN FOR GAME EVENTS (With duplicate connection protection)
 	if GameManager.has_signal("dna_changed"):
-		GameManager.connect("dna_changed", _on_dna_changed)
+		if not GameManager.dna_changed.is_connected(_on_dna_changed):
+			GameManager.dna_changed.connect(_on_dna_changed)
 	
-	# Listen for New Dinos (Make sure GameManager emits "dino_spawned" when buying!)
 	if GameManager.has_signal("dino_spawned"):
-		GameManager.connect("dino_spawned", _on_dino_event)
+		if not GameManager.dino_spawned.is_connected(_on_dino_event):
+			GameManager.dino_spawned.connect(_on_dino_event)
 		
-	# Listen for Research (Make sure GameManager emits "research_unlocked"!)
 	if GameManager.has_signal("research_unlocked"):
-		GameManager.connect("research_unlocked", _on_research_event)
-	
-	# Initial check (in case we loaded a save file with dinos already)
-	_check_dino_count()
+		if not GameManager.research_unlocked.is_connected(_on_research_event):
+			GameManager.research_unlocked.connect(_on_research_event)
 
-# --- AUTO-SCANNER ---
-func _load_tasks_from_folder():
-	var path = "res://resources/tasks/"
-	var dir = DirAccess.open(path)
+# --- LOADING SYSTEM ---
+func _load_all_tasks():
+	active_quests.clear()
+	var folder_path = "res://resources/tasks/"
+	var dir = DirAccess.open(folder_path)
 	
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		
 		while file_name != "":
-			# Only load .tres files (ignore .import or folders)
 			if not dir.current_is_dir() and file_name.ends_with(".tres"):
-				var full_path = path + file_name
-				var task_res = load(full_path)
-				
-				if task_res is TaskData:
-					print("Loaded Task: " + task_res.title)
-					task_database.append(task_res)
+				var res = load(folder_path + file_name)
+				if res is TaskData:
+					var state = {
+						"data": res,
+						"current": 0,
+						"completed": false,
+						"claimed": false
+					}
+					active_quests.append(state)
 			
 			file_name = dir.get_next()
 		
-		# Optional: Sort them by ID so Task 1 is always first
-		task_database.sort_custom(func(a, b): return a.id < b.id)
-		print("Total Tasks Loaded: " + str(task_database.size()))
+		# Sort by ID
+		active_quests.sort_custom(func(a, b): return a.data.id < b.data.id)
+		
+		# Run an initial check after a short delay to let Dinos load
+		await get_tree().create_timer(0.1).timeout
+		_recalculate_all()
 	else:
-		print("Error: Could not find folder " + path + ". Please create it!")
-
-# --- INITIALIZATION ---
-func _initialize_quests():
-	active_quests.clear()
-	for task_res in task_database:
-		# Create the runtime dictionary
-		var q_state = {
-			"data": task_res,
-			"current": 0,
-			"completed": false,
-			"claimed": false
-		}
-		active_quests.append(q_state)
-
-# --- EVENT HANDLERS ---
-
-func _on_dna_changed(amount):
-	for q in active_quests:
-		if q.data.goal_type == "dna" and not q.completed:
-			# If the task is "Have 100 DNA", checking current amount works.
-			# If you want "Collect 100 DNA total", you need a separate counter.
-			q.current = amount 
-			_check_completion(q)
-
-func _on_dino_event(_dino):
-	# Whenever a dino spawns, re-count everything to be safe
-	_check_dino_count()
-
-func _on_research_event(research_id):
-	for q in active_quests:
-		if q.data.goal_type == "research" and not q.completed:
-			# Check if the unlocked research matches the Target ID (e.g., "Upright Stance")
-			if q.data.target_id == research_id:
-				q.current = 1
-				_check_completion(q)
+		print("ERROR: Could not find folder " + folder_path)
 
 # --- CHECKING LOGIC ---
 
-func _check_dino_count():
-	# 1. GET ALL DINOS
-	var all_dinos = get_tree().get_nodes_in_group("dinos")
-	print("\n--- QUEST DEBUG START ---")
-	print("Found " + str(all_dinos.size()) + " dinos in group 'dinos'")
-	
-	# 2. CHECK EACH QUEST
+func _on_dna_changed(amount):
+	var needs_update = false
 	for q in active_quests:
-		if q.data.goal_type == "dino_count" and not q.completed:
-			var current_match_count = 0
-			var quest_target = q.data.target_id
-			
-			print("Checking Quest: '" + q.data.title + "' (Looking for: '" + quest_target + "')")
-			
-			# 3. CHECK EACH DINO AGAINST THIS QUEST
-			for dino in all_dinos:
-				# Check if species_data exists
-				if not "species_data" in dino:
-					print("  [ERROR] Dino " + dino.name + " has NO 'species_data' variable!")
-					continue
-					
-				var stats = dino.species_data
-				if not stats:
-					print("  [ERROR] Dino " + dino.name + " has empty (null) species_data!")
-					continue
-				
-				# TRY TO FIND A NAME MATCH
-				# We check both 'species_name' and 'id' in case you named the variable differently
-				var dino_name = "UNKNOWN"
-				if "species_name" in stats:
-					dino_name = stats.species_name
-				elif "id" in stats:
-					dino_name = stats.id
-				elif "name" in stats:
-					dino_name = stats.name
-				
-				print("  > Found Dino: '" + dino_name + "' vs Target: '" + quest_target + "'")
-				
-				if dino_name == quest_target:
-					current_match_count += 1
-					print("    MATCH FOUND!")
-			
-			# 4. UPDATE
-			q.current = current_match_count
-			print("Final Count for this quest: " + str(current_match_count))
-			_check_completion(q)
-			
-	print("--- QUEST DEBUG END ---\n")
+		if q.data.goal_type == "currency" and not q.completed:
+			# Update progress
+			if q.current != amount:
+				q.current = amount
+				needs_update = true
+				_check_complete(q)
+	
+	if needs_update:
+		emit_signal("quests_updated")
 
-func _check_completion(q):
+func _on_research_event(research_id):
+	var needs_update = false
+	for q in active_quests:
+		if q.data.goal_type == "research" and not q.completed:
+			# Check exact ID match
+			if q.data.target_id == research_id:
+				q.current = 1
+				needs_update = true
+				_check_complete(q)
+				
+	if needs_update:
+		emit_signal("quests_updated")
+
+func _on_dino_event(_dino_node):
+	_recalculate_all()
+
+func _recalculate_all():
+	var all_dinos = get_tree().get_nodes_in_group("dinos")
+	var something_changed = false
+	
+	for q in active_quests:
+		# Only process "Counter" type quests
+		if q.data.goal_type == "dino_count" and not q.completed:
+			var count = 0
+			var target_name = q.data.target_id.strip_edges() # "Archosaur"
+			
+			# 1. COUNT THE DINOS
+			for dino in all_dinos:
+				var found_name = ""
+				
+				# Smart Check: Look in Resource first, then Variable
+				if "species_data" in dino and dino.species_data != null:
+					found_name = dino.species_data.species_name
+				elif "species_name" in dino:
+					found_name = dino.species_name
+				
+				# Compare
+				if found_name == target_name:
+					count += 1
+			
+			# 2. UPDATE THE QUEST DATA
+			if q.current != count:
+				q.current = count
+				something_changed = true
+				print("Quest Updated: " + q.data.title + " is now " + str(count))
+				_check_complete(q)
+
+	# 3. TELL THE UI TO REFRESH
+	if something_changed:
+		emit_signal("quests_updated")
+
+func _check_complete(q):
 	if q.current >= q.data.target_amount:
 		if not q.completed:
 			q.completed = true
-			q.current = q.data.target_amount # Cap visual progress bar
-			emit_signal("quests_updated")
-			print("Task Completed: " + q.data.title)
+			q.current = q.data.target_amount
+			# Note: We don't emit here because the calling function handles the emit
+			print("COMPLETED QUEST: " + q.data.title)
 
-# --- PUBLIC FUNCTIONS ---
-
+# --- REWARD SYSTEM ---
 func claim_reward(index):
 	if index < 0 or index >= active_quests.size(): return
 	
 	var q = active_quests[index]
 	if q.completed and not q.claimed:
 		q.claimed = true
-		
-		# Give the DNA
 		GameManager.add_dna(q.data.reward_dna)
-		
-		# Update UI
 		emit_signal("quests_updated")
