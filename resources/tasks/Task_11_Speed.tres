@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TaskData" load_steps=2 format=3 uid="uid://c0vvejlwy84ep"]
+
+[ext_resource type="Script" path="res://scripts/resources/TaskData.gd" id="1_3x4am"]
+
+[resource]
+script = ExtResource("1_3x4am")
+id = "task_11"
+title = "Hollow Bones"
+description = "Speed is survival. To move faster, we must reduce skeletal weight. (Research Hollow Bones)"
+goal_type = "research"
+target_amount = 1
+target_id = "Hollow Bones"
+reward_dna = 25000

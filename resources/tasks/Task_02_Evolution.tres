@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TaskData" load_steps=2 format=3 uid="uid://hew0kcs1olg0"]
+
+[ext_resource type="Script" path="res://scripts/resources/TaskData.gd" id="1_yx8f2"]
+
+[resource]
+script = ExtResource("1_yx8f2")
+id = "task_02"
+title = "Evolutionary Leap"
+description = "To evolve beyond simple reptiles, legs must move under the body. (Research Upright Stance)"
+goal_type = "research"
+target_amount = 1
+target_id = "Upright Stance"
+reward_dna = 1000

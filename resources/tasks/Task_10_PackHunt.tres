@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TaskData" load_steps=2 format=3 uid="uid://di3xb1w80ummg"]
+
+[ext_resource type="Script" path="res://scripts/resources/TaskData.gd" id="1_4fdd0"]
+
+[resource]
+script = ExtResource("1_4fdd0")
+id = "task_10"
+title = "River Ambush"
+description = "A single Herrerasaurus is a threat, but a pack is an apex force."
+target_id = "Herrerasaurus"
+reward_dna = 30000

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TaskData" load_steps=2 format=3 uid="uid://bmgn88baere1d"]
+
+[ext_resource type="Script" path="res://scripts/resources/TaskData.gd" id="1_votk1"]
+
+[resource]
+script = ExtResource("1_votk1")
+id = "task_14"
+title = "King of the Triassic"
+description = "To support a larger predator frame, we need stronger limb stability. (Research Fused Ankles)"
+goal_type = "research"
+target_amount = 1
+target_id = "Fused Ankles"
+reward_dna = 100000

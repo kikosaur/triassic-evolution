@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TaskData" load_steps=2 format=3 uid="uid://bbwlafclvy1na"]
+
+[ext_resource type="Script" path="res://scripts/resources/TaskData.gd" id="1_p71r6"]
+
+[resource]
+script = ExtResource("1_p71r6")
+id = "task_15"
+title = "The Earth Shaker"
+description = "This body mass is too great for two legs. We must shift the center of gravity. (Research Quad)"
+goal_type = "research"
+target_amount = 1
+target_id = "Quadrupedalism"
+reward_dna = 250000
