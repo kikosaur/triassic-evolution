@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource("1_5mnje")
-id = "task_07"
+id = "task_06"
 title = "Oasis Colonization"
 description = "The Eoraptor thrives near water sources. Establish a foothold in the Oasis."
 goal_type = "research"
 target_amount = 1
-target_id = "Perforate Acetabulum"
+target_id = "node_perforate"
 reward_dna = 10000

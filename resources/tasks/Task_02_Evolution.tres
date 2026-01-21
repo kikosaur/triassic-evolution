@@ -9,5 +9,5 @@ title = "Evolutionary Leap"
 description = "To evolve beyond simple reptiles, legs must move under the body. (Research Upright Stance)"
 goal_type = "research"
 target_amount = 1
-target_id = "Upright Stance"
+target_id = "node_upright"
 reward_dna = 1000

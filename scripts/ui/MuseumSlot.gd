@@ -19,11 +19,13 @@ func setup(data: Resource, is_unlocked: bool):
 		disabled = false
 		
 		# Show full color
-		icon_rect.modulate = Color(1, 1, 1, 1) 
+		icon_rect.modulate = Color(1, 1, 1, 1)
 		
 		# Show Real Name
 		if "species_name" in data:
 			name_label.text = data.species_name
+		elif "display_name" in data:
+			name_label.text = data.display_name
 		else:
 			name_label.text = "Unknown"
 			
@@ -31,7 +33,7 @@ func setup(data: Resource, is_unlocked: bool):
 		disabled = true
 		
 		# Silhouette (Black)
-		icon_rect.modulate = Color(0, 0, 0, 1) 
+		icon_rect.modulate = Color(0, 0, 0, 1)
 		
 		# Mystery Text
 		name_label.text = "???"

@@ -20,3 +20,6 @@ mono_crash.*.json
 *.aab
 android/build/
 Builds/
+
+# Security - Never commit secrets!
+secrets.cfg

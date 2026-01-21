@@ -10,6 +10,7 @@ species_name = "Panphagia"
 animations = ExtResource("1_4ammk")
 base_dna_cost = 7500
 passive_dna_yield = 53
+click_yield = 25
 icon = ExtResource("2_uk15t")
 required_research_id = "node_panphagia"
 ideal_biome_phase = 2

@@ -1,18 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://b6kunprhuu7ed"]
+[gd_scene load_steps=3 format=3 uid="uid://b6kunprhuu7ed"]
 
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_ltpfo"]
 [ext_resource type="Script" uid="uid://54irjixwj5ki" path="res://scripts/ui/MuseumSlot.gd" id="1_o7xb0"]
 
 [node name="MuseumSlot" type="Button"]
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(200, 250)
+theme = ExtResource("1_ltpfo")
 script = ExtResource("1_o7xb0")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
-custom_minimum_size = Vector2(200, 200)
+custom_minimum_size = Vector2(200, 180)
 layout_mode = 2
 size_flags_vertical = 3
 expand_mode = 1

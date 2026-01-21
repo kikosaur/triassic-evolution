@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bm35tyebotbck"]
+[gd_scene load_steps=27 format=3 uid="uid://bm35tyebotbck"]
 
 [ext_resource type="Script" uid="uid://ca1ywh1c2458h" path="res://scenes/world/MainGame.gd" id="1_o1bk3"]
 [ext_resource type="PackedScene" uid="uid://c338ymwmyekeu" path="res://scenes/ui/TopPanel.tscn" id="2_70oxy"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://blr2a32qtxvbr" path="res://assets/habitat-transition/05 Cycads.png" id="9_g2aln"]
 [ext_resource type="Texture2D" uid="uid://ce201kx6kh82p" path="res://assets/habitat-transition/06 Forest.png" id="10_k8fvk"]
 [ext_resource type="PackedScene" uid="uid://rc6mwphwcjrk" path="res://scenes/ui/ExtinctionPanel.tscn" id="10_ue8bh"]
+[ext_resource type="Script" uid="uid://becx3bgdnjo0k" path="res://scenes/world/BackgroundScaler.gd" id="11_aqbxs"]
 [ext_resource type="PackedScene" uid="uid://c5xetkp3c7xg" path="res://scenes/ui/ShopPanel.tscn" id="12_emtlf"]
 [ext_resource type="PackedScene" uid="uid://ifcqyuyvc104" path="res://scenes/ui/MuseumScene.tscn" id="13_lnpaj"]
 [ext_resource type="Texture2D" uid="uid://dr3tojso7ddpw" path="res://assets/ui/research.png" id="14_3sbe1"]
@@ -46,7 +47,7 @@ archosaur_res = SubResource("Resource_lnpaj")
 [node name="Background" type="Sprite2D" parent="WorldArt"]
 scale = Vector2(0.4651163, 0.46809897)
 texture = ExtResource("5_u7f5m")
-centered = false
+script = ExtResource("11_aqbxs")
 
 [node name="ClickZone" type="Button" parent="."]
 modulate = Color(1, 1, 1, 0)
@@ -157,7 +158,6 @@ offset_right = 0.0
 grow_horizontal = 0
 
 [node name="StartScreen" parent="UI_Layer" instance=ExtResource("21_b5gth")]
-visible = false
 
 [node name="SettingsPanel" parent="UI_Layer" instance=ExtResource("22_b5gth")]
 visible = false

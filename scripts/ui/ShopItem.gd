@@ -2,7 +2,7 @@ extends Panel # Changed from PanelContainer to match the new "Card" root
 
 @export var species_data: DinosaurSpecies
 @export var habitat_data: HabitatProduct
-@export var required_research_id: String = "" 
+@export var required_research_id: String = ""
 
 # --- UPDATED UI REFERENCES (Vertical Layout) ---
 @onready var icon_rect = $MarginContainer/VBoxContainer/IconRect
@@ -18,7 +18,7 @@ func _update_display():
 	# CASE 1: SELLING A DINO
 	if species_data:
 		name_lbl.text = species_data.species_name
-		price_lbl.text = str(species_data.base_dna_cost) + " DNA"
+		price_lbl.text = GameManager.format_number(species_data.base_dna_cost) + " DNA"
 		if species_data.icon:
 			icon_rect.texture = species_data.icon
 	
@@ -26,7 +26,7 @@ func _update_display():
 	elif habitat_data:
 		name_lbl.text = habitat_data.name
 		# Format: "500 DNA | +10%"
-		price_lbl.text = str(habitat_data.dna_cost) + " DNA\n+" + str(habitat_data.density_gain) + "% Density"
+		price_lbl.text = GameManager.format_number(habitat_data.dna_cost) + " DNA\n+" + str(habitat_data.density_gain) + "% Density"
 		if habitat_data.icon:
 			icon_rect.texture = habitat_data.icon
 
@@ -61,6 +61,7 @@ func _process(_delta):
 
 func _on_buy():
 	# BUYING DINO
+	AudioManager.play_sfx("click")
 	if species_data:
 		if GameManager.try_spend_dna(species_data.base_dna_cost):
 			GameManager.trigger_dino_spawn(species_data)

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="HabitatDef" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/HabitatDef.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/habitat_traits/H05_Conifer_Forest.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Conifer Forest"
+id = "habitat_forest"
+description = "Vast evergreen forests that dominate the landscape, offering abundant resources."
+icon = ExtResource("2_icon")
+required_research_id = "node_forest"

@@ -13,7 +13,7 @@ func setup(q_state, index):
 	
 	title_lbl.text = data.title
 	desc_lbl.text = data.description
-	prog_lbl.text = str(q_state.current) + " / " + str(data.target_amount)
+	prog_lbl.text = GameManager.format_number(q_state.current) + " / " + GameManager.format_number(data.target_amount)
 	
 	# --- 1. FORCE CONNECTION (The Fix) ---
 	# This ensures the button actually calls the function below
@@ -34,8 +34,7 @@ func setup(q_state, index):
 		claim_btn.disabled = true
 		modulate = Color(1, 1, 1, 1)
 
-# --- 3. THE FUNCTION ---
-func _on_claim_clicked():
+# --- CLAIM BUTTON HANDLER ---
+func _on_claim_clicked() -> void:
 	AudioManager.play_sfx("success")
-	print("Button Clicked! Asking Manager to claim index: " + str(my_index))
 	QuestManager.claim_reward(my_index)

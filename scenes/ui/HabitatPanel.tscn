@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://lmy01cu6ufgi"]
+[gd_scene load_steps=3 format=3 uid="uid://lmy01cu6ufgi"]
 
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_khjsv"]
 [ext_resource type="Script" uid="uid://bd4k5xf3cdbro" path="res://scripts/ui/HabitatPanel.gd" id="1_noai0"]
 
 [node name="HabitatPanel" type="Panel"]
@@ -8,32 +9,40 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -120.0
+offset_left = -400.0
+offset_top = -150.0
 grow_horizontal = 0
 grow_vertical = 0
+theme = ExtResource("1_khjsv")
 script = ExtResource("1_noai0")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="VegLabel" type="Label" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="VegLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Vegetation: 0%"
 
-[node name="VegBar" type="ProgressBar" parent="VBoxContainer"]
+[node name="VegBar" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CritterLabel" type="Label" parent="VBoxContainer"]
+[node name="CritterLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Critters: 0%"
 
-[node name="CritterBar" type="ProgressBar" parent="VBoxContainer"]
+[node name="CritterBar" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://rc6mwphwcjrk"]
+[gd_scene load_steps=3 format=3 uid="uid://rc6mwphwcjrk"]
 
 [ext_resource type="Script" uid="uid://cp15c8267xy3l" path="res://scripts/ui/ExtinctionPanel.gd" id="1_kc2ut"]
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_m0lol"]
 
 [node name="ExtinctionPanel" type="Panel"]
 anchors_preset = 15
@@ -8,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_m0lol")
 script = ExtResource("1_kc2ut")
 
 [node name="Title" type="Label" parent="."]
@@ -57,3 +59,20 @@ offset_bottom = 45.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Evolve & Restart (+10% DNA Bonus)"
+
+[node name="RewardLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
+text = "Fossil Reward: +5"
+horizontal_alignment = 1

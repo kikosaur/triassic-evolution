@@ -6,11 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://c1qybkpxpuvnc" path="res://assets/dinosaurs/01-4.png" id="4_hpssa"]
 [ext_resource type="Texture2D" uid="uid://b7bwk7g7a07y8" path="res://assets/dinosaurs/01-5.png" id="5_lq4dh"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_yo5pd"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tbehl"]
 atlas = ExtResource("1_1swgu")
 region = Rect2(0, 0, 2816, 1536)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tbehl"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_yo5pd"]
 atlas = ExtResource("1_1swgu")
 region = Rect2(0, 0, 2816, 1536)
 
@@ -32,6 +32,14 @@ region = Rect2(0, 0, 1254, 556)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tbehl")
+}],
+"loop": false,
+"name": &"die",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yo5pd")

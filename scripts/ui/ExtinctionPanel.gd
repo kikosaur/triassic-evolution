@@ -1,19 +1,55 @@
 extends Panel
+## ExtinctionPanel - Handles the prestige/reset mechanic.
 
-func _ready():
+# --- LOGGING (Set to false for production) ---
+const DEBUG_MODE: bool = false
+
+var reward_label: Label
+
+func _ready() -> void:
+	reward_label = get_node_or_null("RewardLabel")
 	$ResetBtn.pressed.connect(_on_reset)
 
-func _on_reset():
-	# 1. Calculate Prestige (10% bonus per run, or based on fossils)
+func _on_show() -> void:
+	# Calculate and display expected reward when panel opens
+	var expected = _calculate_fossil_reward()
+	if reward_label:
+		reward_label.text = "Fossil Reward: +" + GameManager.format_number(expected)
+
+func _calculate_fossil_reward() -> int:
+	# Base reward from research progress (1 fossil per unlocked node)
+	var research_bonus = GameManager.unlocked_research_ids.size()
+	
+	# Bonus from total DPS (1 fossil per 100 DPS)
+	var dps_bonus = int(GameManager.get_total_dna_per_second() / 100.0)
+	
+	# Bonus from vegetation progress (1 fossil per 20% density)
+	var habitat_bonus = int(GameManager.vegetation_density / 20)
+	
+	# Minimum of 5 fossils + bonuses
+	return 5 + research_bonus + dps_bonus + habitat_bonus
+
+func _on_reset() -> void:
+	# 1. Calculate and grant Fossil Reward BEFORE reset
+	var fossil_reward = _calculate_fossil_reward()
+	GameManager.add_fossils(fossil_reward)
+	if DEBUG_MODE:
+		print("ExtinctionPanel: Granted ", fossil_reward, " fossils")
+	
+	# 2. Calculate Prestige (10% bonus per run)
 	GameManager.prestige_multiplier += 0.1
 	
-	# 2. Reset Game Data
+	# 3. Reset Game Data (but keep fossils!)
+	var saved_fossils = GameManager.fossils # Preserve fossils
 	GameManager.current_dna = 0
-	GameManager.current_fossils = 0
 	GameManager.vegetation_density = 0
 	GameManager.critter_density = 0
 	GameManager.unlocked_research_ids = ["node_archosaur"] # Reset tree
 	GameManager.owned_dinosaurs.clear()
+	GameManager.fossils = saved_fossils # Restore fossils
 	
-	# 3. Reload Scene
+	# 4. Play success sound
+	AudioManager.play_sfx("success")
+	
+	# 5. Reload Scene
 	get_tree().reload_current_scene()

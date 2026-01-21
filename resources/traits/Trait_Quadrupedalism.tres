@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TraitDef" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/TraitDef.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/traits/T011_Quadrupedalism.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Quadrupedalism"
+id = "trait_quadrupedal"
+description = "Walking on four legs to support extreme body mass."
+icon = ExtResource("2_icon")
+required_research_id = "node_quadruped"

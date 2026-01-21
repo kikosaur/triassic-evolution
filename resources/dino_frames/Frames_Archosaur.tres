@@ -29,6 +29,14 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_v88f1")
 }],
+"loop": false,
+"name": &"die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v88f1")
+}],
 "loop": true,
 "name": &"eat",
 "speed": 5.0

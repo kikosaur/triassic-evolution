@@ -7,7 +7,6 @@ extends Panel
 
 func _ready():
 	# Connect Buttons
-	
 	# Listen for updates
 	GameManager.connect("habitat_updated", _on_update)
 	

@@ -1,4 +1,8 @@
 extends Node2D
+## MainGame - The primary game scene handling world visuals and UI connections.
+
+# --- LOGGING (Set to false for production) ---
+const DEBUG_MODE: bool = false
 
 @onready var click_zone = $ClickZone
 @onready var dino_container = $DinoContainer
@@ -15,8 +19,8 @@ extends Node2D
 @export var bg_06_forest: Texture2D
 
 # EXISTING EXPORTS
-@export var dino_scene: PackedScene 
-@export var archosaur_res: Resource 
+@export var dino_scene: PackedScene
+@export var archosaur_res: Resource
 
 # RESEARCH
 @onready var research_menu = $UI_Layer/ResearchMenu
@@ -37,8 +41,10 @@ extends Node2D
 @onready var btn_tasks = $UI_Layer/BtnTasks
 @onready var quest_panel = $UI_Layer/QuestPanel
 
-func _ready():
-	print("Main Game Started")
+func _ready() -> void:
+	if DEBUG_MODE:
+		print("MainGame: Scene started")
+	AudioManager.play_music()
 	click_zone.pressed.connect(_on_background_clicked)
 	# Listen for Habitat Changes
 	
@@ -48,19 +54,21 @@ func _ready():
 	GameManager.connect("dinosaur_spawned", _spawn_dino)
 	GameManager.connect("fossils_changed", _update_fossils_ui)
 	GameManager.connect("research_unlocked", _on_research_unlocked)
+	# Trigger visual update when habitat changes
+	GameManager.connect("habitat_updated", func(_v, _c): _update_biome_visuals())
 	
 	_update_biome_visuals()
 	
 	# --- TOGGLE LOGIC ---
 	# Open/Close the Shop
-	btn_shop.pressed.connect(func(): 
+	btn_shop.pressed.connect(func():
 		shop_panel.visible = !shop_panel.visible
 		# Optional: Close Research if opening Shop (to avoid overlap)
 		if shop_panel.visible:
 			research_menu.visible = false
 		)
 		
-	btn_museum.pressed.connect(func(): 
+	btn_museum.pressed.connect(func():
 		museum.visible = true
 		museum.refresh_gallery() # Ensure it updates if we just unlocked something!
 	)
@@ -72,74 +80,88 @@ func _on_research_unlocked(_id):
 	_update_biome_visuals()
 
 func _update_biome_visuals():
-	# We check from HIGHEST tier to LOWEST tier.
-	# The first one we find is the "best" background we have.
-	
+	var veg = GameManager.vegetation_density
+	var crit = GameManager.critter_density
 	var unlocked = GameManager.unlocked_research_ids
+	var target_texture = bg_01_base
 	
-	# 1. CHECK TIER 6 (Forest)
-	if "node_forest" in unlocked:
-		background_sprite.texture = bg_06_forest
-		return
+	# Determine Biome based on Density Thresholds AND Research
+	if veg >= 80.0 and crit >= 80.0 and "node_forest" in unlocked:
+		target_texture = bg_06_forest
+	elif veg >= 50.0 and crit >= 40.0 and "node_cycads" in unlocked:
+		target_texture = bg_05_cycads
+	elif veg >= 30.0 and crit >= 30.0 and "node_river" in unlocked:
+		target_texture = bg_04_rivers
+	elif veg >= 20.0 and "node_ferns" in unlocked:
+		target_texture = bg_03_ferns
+	elif veg >= 10.0 and "node_pools" in unlocked:
+		target_texture = bg_02_pools
+	
+	# --- 2. APPLY TEXTURE & RESIZE ---
+	# Only update if it's actually different (saves performance)
+	if background_sprite.texture != target_texture:
+		background_sprite.texture = target_texture
+		
+		# CRITICAL: This makes it fit the mobile screen immediately!
+		# This calls the function in the script we just attached to the sprite.
+		if background_sprite.has_method("apply_cover_scale"):
+			background_sprite.apply_cover_scale()
 
-	# 2. CHECK TIER 5 (Cycads)
-	if "node_cycads" in unlocked:
-		background_sprite.texture = bg_05_cycads
-		return
-
-	# 3. CHECK TIER 4 (Rivers - assuming ID is node_rivers)
-	if "node_river" in unlocked:
-		background_sprite.texture = bg_04_rivers
-		return
-
-	# 4. CHECK TIER 3 (Ferns)
-	if "node_ferns" in unlocked:
-		background_sprite.texture = bg_03_ferns
-		return
-
-	# 5. CHECK TIER 2 (Pools)
-	if "node_pools" in unlocked:
-		background_sprite.texture = bg_02_pools
-		return
-
-	# 6. DEFAULT (Base)
-	background_sprite.texture = bg_01_base
+func _show_click_feedback(pos: Vector2, amount: int):
+	var label = Label.new()
+	label.text = "+" + str(amount)
+	label.modulate = Color(0.7, 1.0, 0.7) # Light Green
+	label.position = pos
+	
+	# STYLE: Pixel Font & Bigger Size
+	label.add_theme_font_size_override("font_size", 32)
+	var font = load("res://assets/fonts/PressStart2P-Regular.ttf")
+	if font:
+		label.add_theme_font_override("font", font)
+	
+	$UI_Layer.add_child(label)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", pos.y - 80, 0.8).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8)
+	tween.tween_callback(label.queue_free)
 
 func _on_background_clicked():
-	GameManager.add_dna(1) # Increased to 5 to make testing faster!
+	GameManager.add_dna(1)
+	_show_click_feedback(get_viewport().get_mouse_position(), 1)
+	
+	# --- RARE FOSSIL: 2% chance to find a fossil when clicking dirt ---
+	if randf() < 0.02: # 2% chance
+		GameManager.add_fossils(1)
+		AudioManager.play_sfx("success")
+		if DEBUG_MODE:
+			print("MainGame: Rare fossil found!")
 
 func _on_buy_pressed():
 	if GameManager.try_spend_dna(archosaur_res.base_dna_cost):
 		spawn_dino(archosaur_res)
 
+func _spawn_dino(species_res: DinosaurSpecies):
+	spawn_dino(species_res)
+
 func spawn_dino(species):
 	var new_dino = dino_scene.instantiate()
 	new_dino.species_data = species
-	new_dino.position = Vector2(640, 500)
+	new_dino.position = Vector2(randf_range(500, 700), randf_range(300, 500)) # Randomize slightly
 	dino_container.add_child(new_dino)
+	
+	# Notify QuestManager via GameManager
+	GameManager.notify_dino_spawned(new_dino)
 
 func _show_extinction():
 	extinction_panel.visible = true
 	# Optional: Play a sound or shake screen here
 
-func _spawn_dino(species_res: DinosaurSpecies):
-	var new_dino = load("res://scenes/units/DinoUnit.tscn").instantiate()
-	new_dino.species_data = species_res
-	new_dino.position = Vector2(500, 300) # Center spawn
-	dino_container.add_child(new_dino)
-
 func _process(_delta):
-	# Check the unlocked list in GameManager
-	var total_dps = 0
-	for dino in dino_container.get_children():
-		if not dino.is_dead and dino.species_data:
-			total_dps += dino.species_data.passive_dna_yield
-	
-	dna_label.text = str(GameManager.current_dna)
+	pass
 
-func _update_fossils_ui(new_amount):
-	# This updates the text whenever the number changes
-	fossil_label.text = str(new_amount)
+func _update_fossils_ui(_new_amount):
+	pass
 
 func _on_btn_save_pressed():
 	var data = GameManager.get_save_dictionary()
@@ -148,17 +170,18 @@ func _on_btn_save_pressed():
 func _on_btn_load_pressed():
 	AuthManager.load_game_from_cloud()
 
-func _notification(what):
+func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		# Give GameManager time to send the save request
 		if AuthManager.user_id != "":
-			print("Saving before quit...")
+			if DEBUG_MODE:
+				print("MainGame: Saving before quit...")
 			var data = GameManager.get_save_dictionary()
 			AuthManager.save_game_to_cloud(data)
-			# Wait a tiny bit for the request to fire (approximate)
+			# Wait a tiny bit for the request to fire
 			await get_tree().create_timer(0.5).timeout
 		
-		get_tree().quit() # Now actually close
+		get_tree().quit()
 
 # Inside MainGame.gd (around line 133)
 
@@ -166,4 +189,4 @@ func _on_timer_timeout(): # Or wherever you calculated it
 	var total_dps = GameManager.get_total_dna_per_second()
 	
 	# FIX: Use the variable to update the UI!
-	$UI_Layer/TopPanel/RateLabel.text = "+ " + str(total_dps) + "/s"
+	$UI_Layer/TopPanel/RateLabel.text = "+ " + GameManager.format_number(total_dps) + "/s"

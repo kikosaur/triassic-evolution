@@ -1,30 +1,80 @@
 [gd_resource type="Theme" load_steps=6 format=3 uid="uid://djqfj60k8kq6r"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tx61t"]
-bg_color = Color(0.7371929, 0.737193, 0.73719275, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30ygl"]
-bg_color = Color(0.5211406, 0.52114064, 0.52114046, 1)
+bg_color = Color(0.3098, 0.478, 0.302, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.28, 0.176, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30ygl"]
+bg_color = Color(0.243, 0.38, 0.239, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.28, 0.176, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tiavq"]
-bg_color = Color(0.15487596, 0.154876, 0.15487587, 1)
+bg_color = Color(0.18, 0.28, 0.176, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.12, 0.18, 0.11, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7x6q5"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+bg_color = Color(0.129, 0.149, 0.18, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.243, 0.38, 0.239, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_orgti"]
-bg_color = Color(0.31801978, 0.3180198, 0.31801963, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
+bg_color = Color(0.129, 0.149, 0.18, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.243, 0.29, 0.239, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 8
+shadow_offset = Vector2(0, 4)
 
 [resource]
+Button/colors/font_color = Color(0.91, 0.91, 0.816, 1)
 Button/styles/hover = SubResource("StyleBoxFlat_tx61t")
 Button/styles/normal = SubResource("StyleBoxFlat_30ygl")
 Button/styles/pressed = SubResource("StyleBoxFlat_tiavq")
+Label/colors/font_color = Color(0.91, 0.91, 0.816, 1)
 LineEdit/styles/normal = SubResource("StyleBoxFlat_7x6q5")
 Panel/styles/panel = SubResource("StyleBoxFlat_orgti")

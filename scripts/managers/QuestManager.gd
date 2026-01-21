@@ -1,4 +1,9 @@
 extends Node
+## QuestManager - Handles quest/task tracking and rewards.
+## Autoload singleton accessible globally.
+
+# --- LOGGING (Set to false for production) ---
+const DEBUG_MODE: bool = false
 
 signal quests_updated # Tells UI to redraw
 
@@ -52,7 +57,7 @@ func _load_all_tasks():
 		await get_tree().create_timer(0.1).timeout
 		_recalculate_all()
 	else:
-		print("ERROR: Could not find folder " + folder_path)
+		push_error("QuestManager: Could not find folder " + folder_path)
 
 # --- CHECKING LOGIC ---
 
@@ -90,43 +95,57 @@ func _recalculate_all():
 	var something_changed = false
 	
 	for q in active_quests:
-		# Only process "Counter" type quests
-		if q.data.goal_type == "dino_count" and not q.completed:
+		if q.completed: continue
+		
+		# 1. DINO COUNT
+		if q.data.goal_type == "dino_count":
 			var count = 0
 			var target_name = q.data.target_id.strip_edges() # "Archosaur"
 			
-			# 1. COUNT THE DINOS
+			# Count...
 			for dino in all_dinos:
 				var found_name = ""
-				
-				# Smart Check: Look in Resource first, then Variable
 				if "species_data" in dino and dino.species_data != null:
 					found_name = dino.species_data.species_name
 				elif "species_name" in dino:
 					found_name = dino.species_name
 				
-				# Compare
 				if found_name == target_name:
 					count += 1
 			
-			# 2. UPDATE THE QUEST DATA
 			if q.current != count:
 				q.current = count
 				something_changed = true
-				print("Quest Updated: " + q.data.title + " is now " + str(count))
+				if DEBUG_MODE:
+					print("QuestManager: Quest '", q.data.title, "' progress: ", count)
+				_check_complete(q)
+				
+		# 2. RESEARCH (Retroactive Check)
+		elif q.data.goal_type == "research":
+			if q.data.target_id in GameManager.unlocked_research_ids:
+				if q.current != 1:
+					q.current = 1
+					something_changed = true
+					_check_complete(q)
+					
+		# 3. CURRENCY (Retroactive Check)
+		elif q.data.goal_type == "currency" or q.data.goal_type == "dna":
+			if q.current != GameManager.current_dna:
+				q.current = GameManager.current_dna
+				something_changed = true
 				_check_complete(q)
 
 	# 3. TELL THE UI TO REFRESH
 	if something_changed:
 		emit_signal("quests_updated")
 
-func _check_complete(q):
+func _check_complete(q: Dictionary) -> void:
 	if q.current >= q.data.target_amount:
 		if not q.completed:
 			q.completed = true
 			q.current = q.data.target_amount
-			# Note: We don't emit here because the calling function handles the emit
-			print("COMPLETED QUEST: " + q.data.title)
+			if DEBUG_MODE:
+				print("QuestManager: Completed quest '", q.data.title, "'")
 
 # --- REWARD SYSTEM ---
 func claim_reward(index):
@@ -137,3 +156,26 @@ func claim_reward(index):
 		q.claimed = true
 		GameManager.add_dna(q.data.reward_dna)
 		emit_signal("quests_updated")
+# --- PERSISTENCE ---
+func get_save_data() -> Array:
+	var save_data = []
+	for q in active_quests:
+		save_data.append({
+			"id": q.data.id,
+			"current": q.current,
+			"completed": q.completed,
+			"claimed": q.claimed
+		})
+	return save_data
+
+func load_save_data(data_list: Array):
+	for saved_q in data_list:
+		# Find the matching quest logic
+		for active_q in active_quests:
+			if active_q.data.id == saved_q["id"]:
+				active_q.current = saved_q["current"]
+				active_q.completed = saved_q["completed"]
+				active_q.claimed = saved_q["claimed"]
+				break
+	
+	emit_signal("quests_updated")

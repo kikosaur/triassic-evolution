@@ -12,6 +12,7 @@ animations = ExtResource("1_2qbwv")
 diet = 1
 base_dna_cost = 120000
 passive_dna_yield = 900
+click_yield = 120
 icon = ExtResource("2_57mc7")
 required_research_id = "node_lilien"
 ideal_biome_phase = 3

@@ -1,11 +1,17 @@
 extends Panel
 
-# Reference the popup we just added as a child
-@onready var info_panel = $InfoPanel
+# --- UI REFERENCES ---
+# Adjust paths if your sliders are inside VBoxContainers!
+@onready var master_slider = $MarginContainer/VBoxContainer/SliderMaster
+@onready var music_slider = $MarginContainer/VBoxContainer/SliderMusic
+@onready var sfx_slider = $MarginContainer/VBoxContainer/SliderMaster
+@onready var close_btn = $MarginContainer/VBoxContainer/BtnClose # Or $VBoxContainer/CloseBtn depending on your layout
 
-# Make sure these paths match your Scene Tree exactly!
 @onready var how_to_play_btn = $MarginContainer/VBoxContainer/HowToPlayBtn
 @onready var terms_btn = $MarginContainer/VBoxContainer/TermsBtn
+@onready var info_panel = $InfoPanel
+var time_warp_btn: Button
+var logout_btn: Button
 
 # --- DEFINE YOUR TEXT HERE ---
 # We use BBCode ([b], [color]) to make the text look nice.
@@ -35,16 +41,64 @@ const TERMS_TEXT = """
 """
 
 func _ready():
-	# Connect buttons
-	how_to_play_btn.pressed.connect(_on_how_to_play_clicked)
-	terms_btn.pressed.connect(_on_terms_clicked)
+	time_warp_btn = get_node_or_null("MarginContainer/VBoxContainer/TimeWarpBtn")
 	
-	# If you have a Close button for the Settings Panel itself, connect it here too:
-	# $CloseButton.pressed.connect(func(): hide())
+	# 1. CONNECT SLIDERS
+	music_slider.value_changed.connect(_on_music_changed)
+	sfx_slider.value_changed.connect(_on_sfx_changed)
+	master_slider.value_changed.connect(_on_master_changed)
+	
+	# 2. CONNECT CLOSE BUTTON (The Fix)
+	# This hides the panel when clicked
+	close_btn.pressed.connect(func():
+		AudioManager.play_sfx("click")
+		hide()
+	)
 
-func _on_how_to_play_clicked():
-	# Re-use the same popup, just change the text!
-	info_panel.setup_popup("How to Play", HOW_TO_PLAY_TEXT)
+	# 3. CONNECT INFO BUTTONS
+	how_to_play_btn.pressed.connect(func():
+		AudioManager.play_sfx("click")
+		info_panel.setup_popup("How to Play", HOW_TO_PLAY_TEXT)
+	)
+	
+	terms_btn.pressed.connect(func():
+		AudioManager.play_sfx("click")
+		info_panel.setup_popup("Terms", TERMS_TEXT)
+	)
+	
+	# 4. CONNECT TIME WARP BUTTON (Premium Feature)
+	if time_warp_btn:
+		time_warp_btn.pressed.connect(_on_time_warp_pressed)
+		
+	# 5. CONNECT LOGOUT BUTTON
+	logout_btn = get_node_or_null("MarginContainer/VBoxContainer/BtnLogout")
+	if logout_btn:
+		logout_btn.pressed.connect(_on_logout_pressed)
 
-func _on_terms_clicked():
-	info_panel.setup_popup("Terms & Conditions", TERMS_TEXT)
+func _on_logout_pressed():
+	AudioManager.play_sfx("click")
+	AuthManager.logout()
+	# Return to Start Screen
+	get_tree().change_scene_to_file("res://scenes/ui/StartScreen.tscn")
+
+func _on_time_warp_pressed():
+	if GameManager.use_time_warp():
+		AudioManager.play_sfx("success")
+		# Show success feedback
+		info_panel.setup_popup("Time Warp!", "[color=green]You skipped 1 hour![/color]\n\nEarned: " + GameManager.format_number(GameManager.get_total_dna_per_second() * 3600) + " DNA")
+	else:
+		AudioManager.play_sfx("click")
+		info_panel.setup_popup("Not Enough Fossils", "You need [color=yellow]10 Fossils[/color] to use Time Warp.\n\nCurrent: " + GameManager.format_number(GameManager.fossils) + " Fossils")
+
+func _on_music_changed(value):
+	# Send the new value directly to AudioManager
+	AudioManager.set_music_volume(value)
+
+func _on_sfx_changed(value):
+	AudioManager.set_sfx_volume(value)
+	# Optional: Play a test sound so user knows how loud it is
+	if not AudioManager.sfx_player.playing:
+		AudioManager.play_sfx("click")
+
+func _on_master_changed(value):
+	AudioManager.set_master_volume(value)

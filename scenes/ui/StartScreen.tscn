@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c77xp245t26vp"]
+[gd_scene load_steps=9 format=3 uid="uid://c77xp245t26vp"]
 
 [ext_resource type="Script" uid="uid://kyx7f8i6cepf" path="res://scripts/ui/StartScreen.gd" id="1_w26h4"]
 [ext_resource type="Texture2D" uid="uid://ce201kx6kh82p" path="res://assets/habitat-transition/06 Forest.png" id="2_lq8pi"]
@@ -6,6 +6,8 @@
 [ext_resource type="FontFile" uid="uid://bwwxs05nocmm8" path="res://assets/fonts/PressStart2P-Regular.ttf" id="4_nwhq5"]
 [ext_resource type="PackedScene" uid="uid://c0ss5gbri434f" path="res://scenes/ui/AuthPanel.tscn" id="5_84hrd"]
 [ext_resource type="PackedScene" uid="uid://b8io3jmork557" path="res://scenes/ui/SettingsPanel.tscn" id="6_lq8pi"]
+[ext_resource type="Texture2D" uid="uid://cx4hp0qt85eq4" path="res://assets/ui/settings.png" id="7_nwhq5"]
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="7_theme"]
 
 [node name="StartScreen" type="Control"]
 layout_mode = 3
@@ -14,6 +16,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("7_theme")
 script = ExtResource("1_w26h4")
 
 [node name="Background" type="TextureRect" parent="."]
@@ -55,17 +58,18 @@ horizontal_alignment = 1
 visible = false
 layout_mode = 1
 
-[node name="BtnSettings" type="Button" parent="."]
+[node name="BtnSettings" type="TextureButton" parent="."]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -8.0
-offset_bottom = 8.0
+offset_left = -100.0
+offset_bottom = 90.0
 grow_horizontal = 0
-text = " + "
+texture_normal = ExtResource("7_nwhq5")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="SettingsPanel" parent="." instance=ExtResource("6_lq8pi")]
 visible = false
-layout_mode = 0
-anchors_preset = 0
+layout_mode = 1

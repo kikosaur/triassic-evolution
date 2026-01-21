@@ -1,8 +1,8 @@
 extends Panel
 
-@onready var time_label = $VBoxContainer/TimeLabel
-@onready var money_label = $VBoxContainer/MoneyLabel
-@onready var btn_collect = $VBoxContainer/Button
+@onready var time_label = $MarginContainer/VBoxContainer/TimeLabel
+@onready var money_label = $MarginContainer/VBoxContainer/MoneyLabel
+@onready var btn_collect = $MarginContainer/VBoxContainer/Button
 
 func _ready():
 	visible = false

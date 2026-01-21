@@ -24,3 +24,34 @@ func play_music():
 	if music_player.stream != music_main:
 		music_player.stream = music_main
 		music_player.play()
+
+func set_music_volume(value: float):
+	# 1. Find the index of the Music bus
+	var bus_index = AudioServer.get_bus_index("Music")
+	
+	# 2. Convert 0-1 slider value to Decibels (Logarithmic)
+	# If value is 0, we mute it entirely
+	if value <= 0.05:
+		AudioServer.set_bus_mute(bus_index, true)
+	else:
+		AudioServer.set_bus_mute(bus_index, false)
+		AudioServer.set_bus_volume_db(bus_index, linear_to_db(value))
+
+func set_sfx_volume(value: float):
+	var bus_index = AudioServer.get_bus_index("SFX")
+	
+	if value <= 0.05:
+		AudioServer.set_bus_mute(bus_index, true)
+	else:
+		AudioServer.set_bus_mute(bus_index, false)
+		AudioServer.set_bus_volume_db(bus_index, linear_to_db(value))
+
+func set_master_volume(value: float):
+	# The "Master" bus is always index 0, but searching by name is safer
+	var bus_index = AudioServer.get_bus_index("Master")
+	
+	if value <= 0.05:
+		AudioServer.set_bus_mute(bus_index, true)
+	else:
+		AudioServer.set_bus_mute(bus_index, false)
+		AudioServer.set_bus_volume_db(bus_index, linear_to_db(value))

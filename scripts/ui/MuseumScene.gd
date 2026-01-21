@@ -2,7 +2,7 @@ extends Control
 
 # ARRAYS: Drag your .tres files here!
 @export var all_dinosaurs: Array[Resource]
-@export var all_traits: Array[Resource]   # Leave empty for now if you don't have them
+@export var all_traits: Array[Resource] # Leave empty for now if you don't have them
 @export var all_habitats: Array[Resource] # Leave empty for now
 
 # GRIDS (Inside the TabContainer)
@@ -19,6 +19,8 @@ extends Control
 # Detail UI
 @onready var d_img = $DetailPanel/MarginContainer/HBoxContainer/LargeImage
 @onready var d_name = $DetailPanel/MarginContainer/HBoxContainer/VBoxContainer/NameLbl
+@onready var d_sci = $DetailPanel/MarginContainer/HBoxContainer/VBoxContainer/SciNameLbl
+@onready var d_year = $DetailPanel/MarginContainer/HBoxContainer/VBoxContainer/YearLbl
 @onready var d_desc = $DetailPanel/MarginContainer/HBoxContainer/VBoxContainer/DescLbl
 
 var slot_scene = preload("res://scenes/ui/MuseumSlot.tscn")
@@ -30,15 +32,36 @@ func _ready():
 	# Bottom "Close Museum" Button
 	btn_close.pressed.connect(func(): visible = false)
 	
-	# --- FIX FOR THE 'X' BUTTON ---
-	# We connect the pressed signal to hide the panel
-	btn_close_popup.pressed.connect(func(): 
-		print("X Button Clicked") # Debug print to check if it works
+	# --- CLOSE POPUP BUTTON ---
+	btn_close_popup.pressed.connect(func():
 		detail_panel.visible = false
 	)
 	
 	# Fill the grid
+	_load_dynamic_resources()
 	refresh_gallery()
+
+func _load_dynamic_resources():
+	all_traits.clear()
+	all_habitats.clear()
+	
+	_load_folder("res://resources/traits/", all_traits)
+	_load_folder("res://resources/habitats/", all_habitats)
+	
+	# Optional: Sort by Name
+	all_traits.sort_custom(func(a, b): return a.display_name < b.display_name)
+	all_habitats.sort_custom(func(a, b): return a.display_name < b.display_name)
+
+func _load_folder(path, target_array):
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if not dir.current_is_dir() and file_name.ends_with(".tres"):
+				var res = load(path + file_name)
+				if res: target_array.append(res)
+			file_name = dir.get_next()
 
 func refresh_gallery():
 	# 1. Populate Dinosaurs
@@ -51,7 +74,7 @@ func refresh_gallery():
 	fill_grid(habitat_grid, all_habitats, "habitat_")
 
 # A Helper function to fill ANY grid
-func fill_grid(grid_node, data_array, prefix):
+func fill_grid(grid_node, data_array, _prefix):
 	# Clear old items
 	for child in grid_node.get_children():
 		child.queue_free()
@@ -60,10 +83,12 @@ func fill_grid(grid_node, data_array, prefix):
 		var is_unlocked = false
 		
 		# Check Unlock Logic
-		if "species_name" in item:
-			# It's a Dino
-			var id = prefix + item.species_name.to_lower()
-			if id in GameManager.unlocked_research_ids or item.species_name == "Archosaur":
+		# Check Unlock Logic
+		if "species_name" in item and item.species_name == "Archosaur":
+			is_unlocked = true # Starter
+		elif "required_research_id" in item:
+			# Universal Check: Does the user have the research?
+			if item.required_research_id in GameManager.unlocked_research_ids:
 				is_unlocked = true
 				
 		# Create Slot
@@ -74,8 +99,17 @@ func fill_grid(grid_node, data_array, prefix):
 
 func _on_slot_clicked(data):
 	# Show Details
+	# Details
 	if "icon" in data: d_img.texture = data.icon
 	if "species_name" in data: d_name.text = data.species_name
+	elif "display_name" in data: d_name.text = data.display_name
 	if "description" in data: d_desc.text = data.description
+	
+	# Fix: Populate Scientific Name and Year
+	if "scientific_name" in data: d_sci.text = data.scientific_name
+	else: d_sci.text = ""
+		
+	if "time_period" in data: d_year.text = data.time_period
+	else: d_year.text = ""
 	
 	detail_panel.visible = true

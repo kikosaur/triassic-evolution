@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dpu8rjobap63"
+path="res://.godot/imported/Pix - 3023 Mars Wars.mp3-51215d41fac36a24ac6ce6e1e8689d8d.mp3str"
+
+[deps]
+
+source_file="res://assets/soundtrack/Pix - 3023 Mars Wars.mp3"
+dest_files=["res://.godot/imported/Pix - 3023 Mars Wars.mp3-51215d41fac36a24ac6ce6e1e8689d8d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

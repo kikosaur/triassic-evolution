@@ -51,7 +51,7 @@ func _ready():
 			_safe_play("idle") # <--- Use Safe Play
 		
 		# SIZE FIX
-		var global_shrink = 0.2 
+		var global_shrink = 0.2
 		var s = species_data.visual_scale * global_shrink
 		anim.scale = Vector2(s, s)
 		
@@ -61,7 +61,7 @@ func _ready():
 	_setup_passive_timer()
 
 func _process(delta):
-	if is_dead: return 
+	if is_dead: return
 	
 	_handle_aging(delta)
 	
@@ -108,9 +108,9 @@ func _on_tick():
 	
 	var ate_food = false
 	if species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
-		ate_food = GameManager.consume_vegetation(1.0)
+		ate_food = GameManager.consume_vegetation(0.05)
 	else:
-		ate_food = GameManager.consume_critters(1.0)
+		ate_food = GameManager.consume_critters(0.05)
 	
 	if ate_food:
 		GameManager.add_dna(species_data.passive_dna_yield)
@@ -155,13 +155,25 @@ func _pick_random_destination():
 
 # (Keep Aging, Die, and Fossil Logic same as before)
 func die():
-	if is_dead: return 
+	if is_dead: return
 	is_dead = true
-	anim.stop() # Stop animating
-	anim.modulate = Color(0.4, 0.35, 0.3) 
-	anim.rotation_degrees = 180 
-	anim.position.y += 10 
+	
 	if passive_timer: passive_timer.stop()
+	
+	# IMPROVED DEATH LOGIC
+	# 1. Try to play death animation
+	if anim.sprite_frames.has_animation("die"):
+		anim.play("die")
+		# Optional: Tint it slightly so it looks dead even with placeholder art
+		anim.modulate = Color(0.6, 0.6, 0.6)
+	else:
+		# 2. Fallback: Stop and fade to gray
+		anim.stop()
+		anim.modulate = Color(0.5, 0.5, 0.5) # Gray corpse
+	
+	# FIX: Auto-delete after 60 seconds to prevent lag
+	var rot_timer = get_tree().create_timer(60.0)
+	rot_timer.timeout.connect(queue_free)
 
 func _handle_aging(delta):
 	if not species_data: return
@@ -170,26 +182,46 @@ func _handle_aging(delta):
 	
 	if current_phase == ideal:
 		age_multiplier = 1.0
-		anim.modulate = anim.modulate.lerp(Color(1, 1, 1), delta * 5.0) 
+		# Restore color if they return to valid biome
+		anim.modulate = anim.modulate.lerp(Color(1, 1, 1), delta * 2.0)
 	else:
-		var mismatch = abs(current_phase - ideal) 
+		var mismatch = abs(current_phase - ideal)
 		var tolerance = species_data.tolerance
 		age_multiplier = 1.0 + (mismatch * (1.0 - tolerance) * 2.0)
-		anim.modulate = anim.modulate.lerp(Color(1, 0.4, 0.4), delta * 5.0)
-
+		
+		# FIX: Removed the red tint "warning". 
+		# If you want visual feedback, maybe just slightly dim it, 
+		# but "Turning Red" was too aggressive.
+		# anim.modulate = anim.modulate.lerp(Color(1, 0.8, 0.8), delta * 5.0) 
+		
 	current_age += delta * age_multiplier
 	if current_age >= species_data.base_lifespan:
 		die()
 
 func _unhandled_input(event):
-	# Only allow clicking if dead
-	if is_dead and event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if _is_click_on_sprite(event.position):
-			_harvest_fossil()
+			if is_dead:
+				# Dead dino: Harvest fossil
+				_harvest_fossil()
+			else:
+				# Living dino: Give click yield DNA bonus
+				_on_dino_clicked()
+
+func _on_dino_clicked():
+	if not species_data: return
+	GameManager.add_dna(species_data.click_yield)
+	AudioManager.play_sfx("click")
+	
+	# Optional: Visual feedback (small bounce)
+	var tween = create_tween()
+	tween.tween_property(anim, "scale", anim.scale * 1.1, 0.1)
+	tween.tween_property(anim, "scale", anim.scale, 0.1)
 
 func _harvest_fossil():
 	if GameManager.has_method("add_fossils"):
 		GameManager.add_fossils(1)
+		AudioManager.play_sfx("success")
 	queue_free()
 
 func _setup_passive_timer():

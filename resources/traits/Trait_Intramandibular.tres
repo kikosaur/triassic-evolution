@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TraitDef" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/TraitDef.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/traits/T05_Intramandibular_Joint.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Intramandibular Joint"
+id = "trait_intramandibular"
+description = "A flexible jaw joint that allows the jaw to expand, helping in swallowing larger chunks of food."
+icon = ExtResource("2_icon")
+required_research_id = "node_intra"

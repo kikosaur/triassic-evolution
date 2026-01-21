@@ -1,7 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://ifcqyuyvc104"]
+[gd_scene load_steps=29 format=3 uid="uid://ifcqyuyvc104"]
 
 [ext_resource type="Script" uid="uid://cyvc4imibflhu" path="res://scripts/ui/MuseumScene.gd" id="1_81hgk"]
-[ext_resource type="Script" uid="uid://dw664fl0w61ik" path="res://scripts/resources/DinosaurSpecies.gd" id="2_dub3s"]
 [ext_resource type="Resource" uid="uid://p8ukqi65mh8o" path="res://resources/dinos/00_Archosaur.tres" id="3_pg7n5"]
 [ext_resource type="Resource" uid="uid://bekjfxkah4yxd" path="res://resources/dinos/01_Lagosuchus.tres" id="4_cfkgp"]
 [ext_resource type="Resource" uid="uid://nyylx8d6ovjs" path="res://resources/dinos/02_Eoraptor.tres" id="5_2w7la"]
@@ -11,6 +10,24 @@
 [ext_resource type="Resource" uid="uid://0onbpuep2kdd" path="res://resources/dinos/06_Plateosaurus.tres" id="9_bih5u"]
 [ext_resource type="Resource" uid="uid://dpqhonnoddjno" path="res://resources/dinos/07_Liliensternus.tres" id="10_67mmr"]
 [ext_resource type="Resource" uid="uid://clcnqyunc53nh" path="res://resources/dinos/08_Riojasaurus.tres" id="11_02556"]
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="12_theme"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_UprightStance.tres" id="12_y4xfs"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_PerforateAcetabulum.tres" id="13_r13ed"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_SerratedTeeth.tres" id="14_vecdf"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_LeafShapedTeeth.tres" id="15_u7h3h"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_Intramandibular.tres" id="16_ufjsj"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_Gastroliths.tres" id="17_gt2xa"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_HollowBones.tres" id="18_r1bro"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_ElongatedNeck.tres" id="19_4ewgh"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_FusedAnkles.tres" id="20_q8to5"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_CranialCrest.tres" id="21_t38yf"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_Quadrupedalism.tres" id="22_qt4em"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_Gigantism.tres" id="23_issol"]
+[ext_resource type="Resource" path="res://resources/habitats/Habitat_Pools.tres" id="24_smn8j"]
+[ext_resource type="Resource" path="res://resources/habitats/Habitat_Ferns.tres" id="25_0xwfh"]
+[ext_resource type="Resource" path="res://resources/habitats/Habitat_River.tres" id="26_s21jn"]
+[ext_resource type="Resource" path="res://resources/habitats/Habitat_Cycads.tres" id="27_gvbcj"]
+[ext_resource type="Resource" path="res://resources/habitats/Habitat_Forest.tres" id="28_ppmqu"]
 
 [node name="MuseumScene" type="Control"]
 layout_mode = 3
@@ -21,8 +38,11 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("12_theme")
 script = ExtResource("1_81hgk")
-all_dinosaurs = Array[ExtResource("2_dub3s")]([ExtResource("3_pg7n5"), ExtResource("4_cfkgp"), ExtResource("5_2w7la"), ExtResource("6_wh76r"), ExtResource("7_v4qxi"), ExtResource("8_j5be2"), ExtResource("9_bih5u"), ExtResource("10_67mmr"), ExtResource("11_02556")])
+all_dinosaurs = Array[Resource]([ExtResource("3_pg7n5"), ExtResource("4_cfkgp"), ExtResource("5_2w7la"), ExtResource("6_wh76r"), ExtResource("7_v4qxi"), ExtResource("8_j5be2"), ExtResource("9_bih5u"), ExtResource("10_67mmr"), ExtResource("11_02556")])
+all_traits = Array[Resource]([ExtResource("12_y4xfs"), ExtResource("13_r13ed"), ExtResource("14_vecdf"), ExtResource("15_u7h3h"), ExtResource("16_ufjsj"), ExtResource("17_gt2xa"), ExtResource("18_r1bro"), ExtResource("19_4ewgh"), ExtResource("20_q8to5"), ExtResource("21_t38yf"), ExtResource("22_qt4em"), ExtResource("23_issol")])
+all_habitats = Array[Resource]([ExtResource("24_smn8j"), ExtResource("25_0xwfh"), ExtResource("26_s21jn"), ExtResource("27_gvbcj"), ExtResource("28_ppmqu")])
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -103,16 +123,17 @@ grow_horizontal = 2
 text = "  X  "
 
 [node name="DetailPanel" type="Panel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -207.0
-offset_top = -130.0
-offset_right = 207.0
-offset_bottom = 130.0
+offset_left = -250.0
+offset_top = -150.0
+offset_right = 250.0
+offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -143,12 +164,12 @@ layout_mode = 2
 [node name="LargeImage" type="TextureRect" parent="DetailPanel/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
-size_flags_horizontal = 3
 expand_mode = 1
 stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DetailPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="NameLbl" type="Label" parent="DetailPanel/MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -165,6 +186,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+autowrap_mode = 3
 
 [node name="BtnClosePopup" type="Button" parent="DetailPanel"]
 layout_mode = 1

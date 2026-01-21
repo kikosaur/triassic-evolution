@@ -83,6 +83,11 @@ size_flags_vertical = 3
 text = "Terms & Conditions
 "
 
+[node name="TimeWarpBtn" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Time Warp (10 Fossils)"
+
 [node name="BtnLogout" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -95,13 +100,8 @@ text = "Close"
 
 [node name="InfoPanel" parent="." instance=ExtResource("3_idotu")]
 visible = false
-layout_mode = 0
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_right = 600.0
-offset_bottom = 400.0
-grow_horizontal = 1
-grow_vertical = 1
+layout_mode = 1
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0

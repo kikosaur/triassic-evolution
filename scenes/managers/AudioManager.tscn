@@ -1,10 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://d4m2sisn3rceg"]
+[gd_scene load_steps=5 format=3 uid="uid://d4m2sisn3rceg"]
 
 [ext_resource type="Script" uid="uid://d0g7uhrgupa7k" path="res://scenes/managers/AudioManager.gd" id="1_kkfu8"]
+[ext_resource type="AudioStream" uid="uid://barkadjwn0gu5" path="res://assets/soundtrack/button-sound-effects-copyright-free_94UIhWJ1.wav" id="2_nntkl"]
+[ext_resource type="AudioStream" uid="uid://bclfaa1nibc4s" path="res://assets/soundtrack/coin_q4JDpnEu.wav" id="3_5qtp6"]
+[ext_resource type="AudioStream" uid="uid://dpu8rjobap63" path="res://assets/soundtrack/Pix - 3023 Mars Wars.mp3" id="4_dynhf"]
 
 [node name="AudioManager" type="Node"]
 script = ExtResource("1_kkfu8")
+sfx_click = ExtResource("2_nntkl")
+sfx_success = ExtResource("3_5qtp6")
+music_main = ExtResource("4_dynhf")
 
 [node name="SFX_Player" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+bus = &"SFX"
 
 [node name="Music_Player" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+bus = &"Music"

@@ -1,7 +1,7 @@
 extends Control
 
 @export var my_data: ResearchDef
-@export var parent_node: Control 
+@export var parent_node: Control
 
 # --- NODE PATHS ---
 # Update these to match your exact Scene Tree!
@@ -58,7 +58,7 @@ func _update_visuals():
 		modulate = Color(1, 1, 1) # Normal brightness
 		icon_rect.modulate = Color(0, 0, 0, 0.8) # Silhouetted Icon (Mystery)
 		
-		cost_label.text = str(my_data.dna_cost) + " DNA"
+		cost_label.text = GameManager.format_number(my_data.dna_cost) + " DNA"
 		name_label.text = my_data.display_name # Show name so they know what to buy
 		btn_node.disabled = false
 		
