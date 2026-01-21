@@ -1,76 +1,50 @@
 extends Panel
 
-# --- AUDIO BUS INDICES ---
-var master_bus = AudioServer.get_bus_index("Master")
-var music_bus = AudioServer.get_bus_index("Music")
-var sfx_bus = AudioServer.get_bus_index("SFX")
-
-# --- NODES ---
-@onready var slider_master = $MarginContainer/VBoxContainer/SliderMaster
-@onready var slider_music = $MarginContainer/VBoxContainer/SliderMusic
-@onready var slider_sfx = $MarginContainer/VBoxContainer/SliderSFX
-
+# Reference the popup we just added as a child
 @onready var info_panel = $InfoPanel
-@onready var info_text = $InfoPanel/MarginContainer/VBoxContainer/InfoText
-@onready var btn_back = $InfoPanel/MarginContainer/VBoxContainer/BtnBack
+
+# Make sure these paths match your Scene Tree exactly!
+@onready var how_to_play_btn = $VBoxContainer/HowToPlayBtn
+@onready var terms_btn = $VBoxContainer/TermsBtn
+
+# --- DEFINE YOUR TEXT HERE ---
+# We use BBCode ([b], [color]) to make the text look nice.
+const HOW_TO_PLAY_TEXT = """
+[b]1. Build Your Park[/b]
+Buy dinosaurs from the Market to start generating DNA.
+
+[b]2. Evolve[/b]
+Use DNA to [color=yellow]Research[/color] new evolutionary traits. Unlocking nodes like 'Upright Stance' allows you to buy better dinosaurs.
+
+[b]3. Complete Tasks[/b]
+Check the Quest Menu for tasks. Completing them gives huge DNA bonuses!
+
+[b]4. Manage Habitats[/b]
+Buy habitat decorations to boost the efficiency of your dinosaurs.
+"""
+
+const TERMS_TEXT = """
+[b]Triassic Evolution Terms[/b]
+
+1. This game is a personal project created for educational purposes.
+2. No personal data is collected or stored on external servers.
+3. Dinosaur logic is simulated and does not represent real biological timeframes.
+4. By playing, you agree to have fun and evolve responsibly!
+
+[i]Version 1.0.0[/i]
+"""
 
 func _ready():
-	# 1. Connect Sliders
-	slider_master.value_changed.connect(_on_master_changed)
-	slider_music.value_changed.connect(_on_music_changed)
-	slider_sfx.value_changed.connect(_on_sfx_changed)
+	# Connect buttons
+	how_to_play_btn.pressed.connect(_on_how_to_play_clicked)
+	terms_btn.pressed.connect(_on_terms_clicked)
 	
-	# 2. Connect Buttons
-	$MarginContainer/VBoxContainer/BtnTutorial.pressed.connect(_show_tutorial)
-	$MarginContainer/VBoxContainer/BtnTerms.pressed.connect(_show_terms)
-	$MarginContainer/VBoxContainer/BtnLogout.pressed.connect(_on_logout)
-	$MarginContainer/VBoxContainer/BtnClose.pressed.connect(func(): visible = false)
-	
-	btn_back.pressed.connect(func(): info_panel.visible = false)
-	
-	# 3. Initialize Info Panel
-	info_panel.visible = false
+	# If you have a Close button for the Settings Panel itself, connect it here too:
+	# $CloseButton.pressed.connect(func(): hide())
 
-# --- VOLUME LOGIC ---
-func _on_master_changed(value):
-	AudioServer.set_bus_volume_db(master_bus, linear_to_db(value))
-	AudioServer.set_bus_mute(master_bus, value < 0.05) # Mute if near 0
+func _on_how_to_play_clicked():
+	# Re-use the same popup, just change the text!
+	info_panel.setup_popup("How to Play", HOW_TO_PLAY_TEXT)
 
-func _on_music_changed(value):
-	AudioServer.set_bus_volume_db(music_bus, linear_to_db(value))
-	AudioServer.set_bus_mute(music_bus, value < 0.05)
-
-func _on_sfx_changed(value):
-	AudioServer.set_bus_volume_db(sfx_bus, linear_to_db(value))
-	AudioServer.set_bus_mute(sfx_bus, value < 0.05)
-
-# --- INFO SCREENS ---
-func _show_tutorial():
-	info_text.text = "[center][b]HOW TO PLAY[/b][/center]\n\n" + \
-	"- Buy Dinosaurs to earn DNA.\n" + \
-	"- Carnivores hunt Herbivores if density is 0%.\n" + \
-	"- Unlock Research to evolve your Habitat.\n" + \
-	"- Find Fossils when dinos die to buy special upgrades!"
-	info_panel.visible = true
-
-func _show_terms():
-	info_text.text = "[center][b]TERMS & CONDITIONS[/b][/center]\n\n" + \
-	"1. Don't feed the T-Rex by hand.\n" + \
-	"2. We are not responsible for lost limbs.\n" + \
-	"3. Enjoy the evolution!"
-	info_panel.visible = true
-
-# --- LOGOUT LOGIC ---
-func _on_logout():
-	# 1. Clear Auth Data
-	AuthManager.user_id = ""
-	AuthManager.user_token = ""
-	
-	# 2. Save Game (Optional: Save before kicking them out)
-	# var data = GameManager.get_save_dictionary()
-	# AuthManager.save_game_to_cloud(data)
-	
-	# 3. Reset Game State
-	# The easiest way is to reload the entire scene.
-	# Since StartScreen appears if user_id is empty, it will show the login screen.
-	get_tree().reload_current_scene()
+func _on_terms_clicked():
+	info_panel.setup_popup("Terms & Conditions", TERMS_TEXT)

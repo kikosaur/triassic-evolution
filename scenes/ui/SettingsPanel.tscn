@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8io3jmork557"]
+[gd_scene load_steps=4 format=3 uid="uid://b8io3jmork557"]
 
 [ext_resource type="Script" uid="uid://clcsiql3jk683" path="res://scripts/ui/SettingsPanel.gd" id="1_741xb"]
 [ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_cjf3c"]
+[ext_resource type="PackedScene" uid="uid://d00hba042nes7" path="res://scenes/ui/InfoPanel.tscn" id="3_idotu"]
 
 [node name="SettingsPanel" type="Panel"]
 custom_minimum_size = Vector2(500, 400)
@@ -71,12 +72,12 @@ max_value = 1.0
 step = 0.5
 value = 1.0
 
-[node name="BtnTutorial" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="HowToPlayBtn" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "How to Play"
 
-[node name="BtnTerms" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="TermsBtn" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Terms & Conditions
@@ -92,26 +93,7 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Close"
 
-[node name="InfoPanel" type="Panel" parent="."]
+[node name="InfoPanel" parent="." instance=ExtResource("3_idotu")]
 visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="InfoPanel"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="InfoPanel/MarginContainer"]
-layout_mode = 2
-
-[node name="InfoText" type="RichTextLabel" parent="InfoPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="BtnBack" type="Button" parent="InfoPanel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = " x "
+anchors_preset = 0
