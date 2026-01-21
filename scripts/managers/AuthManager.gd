@@ -45,6 +45,12 @@ func _send_request(url, body):
 	_http_request.request(url, headers, HTTPClient.METHOD_POST, body)
 
 func _on_request_completed(_result, response_code, _headers, body):
+	var body_string = body.get_string_from_utf8()
+	
+	# DEBUG: Print exactly what the server sent back
+	print("SERVER RESPONSE CODE: " + str(response_code))
+	print("SERVER BODY: " + body_string)
+	
 	var json = JSON.new()
 	var parse_result = json.parse(body.get_string_from_utf8())
 	

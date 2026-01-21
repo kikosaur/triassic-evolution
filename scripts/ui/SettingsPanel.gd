@@ -4,8 +4,8 @@ extends Panel
 @onready var info_panel = $InfoPanel
 
 # Make sure these paths match your Scene Tree exactly!
-@onready var how_to_play_btn = $VBoxContainer/HowToPlayBtn
-@onready var terms_btn = $VBoxContainer/TermsBtn
+@onready var how_to_play_btn = $MarginContainer/VBoxContainer/HowToPlayBtn
+@onready var terms_btn = $MarginContainer/VBoxContainer/TermsBtn
 
 # --- DEFINE YOUR TEXT HERE ---
 # We use BBCode ([b], [color]) to make the text look nice.
