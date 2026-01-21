@@ -1,5 +1,6 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bc2k2eafgc0rt"]
+[gd_resource type="Resource" script_class="HabitatProduct" load_steps=3 format=3 uid="uid://bc2k2eafgc0rt"]
 
+[ext_resource type="Texture2D" uid="uid://cyym8qln565p6" path="res://assets/habitat_items/dragonfly.png" id="1_6hqpm"]
 [ext_resource type="Script" uid="uid://dq7of5jpf5ow6" path="res://scripts/resources/HabitatProduct.gd" id="1_8h6la"]
 
 [resource]
@@ -8,3 +9,4 @@ name = "Dragonfly Swarm"
 type = 1
 dna_cost = 150
 density_gain = 60.0
+icon = ExtResource("1_6hqpm")

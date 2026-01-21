@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_hosl5")
 species_name = "Riojasaurus"
-visual_scale = 2.5
+visual_scale = 3.0
 animations = ExtResource("1_i374f")
 base_dna_cost = 380000
 passive_dna_yield = 3000

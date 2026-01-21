@@ -9,6 +9,10 @@ extends Node
 @export var sfx_success: AudioStream
 @export var music_main: AudioStream
 
+func _ready():
+	# Loop Music
+	music_player.finished.connect(func(): music_player.play())
+
 func play_sfx(sound_name: String):
 	# Choose the sound based on the name
 	if sound_name == "click":

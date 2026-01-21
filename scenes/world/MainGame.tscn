@@ -157,7 +157,7 @@ offset_left = -500.0
 offset_right = 0.0
 grow_horizontal = 0
 
-[node name="StartScreen" parent="UI_Layer" instance=ExtResource("21_b5gth")]
+
 
 [node name="SettingsPanel" parent="UI_Layer" instance=ExtResource("22_b5gth")]
 visible = false

@@ -11,8 +11,10 @@ var is_waiting_for_input = true
 
 func _ready():
 	# 1. Check if already logged in (Auto-Load feature)
+	# 1. Check if already logged in (Auto-Load feature)
 	if AuthManager.user_id != "":
-		queue_free() # Skip start screen entirely
+		# Go to Loading Screen
+		get_tree().change_scene_to_file("res://scenes/ui/LoadingScreen.tscn")
 		return
 
 	# 2. Setup initial state
@@ -60,4 +62,7 @@ func _on_login_success(_user):
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 1.0)
 	await tween.finished
-	queue_free() # Remove Start Screen, revealing MainGame
+	
+	# FIX: Don't just destroy self, load the Game Scene!
+	# FIX: Go to Loading Screen first to fetch data
+	get_tree().change_scene_to_file("res://scenes/ui/LoadingScreen.tscn")

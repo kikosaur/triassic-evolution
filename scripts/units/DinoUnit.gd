@@ -31,7 +31,7 @@ var target_prey: Node2D = null
 var passive_timer: Timer
 
 func _safe_play(anim_name: String):
-	if not anim.sprite_frames: return
+	if anim_name == "" or not anim.sprite_frames: return
 	
 	if anim.sprite_frames.has_animation(anim_name):
 		if anim.animation != anim_name:
@@ -48,12 +48,49 @@ func _ready():
 		# Check if animations exist
 		if species_data.animations:
 			anim.sprite_frames = species_data.animations
-			_safe_play("idle") # <--- Use Safe Play
+			
+			# Q: Force a valid animation to prevent Errors
+			var valid_anim = ""
+			if anim.sprite_frames.has_animation("idle"):
+				valid_anim = "idle"
+			elif anim.sprite_frames.has_animation("default"):
+				valid_anim = "default"
+			else:
+				# Pick first available if any
+				var names = anim.sprite_frames.get_animation_names()
+				if names.size() > 0:
+					valid_anim = names[0]
+			
+			if valid_anim != "":
+				anim.animation = valid_anim
+				anim.play(valid_anim)
+				
+				# --- SIZE NORMALIZATION FIX ---
+				# This ensures 4K images and Pixel Art images can coexist!
+				var tex = anim.sprite_frames.get_frame_texture(valid_anim, 0)
+				if tex:
+					var raw_width = float(tex.get_width())
+					
+					# 1. Choose a "Standard" width in pixels for a 1.0 scale dino
+					# (Adjustment: 200px looks good on 1080p)
+					var base_target_width = 200.0
+					
+					# 2. Calculate how much we need to shrink/grow this specific image
+					var resolution_scale = base_target_width / raw_width
+					
+					# 3. Combine with the Species "Game Size" factor
+					# visual_scale 1.0 = Average, 0.5 = Small, 2.0 = Giant
+					var final_s = resolution_scale * species_data.visual_scale
+					
+					anim.scale = Vector2(final_s, final_s)
+			
+			# Ensure we are safe
+			# _safe_play("idle") # Redundant now
 		
-		# SIZE FIX
-		var global_shrink = 0.2
-		var s = species_data.visual_scale * global_shrink
-		anim.scale = Vector2(s, s)
+		# Old simple logic (Removed)
+		# var global_shrink = 0.2
+		# var s = species_data.visual_scale * global_shrink
+		# anim.scale = Vector2(s, s)
 		
 		move_speed = randf_range(20.0, 40.0)
 	
@@ -136,7 +173,7 @@ func _play_eat_animation():
 		await get_tree().create_timer(0.5).timeout
 	
 	is_eating = false
-	anim.play("idle") # Return to idle
+	# anim.play("idle") # REMOVED: Let _process handle the next state (Idle or Walk) naturally
 
 func _eat_prey(prey):
 	if is_instance_valid(prey):

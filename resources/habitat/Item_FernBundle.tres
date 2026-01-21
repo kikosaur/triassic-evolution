@@ -1,8 +1,10 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://d23sfn362qkgb"]
+[gd_resource type="Resource" script_class="HabitatProduct" load_steps=3 format=3 uid="uid://d23sfn362qkgb"]
 
 [ext_resource type="Script" uid="uid://dq7of5jpf5ow6" path="res://scripts/resources/HabitatProduct.gd" id="1_326am"]
+[ext_resource type="Texture2D" uid="uid://8lakmmarxdwi" path="res://assets/habitat_items/ferns.png" id="1_i21tg"]
 
 [resource]
 script = ExtResource("1_326am")
 name = "Fern Bundle"
 dna_cost = 25
+icon = ExtResource("1_i21tg")

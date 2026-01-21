@@ -10,6 +10,7 @@ var _config_loaded: bool = false
 # --- SIGNALS ---
 signal auth_result(success: bool, message: String)
 signal user_logged_in(user_data: Dictionary)
+signal save_data_loaded(success: bool)
 
 # --- STATE ---
 var _http_request: HTTPRequest
@@ -124,8 +125,8 @@ func _on_request_completed(_result: int, response_code: int, _headers: PackedStr
 		emit_signal("auth_result", true, "Login Successful!")
 		emit_signal("user_logged_in", response["user"])
 		
-		# Auto-load save data
-		load_game_from_cloud()
+		# Auto-load is now handled by LoadingScreen!
+		# load_game_from_cloud()
 
 # --- DATABASE FUNCTIONS ---
 
@@ -190,6 +191,9 @@ func _on_load_completed(_res: int, code: int, _head: PackedStringArray, body: Pa
 		if DEBUG_MODE:
 			print("AuthManager: Save found, loading...")
 		GameManager.load_save_dictionary(data)
+		emit_signal("save_data_loaded", true)
 	else:
 		if DEBUG_MODE:
 			print("AuthManager: No save file found for this user.")
+		# Even if no save, we are done loading (fresh start)
+		emit_signal("save_data_loaded", true)

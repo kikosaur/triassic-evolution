@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_x52go")
 species_name = "Coelophysis"
-visual_scale = 1.1
+visual_scale = 1.2
 animations = ExtResource("1_pb518")
 diet = 1
 base_dna_cost = 13500
