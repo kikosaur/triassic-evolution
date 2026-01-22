@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_h0g60")
 species_name = "Eoraptor"
-visual_scale = 0.7
+visual_scale = 2.0
 animations = ExtResource("1_6cycl")
 base_dna_cost = 1000
 passive_dna_yield = 20

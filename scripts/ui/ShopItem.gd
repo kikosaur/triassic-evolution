@@ -9,6 +9,11 @@ extends Panel # Changed from PanelContainer to match the new "Card" root
 @onready var name_lbl = $MarginContainer/VBoxContainer/NameLabel
 @onready var price_lbl = $MarginContainer/VBoxContainer/PriceLabel # We use this for Cost/Stats now
 @onready var buy_btn = $MarginContainer/VBoxContainer/BuyButton
+@onready var diet_icon = %DietIcon
+
+# Preload diet icons
+var herbivore_icon = preload("res://assets/ui/herbivore_icon.svg")
+var carnivore_icon = preload("res://assets/ui/carnivore_icon.svg")
 
 func _ready():
 	buy_btn.pressed.connect(_on_buy)
@@ -21,6 +26,14 @@ func _update_display():
 		price_lbl.text = GameManager.format_number(species_data.base_dna_cost) + " DNA"
 		if species_data.icon:
 			icon_rect.texture = species_data.icon
+		
+		# Set diet icon
+		if species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
+			diet_icon.texture = herbivore_icon
+			diet_icon.visible = true
+		else: # CARNIVORE
+			diet_icon.texture = carnivore_icon
+			diet_icon.visible = true
 	
 	# CASE 2: SELLING HABITAT
 	elif habitat_data:
@@ -29,6 +42,9 @@ func _update_display():
 		price_lbl.text = GameManager.format_number(habitat_data.dna_cost) + " DNA\n+" + str(habitat_data.density_gain) + "% Density"
 		if habitat_data.icon:
 			icon_rect.texture = habitat_data.icon
+		
+		# Hide diet icon for habitats
+		diet_icon.visible = false
 
 func _process(_delta):
 	# 1. VISIBILITY CHECK (The "Locked" System)

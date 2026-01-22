@@ -1,0 +1,20 @@
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fossil Icon - Gray/Brown like Critters Bar -->
+  <defs>
+    <linearGradient id="fossilGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#A1887F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#795548;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Bone shape -->
+  <ellipse cx="14" cy="14" rx="8" ry="8" fill="url(#fossilGrad)"/>
+  <ellipse cx="34" cy="34" rx="8" ry="8" fill="url(#fossilGrad)"/>
+  <rect x="18" y="18" width="12" height="12" fill="url(#fossilGrad)" 
+        transform="rotate(45 24 24)"/>
+  
+  <!-- Detail lines -->
+  <path d="M 14 14 L 34 34" stroke="#5D4037" stroke-width="3"/>
+  <circle cx="14" cy="14" r="3" fill="#BCAAA4" opacity="0.7"/>
+  <circle cx="34" cy="34" r="3" fill="#BCAAA4" opacity="0.7"/>
+</svg>

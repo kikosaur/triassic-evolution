@@ -68,12 +68,13 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="DinoGrid" type="HFlowContainer" parent="TabContainer/Dinosaurs/MarginContainer"]
+[node name="DinoGrid" type="GridContainer" parent="TabContainer/Dinosaurs/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+columns = 3
 theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
+theme_override_constants/v_separation = 40
 
 [node name="Habitats" type="ScrollContainer" parent="TabContainer"]
 visible = false
@@ -89,9 +90,25 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="HabGrid" type="HFlowContainer" parent="TabContainer/Habitats/MarginContainer"]
+[node name="HabGrid" type="GridContainer" parent="TabContainer/Habitats/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+columns = 2
 theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
+theme_override_constants/v_separation = 40
+
+[node name="CloseButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -80.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 45.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 24
+text = "[X]"
+
+[connection signal="pressed" from="CloseButton" to="." method="hide"]

@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_iysgw")
 species_name = "Panphagia"
-visual_scale = 0.8
+visual_scale = 3.0
 animations = ExtResource("1_4ammk")
 base_dna_cost = 7500
 passive_dna_yield = 53

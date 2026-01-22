@@ -1,0 +1,13 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tooth/fang icon for carnivore -->
+  <g>
+    <!-- Sharp tooth shape -->
+    <path d="M 32 8 L 44 32 Q 44 48 32 56 Q 20 48 20 32 L 32 8 Z" 
+          fill="#F44336" stroke="#C62828" stroke-width="2"/>
+    <!-- Inner highlight -->
+    <path d="M 32 12 L 40 32 Q 40 44 32 50 Q 24 44 24 32 L 32 12 Z" 
+          fill="#EF5350" stroke="none"/>
+    <!-- Sharp point accent -->
+    <circle cx="32" cy="10" r="3" fill="#FFFFFF" opacity="0.6"/>
+  </g>
+</svg>
