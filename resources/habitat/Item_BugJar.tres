@@ -8,5 +8,5 @@ script = ExtResource("1_ckt5l")
 name = "Jar of Beetles"
 type = 1
 dna_cost = 40
-density_gain = 15.0
+density_gain = 2.0
 icon = ExtResource("1_8sdot")

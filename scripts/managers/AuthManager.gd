@@ -67,14 +67,25 @@ func _load_secrets() -> void:
 
 # --- PUBLIC FUNCTIONS ---
 
-func sign_up(email: String, password: String) -> void:
+func sign_up(email: String, password: String, full_name: String, dob: String, username: String) -> void:
 	if not _config_loaded:
 		emit_signal("auth_result", false, "Configuration not loaded!")
 		return
 	
 	_current_action = "signup"
 	var url = _project_url + "/auth/v1/signup"
-	var body = JSON.stringify({"email": email, "password": password})
+	
+	# Supabase expects 'data' inside 'options' for user metadata
+	var body_data = {
+		"email": email,
+		"password": password,
+		"data": {
+			"full_name": full_name,
+			"dob": dob,
+			"username": username
+		}
+	}
+	var body = JSON.stringify(body_data)
 	_send_request(url, body)
 
 func login(email: String, password: String) -> void:

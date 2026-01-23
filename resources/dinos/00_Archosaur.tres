@@ -10,6 +10,7 @@ species_name = "Archosaur"
 animations = ExtResource("1_i6s0k")
 base_dna_cost = 25
 icon = ExtResource("1_iro2c")
+consumption_rate = 1.0
 tolerance = 0.8
 scientific_name = "Archosauria"
 description = "The 'great-grandfather' of dinosaurs and crocodiles. A rugged survivor of the arid scrublands."

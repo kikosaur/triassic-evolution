@@ -9,12 +9,31 @@ var reward_label: Label
 func _ready() -> void:
 	reward_label = get_node_or_null("RewardLabel")
 	$ResetBtn.pressed.connect(_on_reset)
+	
+	# Close Button Logic
+	var close_btn = get_node_or_null("CloseBtn")
+	if close_btn:
+		close_btn.pressed.connect(func(): visible = false)
 
 func _on_show() -> void:
-	# Calculate and display expected reward when panel opens
-	var expected = _calculate_fossil_reward()
-	if reward_label:
-		reward_label.text = "Fossil Reward: +" + GameManager.format_number(expected)
+	var can_reset = _check_requirements()
+	$ResetBtn.disabled = not can_reset
+	
+	if can_reset:
+		# Calculate and display expected reward when panel opens
+		var expected = _calculate_fossil_reward()
+		if reward_label:
+			reward_label.text = "Fossil Reward: +" + GameManager.format_number(expected)
+	else:
+		if reward_label:
+			reward_label.text = "REQUIREMENTS NOT MET:\n"
+			if not GameManager.is_all_research_unlocked():
+				reward_label.text += "- Unlock All Research\n"
+			if not QuestManager.are_all_quests_completed():
+				reward_label.text += "- Complete All Tasks"
+
+func _check_requirements() -> bool:
+	return GameManager.is_all_research_unlocked() and QuestManager.are_all_quests_completed()
 
 func _calculate_fossil_reward() -> int:
 	# Base reward from research progress (1 fossil per unlocked node)

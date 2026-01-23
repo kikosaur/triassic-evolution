@@ -31,7 +31,7 @@ func _on_signup_pressed():
 		
 	status_label.text = "Creating Account..."
 	status_label.modulate = Color.YELLOW
-	AuthManager.sign_up(email_input.text, pass_input.text)
+	AuthManager.sign_up(email_input.text, pass_input.text, "Legacy User", "2000-01-01", "legacy_user")
 
 func _on_auth_result(success, message):
 	status_label.text = message

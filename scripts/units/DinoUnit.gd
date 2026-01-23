@@ -31,16 +31,33 @@ var target_prey: Node2D = null
 @onready var anim = $AnimatedSprite # CHANGED: Now references AnimatedSprite2D
 var passive_timer: Timer
 
-func _safe_play(anim_name: String):
+# Helper to play animation AND match scale to consistent visual size
+func _play_scaled_anim(anim_name: String):
+	if is_dead and anim_name != "die": return
 	if anim_name == "" or not anim.sprite_frames: return
 	
 	if anim.sprite_frames.has_animation(anim_name):
 		if anim.animation != anim_name:
 			anim.play(anim_name)
+			_update_scale_for_current_anim()
 	elif anim_name == "idle" and anim.sprite_frames.has_animation("default"):
-		# Fallback: Play "default" if "idle" is missing
 		if anim.animation != "default":
 			anim.play("default")
+			_update_scale_for_current_anim()
+
+func _update_scale_for_current_anim():
+	var tex = anim.sprite_frames.get_frame_texture(anim.animation, anim.frame)
+	if tex:
+		var raw_width = float(tex.get_width())
+		# Target 200px width as "Standard 1.0"
+		var base_target_width = 200.0
+		if raw_width > 0:
+			var resolution_scale = base_target_width / raw_width
+			var final_s = resolution_scale * species_data.visual_scale
+			
+			# Tween it for smoothness? No, snap it to prevent visual glitch
+			anim.scale = Vector2(final_s, final_s)
+			base_scale = anim.scale # Update base for tweening effects
 
 func _ready():
 	add_to_group("dinos")
@@ -127,7 +144,7 @@ func _handle_movement(delta):
 		position = position.move_toward(dest, move_speed * delta)
 		
 		# ANIMATION: Walk
-		_safe_play("walk") # <--- Use Safe Play
+		_play_scaled_anim("walk")
 			
 		# FLIP
 		if dest.x < position.x:
@@ -139,7 +156,7 @@ func _handle_movement(delta):
 		is_moving = false
 		
 		# ANIMATION: Idle
-		_safe_play("idle") # <--- Use Safe Play
+		_play_scaled_anim("idle")
 
 		move_timer -= delta
 		if move_timer <= 0:
@@ -179,7 +196,7 @@ func _play_eat_animation():
 	
 	# Play "eat" animation if it exists
 	if anim.sprite_frames.has_animation("eat"):
-		anim.play("eat")
+		_play_scaled_anim("eat")
 		await anim.animation_finished # Wait for it to finish
 	else:
 		# Fallback if no eat animation: just wait 0.5s
@@ -213,7 +230,7 @@ func die():
 	# IMPROVED DEATH LOGIC
 	# 1. Try to play death animation
 	if anim.sprite_frames.has_animation("die"):
-		anim.play("die")
+		_play_scaled_anim("die")
 		# Optional: Tint it slightly so it looks dead even with placeholder art
 		anim.modulate = Color(0.6, 0.6, 0.6)
 		

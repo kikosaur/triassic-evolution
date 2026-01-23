@@ -70,6 +70,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_i47bq")
+mouse_filter = 2
 
 [node name="TreeContainer" type="Control" parent="ScrollContainer/Content"]
 custom_minimum_size = Vector2(2500, 800)
@@ -79,6 +80,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Node_Archosaur" parent="ScrollContainer/Content/TreeContainer" instance=ExtResource("1_227w5")]
 layout_mode = 0

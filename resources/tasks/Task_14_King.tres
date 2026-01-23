@@ -9,5 +9,5 @@ title = "King of the Triassic"
 description = "To support a larger predator frame, we need stronger limb stability. (Research Fused Ankles)"
 goal_type = "research"
 target_amount = 1
-target_id = "Fused Ankles"
+target_id = "node_fused"
 reward_dna = 100000

@@ -23,7 +23,8 @@ func _update_display():
 	# CASE 1: SELLING A DINO
 	if species_data:
 		name_lbl.text = species_data.species_name
-		price_lbl.text = GameManager.format_number(species_data.base_dna_cost) + " DNA"
+		var cost = GameManager.get_dino_cost(species_data)
+		price_lbl.text = GameManager.format_number(cost) + " DNA"
 		if species_data.icon:
 			icon_rect.texture = species_data.icon
 		
@@ -38,8 +39,9 @@ func _update_display():
 	# CASE 2: SELLING HABITAT
 	elif habitat_data:
 		name_lbl.text = habitat_data.name
+		var cost = GameManager.get_habitat_cost(habitat_data)
 		# Format: "500 DNA | +10%"
-		price_lbl.text = GameManager.format_number(habitat_data.dna_cost) + " DNA\n+" + str(habitat_data.density_gain) + "% Density"
+		price_lbl.text = GameManager.format_number(cost) + " DNA\n+" + str(habitat_data.density_gain) + "% Density"
 		if habitat_data.icon:
 			icon_rect.texture = habitat_data.icon
 		
@@ -47,26 +49,16 @@ func _update_display():
 		diet_icon.visible = false
 
 func _process(_delta):
-	# 1. VISIBILITY CHECK (The "Locked" System)
+	# 1. VISIBILITY CHECK (The "Locked" System) (Unchanged)
 	if required_research_id != "":
-		# Option A: Hide completely (Cards shift to fill gap)
 		visible = (required_research_id in GameManager.unlocked_research_ids)
-		
-		# Option B: Show as "Locked" (Black silhouette) - UNCOMMENT TO USE
-		# var is_unlocked = (required_research_id in GameManager.unlocked_research_ids)
-		# buy_btn.visible = is_unlocked
-		# if not is_unlocked:
-		# 	icon_rect.modulate = Color(0, 0, 0, 0.5) # Black silhouette
-		# 	name_lbl.text = "???"
-		# 	price_lbl.text = "Locked"
-		# else:
-		# 	icon_rect.modulate = Color(1, 1, 1, 1) # Normal
-		# 	_update_display() # Restore text
 
 	# 2. AFFORDABILITY CHECK
 	var cost = 0
-	if species_data: cost = species_data.base_dna_cost
-	if habitat_data: cost = habitat_data.dna_cost
+	if species_data:
+		cost = GameManager.get_dino_cost(species_data)
+	if habitat_data:
+		cost = GameManager.get_habitat_cost(habitat_data)
 	
 	if GameManager.current_dna >= cost:
 		buy_btn.disabled = false
@@ -79,12 +71,15 @@ func _on_buy():
 	# BUYING DINO
 	AudioManager.play_sfx("click")
 	if species_data:
-		if GameManager.try_spend_dna(species_data.base_dna_cost):
+		var cost = GameManager.get_dino_cost(species_data)
+		if GameManager.try_spend_dna(cost):
 			GameManager.trigger_dino_spawn(species_data)
+			_update_display() # Update price for next one!
 			
 	# BUYING HABITAT
 	elif habitat_data:
-		if GameManager.try_spend_dna(habitat_data.dna_cost):
+		var cost = GameManager.get_habitat_cost(habitat_data)
+		if GameManager.try_spend_dna(cost):
 			if habitat_data.type == HabitatProduct.ProductType.VEGETATION:
 				GameManager.vegetation_density += habitat_data.density_gain
 			else:
@@ -95,3 +90,4 @@ func _on_buy():
 			if GameManager.critter_density > 100: GameManager.critter_density = 100
 			
 			GameManager.emit_signal("habitat_updated", GameManager.vegetation_density, GameManager.critter_density)
+			_update_display() # Update price!

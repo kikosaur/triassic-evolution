@@ -33,7 +33,7 @@ layout_mode = 2
 
 [node name="VegLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Vegetation: 0%"
+text = "Vegetation"
 
 [node name="VegBar" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -41,7 +41,7 @@ layout_mode = 2
 
 [node name="CritterLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Critters: 0%"
+text = "Critters"
 
 [node name="CritterBar" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
 unique_name_in_owner = true

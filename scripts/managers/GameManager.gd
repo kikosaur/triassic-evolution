@@ -56,6 +56,23 @@ func _ready():
 	auto_save_timer.timeout.connect(_on_auto_save)
 	
 	# Passive regrowth removed by user request (Fix hunger mechanics)
+	
+	# Time System
+	_setup_year_timer()
+
+var year_timer: Timer
+var current_year: int = 0
+signal year_advanced(total_years: int)
+
+func _setup_year_timer():
+	year_timer = Timer.new()
+	year_timer.wait_time = 1.0 # 1 Real Second = 1 In-Game Year
+	year_timer.autostart = true
+	add_child(year_timer)
+	year_timer.timeout.connect(func():
+		current_year += 1
+		emit_signal("year_advanced", current_year)
+	)
 
 
 func _on_auto_save() -> void:
@@ -121,13 +138,13 @@ func use_time_warp() -> bool:
 
 # --- HABITAT FUNCTIONS ---
 func buy_vegetation():
-	if try_spend_dna(50):
-		vegetation_density = clamp(vegetation_density + 5.0, 0, 100)
+	if try_spend_dna(100):
+		vegetation_density = clamp(vegetation_density + 10.0, 0, 100)
 		emit_signal("habitat_updated", vegetation_density, critter_density)
 
 func buy_critters():
-	if try_spend_dna(75):
-		critter_density = clamp(critter_density + 5.0, 0, 100)
+	if try_spend_dna(150):
+		critter_density = clamp(critter_density + 10.0, 0, 100)
 		emit_signal("habitat_updated", vegetation_density, critter_density)
 
 # --- CONSUMPTION LOGIC ---
@@ -169,6 +186,12 @@ func try_unlock_research(research_def: ResearchDef) -> void:
 			trigger_dino_spawn(research_def.unlock_species)
 			if DEBUG_MODE:
 				print("GameManager: Breakthrough! Free ", research_def.unlock_species.species_name)
+
+func is_all_research_unlocked() -> bool:
+	# There are 17 total research nodes (based on files)
+	# 8 Species + 1 Starter + 8 Upgrades/Traits
+	# A robust way is to check the resource registry or just hardcode the target
+	return unlocked_research_ids.size() >= 17
 
 func trigger_dino_spawn(species_data: DinosaurSpecies):
 	emit_signal("dinosaur_spawned", species_data)
@@ -252,6 +275,7 @@ func get_save_dictionary() -> Dictionary:
 		
 		# --- ADD THIS LINE ---
 		"timestamp": Time.get_unix_time_from_system(),
+		"current_year": current_year,
 		"quests": QuestManager.get_save_data(),
 		# ---------------------
 		
@@ -296,6 +320,10 @@ func load_save_dictionary(data: Dictionary):
 
 	if "quests" in data:
 		QuestManager.load_save_data(data["quests"])
+		
+	if "current_year" in data:
+		current_year = str(data["current_year"]).to_int()
+		emit_signal("year_advanced", current_year)
 	
 	# Update UI
 	emit_signal("dna_changed", current_dna)
@@ -444,6 +472,46 @@ func get_global_click_bonus() -> int:
 				total_bonus += 1
 				
 	return total_bonus
+
+# --- DYNAMIC PRICING ---
+func get_dino_count(species_name: String) -> int:
+	var count = 0
+	var dinos = get_tree().get_nodes_in_group("dinos")
+	for d in dinos:
+		if not d.is_dead and d.species_data and d.species_data.species_name == species_name:
+			count += 1
+	return count
+
+func get_dino_cost(species_data: DinosaurSpecies) -> int:
+	if not species_data: return 0
+	
+	var base = species_data.base_dna_cost
+	var count = get_dino_count(species_data.species_name)
+	
+	# Formula: Base * (1.15 ^ Count)
+	var multiplier = pow(1.15, count)
+	return int(base * multiplier)
+
+func get_habitat_cost(product_res: Resource) -> int:
+	if not product_res: return 0
+	
+	# Assuming Product Script has 'dna_cost', 'type' (0=Veg, 1=Critter)
+	var base = product_res.dna_cost
+	var density_val = 0.0
+	
+	# Check type safely
+	if "type" in product_res:
+		if product_res.type == 0: # VEGETATION
+			density_val = vegetation_density
+		else: # CRITTER (1)
+			density_val = critter_density
+			
+	# Formula: Base * (1.1 ^ (Density / 10))
+	# Every 10% density adds ~10% cost
+	var steps = int(density_val / 10.0)
+	var multiplier = pow(1.1, steps)
+	
+	return int(base * multiplier)
 
 # --- UTILITIES ---
 

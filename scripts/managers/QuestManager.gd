@@ -143,6 +143,14 @@ func _check_complete(q: Dictionary) -> void:
 			if DEBUG_MODE:
 				print("QuestManager: Completed quest '", q.data.title, "'")
 
+func are_all_quests_completed() -> bool:
+	if active_quests.is_empty(): return false
+	
+	for q in active_quests:
+		if not q.completed:
+			return false
+	return true
+
 # --- REWARD SYSTEM ---
 func claim_reward(index):
 	if index < 0 or index >= active_quests.size(): return

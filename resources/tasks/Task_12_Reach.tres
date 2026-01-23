@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TaskData" load_steps=2 format=3 uid="uid://clmrae2msnos2"]
 
-[ext_resource type="Script" path="res://scripts/resources/TaskData.gd" id="1_3yb0p"]
+[ext_resource type="Script" uid="uid://qqhl0h0ymco2" path="res://scripts/resources/TaskData.gd" id="1_3yb0p"]
 
 [resource]
 script = ExtResource("1_3yb0p")
@@ -9,5 +9,5 @@ title = "Reaching New Heights"
 description = "The food is too high for current herbivores. We need a biological adaptation. (Research Elongated Neck)"
 goal_type = "research"
 target_amount = 1
-target_id = "Elongated Neck"
+target_id = "node_longneck"
 reward_dna = 50000

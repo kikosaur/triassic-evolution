@@ -21,23 +21,38 @@ var overlay_node: Control = null
 # 3: Highlight Buy Button (Generic area or specific if possible)
 var steps = [
 	{
-		"text": "Welcome to Triassic Evolution! Life begins here. Let's check your first task.",
-		"highlight": "quest_btn", # ID of the UI element to highlight
-		"alignment": "center"
-	},
-	{
-		"text": "Open the Quest Log to see your goals. Complete tasks to earn DNA.",
-		"highlight": "quest_panel",
-		"alignment": "top_right"
-	},
-	{
-		"text": "Great! Now you need to unlock your first dinosaur: The Archosaur.",
+		"text": "Welcome! Let's start by finding new life. Open the Research Menu.",
 		"highlight": "research_btn",
 		"alignment": "bottom_left"
 	},
 	{
-		"text": "Once unlocked, you can breed them here. Gather 5 to complete your task!",
-		"highlight": "dino_container", # Just a general area hint
+		"text": "The Tree of Life tracks your progress. This is where you unlock new Dinosaurs, Traits, and Habitats!",
+		"highlight": "research_btn",
+		"alignment": "center"
+	},
+	{
+		"text": "Now open the Shop. Press Hatch to hatch dinosaurs and go to Habitat at the top left after the Dinosaurs Tab to buy foods for your Dinosaurs!",
+		"highlight": "shop_btn",
+		"alignment": "bottom_left"
+	},
+	{
+		"text": "Your dinosaurs need food! Plants feed Herbivores, and Critters feed Carnivores. You might not want to lose the Critter bar, the Carnivores will eat your Herbivors!",
+		"highlight": "habitat_bars",
+		"alignment": "center"
+	},
+	{
+		"text": "Check the Task Log often! Completing goals earns you DNA to evolve further.",
+		"highlight": "quest_btn",
+		"alignment": "top_right"
+	},
+	{
+		"text": "The Museum is your Hall of Fame. View your collection and unlocked achievements here.",
+		"highlight": "museum_btn",
+		"alignment": "bottom_left"
+	},
+	{
+		"text": "Fossils are found when Dinosaurs die, or rarely in the dirt. Collect them for upgrades!",
+		"highlight": "museum_btn", # Visual anchor
 		"alignment": "center"
 	}
 ]

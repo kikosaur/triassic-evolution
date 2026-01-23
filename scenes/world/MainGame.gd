@@ -6,8 +6,9 @@ const DEBUG_MODE: bool = false
 
 @onready var click_zone = $ClickZone
 @onready var dino_container = $DinoContainer
-@onready var dna_label = $UI_Layer/TopPanel/DNALabel
-@onready var fossil_label = $UI_Layer/TopPanel/FossilLabel
+# Labels moved to TopPanel internal logic
+# @onready var dna_label = ... 
+# @onready var fossil_label = ...
 @onready var background_sprite = $WorldArt/Background # Make sure this points to your BG!
 
 @export_group("Biome Transitions")
@@ -36,7 +37,7 @@ const DEBUG_MODE: bool = false
 @onready var btn_museum = $UI_Layer/BtnMuseum
 
 @onready var settings_panel = $UI_Layer/SettingsPanel
-@onready var btn_settings = $UI_Layer/TopPanel/BtnSettings
+# btn_settings moved to TopPanel internal logic
 
 @onready var btn_tasks = $UI_Layer/BtnTasks
 @onready var quest_panel = $UI_Layer/QuestPanel
@@ -79,7 +80,8 @@ func _ready() -> void:
 		museum.visible = true
 		museum.refresh_gallery() # Ensure it updates if we just unlocked something!
 	)
-	btn_settings.pressed.connect(func(): settings_panel.visible = true)
+	
+	# btn_settings.pressed.connect... (Handled in TopPanel now)
 	
 	btn_tasks.pressed.connect(func(): quest_panel.show_panel())
 
@@ -134,11 +136,18 @@ func _show_click_feedback(pos: Vector2, amount: int):
 	tween.tween_callback(label.queue_free)
 
 func _on_background_clicked():
-	GameManager.add_dna(1)
-	_show_click_feedback(get_viewport().get_mouse_position(), 1)
+	# 1. Base Click Value
+	var amount = 1
 	
-	# --- RARE FOSSIL: 2% chance to find a fossil when clicking dirt ---
-	if randf() < 0.02: # 2% chance
+	# 2. Add Global Bonus from Active Dinos
+	if GameManager.has_method("get_global_click_bonus"):
+		amount += GameManager.get_global_click_bonus()
+		
+	GameManager.add_dna(amount)
+	_show_click_feedback(get_viewport().get_mouse_position(), amount)
+	
+	# --- RARE FOSSIL: 0.1% chance (1/1000) to find a fossil when clicking dirt ---
+	if randf() < 0.001: # 0.1% chance
 		GameManager.add_fossils(1)
 		AudioManager.play_sfx("success")
 		if DEBUG_MODE:
@@ -196,4 +205,5 @@ func _on_timer_timeout(): # Or wherever you calculated it
 	var total_dps = GameManager.get_total_dna_per_second()
 	
 	# FIX: Use the variable to update the UI!
-	$UI_Layer/TopPanel/RateLabel.text = "+ " + GameManager.format_number(total_dps) + "/s"
+	# FIX: Use the variable to update the UI!
+	$UI_Layer/TopPanel.update_dps_label(total_dps)

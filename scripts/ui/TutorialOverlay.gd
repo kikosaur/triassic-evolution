@@ -35,13 +35,17 @@ func _move_highlight(id: String):
 	
 	if main_game:
 		if id == "quest_btn":
-			# Need to find the Quest Button in TopPanel
-			# Assuming specific path structure or using find_child
-			target_node = main_game.find_child("BtnQuests", true, false)
+			target_node = main_game.find_child("BtnTasks", true, false)
 		elif id == "quest_panel":
 			target_node = main_game.find_child("QuestPanel", true, false)
 		elif id == "research_btn":
-			target_node = main_game.find_child("BtnResearch", true, false)
+			target_node = main_game.find_child("BtnToggleResearch", true, false)
+		elif id == "shop_btn":
+			target_node = main_game.find_child("BtnToggleShop", true, false)
+		elif id == "museum_btn":
+			target_node = main_game.find_child("BtnMuseum", true, false)
+		elif id == "habitat_bars":
+			target_node = main_game.find_child("HabitatPanel", true, false)
 		elif id == "dino_container":
 			target_node = main_game.find_child("DinoContainer", true, false)
 	
