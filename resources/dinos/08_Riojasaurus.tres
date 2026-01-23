@@ -14,11 +14,7 @@ passive_dna_yield = 3000
 click_yield = 250
 icon = ExtResource("2_vw1ga")
 required_research_id = "node_riojasaurus"
-<<<<<<< Updated upstream
 ideal_biome_phase = 4
-=======
 consumption_rate = 0.5
-ideal_biome_phase = 3
->>>>>>> Stashed changes
 scientific_name = "Riojasaurus incertus"
 description = "A massive, four-legged tank. This true giant is the ancestor to the massive Sauropods like Brachiosaurus."

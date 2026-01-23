@@ -7,10 +7,7 @@
 [resource]
 script = ExtResource("2_iro2c")
 species_name = "Archosaur"
-<<<<<<< Updated upstream
 visual_scale = 1.2
-=======
->>>>>>> Stashed changes
 animations = ExtResource("1_i6s0k")
 base_dna_cost = 25
 icon = ExtResource("1_iro2c")
