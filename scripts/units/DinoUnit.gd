@@ -21,6 +21,7 @@ var move_speed: float = 30.0
 var move_timer: float = 0.0
 var is_moving: bool = false
 var is_eating: bool = false
+var base_scale: Vector2 = Vector2.ONE
 
 # Predation
 var hunger: float = 0.0
@@ -93,6 +94,10 @@ func _ready():
 		# anim.scale = Vector2(s, s)
 		
 		move_speed = randf_range(20.0, 40.0)
+	
+	
+	# Store the calculated base scale for tweening logic
+	base_scale = anim.scale
 	
 	_pick_random_destination()
 	_setup_passive_timer()
@@ -211,6 +216,10 @@ func die():
 		anim.play("die")
 		# Optional: Tint it slightly so it looks dead even with placeholder art
 		anim.modulate = Color(0.6, 0.6, 0.6)
+		
+		# Prevent looping if the resource is set to loop
+		await anim.animation_finished
+		anim.pause()
 	else:
 		# 2. Fallback: Stop and fade to gray
 		anim.stop()
@@ -255,13 +264,20 @@ func _unhandled_input(event):
 
 func _on_dino_clicked():
 	if not species_data: return
-	GameManager.add_dna(species_data.click_yield)
+	
+	var total_yield = species_data.click_yield
+	# Add Global Bonus from all active dinos
+	if GameManager.has_method("get_global_click_bonus"):
+		total_yield += GameManager.get_global_click_bonus()
+		
+	GameManager.add_dna(total_yield)
 	AudioManager.play_sfx("click")
 	
 	# Optional: Visual feedback (small bounce)
+	# Use base_scale to prevent "infinite growth" bug on spam click
 	var tween = create_tween()
-	tween.tween_property(anim, "scale", anim.scale * 1.1, 0.1)
-	tween.tween_property(anim, "scale", anim.scale, 0.1)
+	tween.tween_property(anim, "scale", base_scale * 1.1, 0.1)
+	tween.tween_property(anim, "scale", base_scale, 0.1)
 
 func _harvest_fossil():
 	if GameManager.has_method("add_fossils"):
@@ -270,7 +286,6 @@ func _harvest_fossil():
 	queue_free()
 
 func _setup_passive_timer():
-	passive_timer = Timer.new()
 	passive_timer = Timer.new()
 	# Randomize eating interval to 20-30 seconds (User Request)
 	passive_timer.wait_time = randf_range(20.0, 30.0)

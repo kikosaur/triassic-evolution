@@ -35,16 +35,16 @@ func _load_secrets() -> void:
 	
 	# DEBUG: List files to see if secrets.cfg exists
 	if DEBUG_MODE:
-		var dir = DirAccess.open("res://")
-		if dir:
-			dir.list_dir_begin()
-			var file_name = dir.get_next()
-			print("--- ROOT DIRECTORY ---")
-			while file_name != "":
-				print(file_name)
-				file_name = dir.get_next()
-			print("--- END ROOT ---")
-			
+		pass
+		# var dir = DirAccess.open("res://")
+		# if dir:
+		# 	dir.list_dir_begin()
+		# 	var file_name = dir.get_next()
+		# 	print("--- ROOT DIRECTORY ---")
+		# 	while file_name != "":
+		# 		print(file_name)
+		# 		file_name = dir.get_next()
+		# 	print("--- END ROOT ---")
 	var err = config.load("res://secrets.cfg")
 	
 	if err != OK:

@@ -430,6 +430,21 @@ func get_total_dna_per_second() -> int:
 			
 	return total
 
+func get_global_click_bonus() -> int:
+	var total_bonus = 0
+	var dinos = get_tree().get_nodes_in_group("dinos")
+	
+	for dino in dinos:
+		if not dino.is_dead and dino.species_data:
+			# Check if the property exists to be safe (though it should with the resource update)
+			if "global_click_bonus" in dino.species_data:
+				total_bonus += dino.species_data.global_click_bonus
+			else:
+				# Fallback if property missing (e.g. old resource in memory?)
+				total_bonus += 1
+				
+	return total_bonus
+
 # --- UTILITIES ---
 
 func format_number(value: int) -> String:

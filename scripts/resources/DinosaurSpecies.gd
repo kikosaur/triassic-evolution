@@ -11,6 +11,7 @@ enum Diet {HERBIVORE, CARNIVORE}
 @export var base_dna_cost: int = 10
 @export var passive_dna_yield: int = 1
 @export var click_yield: int = 1 # DNA bonus when clicking this dino
+@export var global_click_bonus: int = 1 # Added to GLOBAL click value for every active unit of this species
 @export var icon: Texture2D
 
 @export var required_research_id: String = ""
