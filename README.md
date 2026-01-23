@@ -41,9 +41,9 @@ Species are not simply bought; they are "discovered" based on scientific conditi
 * **Language:** GDScript
 * **Backend:** Supabase (Auth & Database)
 * **Architecture:**
-    * **Resource-Based Data:** All Units, Traits, and Tasks are modular `.tres` files.
-    * **Event-Driven UI:** Decoupled UI systems using Signals.
-    * **Autoload Managers:** Global Singletons for Economy, Auth, Quests, and Save/Load.
+	* **Resource-Based Data:** All Units, Traits, and Tasks are modular `.tres` files.
+	* **Event-Driven UI:** Decoupled UI systems using Signals.
+	* **Autoload Managers:** Global Singletons for Economy, Auth, Quests, and Save/Load.
 
 ---
 
@@ -62,8 +62,8 @@ res://
 │   ├── world/              # MainGame.tscn
 │   └── units/              # DinoUnit.tscn
 └── scripts/
-    ├── managers/           # GameManager.gd, AuthManager.gd, QuestManager.gd
-    └── ui/                 # UI Controllers
+	├── managers/           # GameManager.gd, AuthManager.gd, QuestManager.gd
+	└── ui/                 # UI Controllers
 ```
 
 ---

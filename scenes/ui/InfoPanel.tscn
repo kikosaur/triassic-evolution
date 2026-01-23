@@ -40,6 +40,7 @@ label_settings = SubResource("LabelSettings_4el42")
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 

@@ -7,13 +7,17 @@
 [resource]
 script = ExtResource("2_h0g60")
 species_name = "Eoraptor"
+<<<<<<< Updated upstream
 visual_scale = 2.0
+=======
+>>>>>>> Stashed changes
 animations = ExtResource("1_6cycl")
 base_dna_cost = 1000
 passive_dna_yield = 20
 click_yield = 8
 icon = ExtResource("2_phpln")
 required_research_id = "node_eoraptor"
+consumption_rate = 0.1
 ideal_biome_phase = 2
 scientific_name = "Eoraptor lunensis"
 description = "The first true dinosaur. 'The Dawn Thief' eats both bugs and plants to survive in the seasonal oasis."

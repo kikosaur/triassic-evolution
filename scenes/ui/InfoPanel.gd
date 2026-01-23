@@ -14,7 +14,9 @@ func setup_popup(title: String, text: String):
 	content_text.text = text
 	
 	# Reset scroll to top every time we open it
-	$MarginContainer/VBoxContainer/ScrollContainer.scroll_vertical = 0
+	var scroll = $MarginContainer/VBoxContainer/ScrollContainer
+	scroll.visible = true
+	scroll.scroll_vertical = 0
 	
 	show()
 	move_to_front() # Bring to frontfront

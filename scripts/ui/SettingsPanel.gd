@@ -58,7 +58,10 @@ func _ready():
 	# 3. CONNECT INFO BUTTONS
 	how_to_play_btn.pressed.connect(func():
 		AudioManager.play_sfx("click")
-		info_panel.setup_popup("How to Play", HOW_TO_PLAY_TEXT)
+		# info_panel.setup_popup("How to Play", HOW_TO_PLAY_TEXT)
+		# Launch Interactive Tutorial
+		hide() # Hide settings so we can see the tutorial
+		TutorialManager.reset_tutorial()
 	)
 	
 	terms_btn.pressed.connect(func():

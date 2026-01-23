@@ -7,7 +7,10 @@
 [resource]
 script = ExtResource("2_0xooo")
 species_name = "Lagosuchus"
+<<<<<<< Updated upstream
 visual_scale = 1.8
+=======
+>>>>>>> Stashed changes
 animations = ExtResource("1_2a15n")
 diet = 1
 base_dna_cost = 180
@@ -15,6 +18,7 @@ passive_dna_yield = 5
 click_yield = 3
 icon = ExtResource("5_2fcaj")
 required_research_id = "node_lagosuchus"
+consumption_rate = 0.08
 base_lifespan = 120.0
 scientific_name = "Lagosuchus"
 description = "A small, hopping reptile. Not a dinosaur yet, but very close. Known as 'The Rabbit Reptile'."

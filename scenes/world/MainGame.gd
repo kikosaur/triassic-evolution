@@ -57,7 +57,14 @@ func _ready() -> void:
 	# Trigger visual update when habitat changes
 	GameManager.connect("habitat_updated", func(_v, _c): _update_biome_visuals())
 	
+
 	_update_biome_visuals()
+	
+	# Safe to start tutorial now that scene is ready
+	# Add a small delay so it doesn't pop up instantly
+	var tween = create_tween()
+	tween.tween_interval(1.0)
+	tween.tween_callback(TutorialManager.check_start)
 	
 	# --- TOGGLE LOGIC ---
 	# Open/Close the Shop

@@ -32,6 +32,19 @@ func _ready() -> void:
 
 func _load_secrets() -> void:
 	var config = ConfigFile.new()
+	
+	# DEBUG: List files to see if secrets.cfg exists
+	if DEBUG_MODE:
+		var dir = DirAccess.open("res://")
+		if dir:
+			dir.list_dir_begin()
+			var file_name = dir.get_next()
+			print("--- ROOT DIRECTORY ---")
+			while file_name != "":
+				print(file_name)
+				file_name = dir.get_next()
+			print("--- END ROOT ---")
+			
 	var err = config.load("res://secrets.cfg")
 	
 	if err != OK:
@@ -77,6 +90,7 @@ func login(email: String, password: String) -> void:
 func logout() -> void:
 	user_token = ""
 	user_id = ""
+	GameManager.reset_game_state() # Reset persistent data
 	if DEBUG_MODE:
 		print("AuthManager: User logged out.")
 
@@ -183,6 +197,8 @@ func _on_load_completed(_res: int, code: int, _head: PackedStringArray, body: Pa
 	if code != 200:
 		if DEBUG_MODE:
 			print("AuthManager: Error loading save, code ", code)
+		# Fallback: Proceed as if new user (or offline)
+		emit_signal("save_data_loaded", true)
 		return
 		
 	var json = JSON.parse_string(body.get_string_from_utf8())
@@ -195,5 +211,9 @@ func _on_load_completed(_res: int, code: int, _head: PackedStringArray, body: Pa
 	else:
 		if DEBUG_MODE:
 			print("AuthManager: No save file found for this user.")
+		
+		# Ensure we start fresh (clear any old data in memory)
+		GameManager.reset_game_state()
+		
 		# Even if no save, we are done loading (fresh start)
 		emit_signal("save_data_loaded", true)

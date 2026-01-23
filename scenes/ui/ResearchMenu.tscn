@@ -1,7 +1,8 @@
-[gd_scene load_steps=29 format=3 uid="uid://d1pvlplrkkm5d"]
+[gd_scene load_steps=30 format=3 uid="uid://d1pvlplrkkm5d"]
 
 [ext_resource type="PackedScene" uid="uid://c00m4rc8me8mk" path="res://scenes/ui/ResearchNode.tscn" id="1_227w5"]
 [ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_i47bq"]
+[ext_resource type="Script" uid="uid://bnkb4s5r7kn7v" path="res://scripts/ui/ResearchMenuLogic.gd" id="1_logic"]
 [ext_resource type="Resource" uid="uid://fx47e8phptlw" path="res://resources/research/Res_Archosaur.tres" id="2_gfy1o"]
 [ext_resource type="Resource" uid="uid://8io20j1xjreq" path="res://resources/research/Res_UprightStance.tres" id="3_nfsx2"]
 [ext_resource type="Resource" uid="uid://cgwit1labfvwm" path="res://resources/research/Res_Lagosuchus.tres" id="4_0wg30"]
@@ -29,7 +30,18 @@
 [ext_resource type="Resource" uid="uid://cnip6u6ff77pd" path="res://resources/research/Res_Forest.tres" id="24_hsv2h"]
 [ext_resource type="Resource" uid="uid://c38wg5mjivw52" path="res://resources/research/Res_Riojasaurus.tres" id="26_r1lwx"]
 
-[node name="ResearchMenu" type="ScrollContainer"]
+[node name="ResearchMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_logic")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -42,16 +54,33 @@ offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Content" type="Control" parent="ScrollContainer"]
 custom_minimum_size = Vector2(2500, 800)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Panel" type="Panel" parent="ScrollContainer/Content"]
+custom_minimum_size = Vector2(2500, 800)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_i47bq")
 
-[node name="TreeContainer" type="Control" parent="."]
+[node name="TreeContainer" type="Control" parent="ScrollContainer/Content"]
 custom_minimum_size = Vector2(2500, 800)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Node_Archosaur" parent="TreeContainer" instance=ExtResource("1_227w5")]
+[node name="Node_Archosaur" parent="ScrollContainer/Content/TreeContainer" instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 50.0
 offset_top = 350.0
@@ -59,7 +88,7 @@ offset_right = 50.0
 offset_bottom = 350.0
 my_data = ExtResource("2_gfy1o")
 
-[node name="Node_Upright" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Upright" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 200.0
 offset_top = 350.0
@@ -68,7 +97,7 @@ offset_bottom = 350.0
 my_data = ExtResource("3_nfsx2")
 parent_node = NodePath("../Node_Archosaur")
 
-[node name="Node_Perforate" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Perforate" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 350.0
 offset_top = 350.0
@@ -77,7 +106,7 @@ offset_bottom = 350.0
 my_data = ExtResource("4_4kojt")
 parent_node = NodePath("../Node_Upright")
 
-[node name="Node_Serrated" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Serrated" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 500.0
 offset_top = 200.0
@@ -86,7 +115,7 @@ offset_bottom = 200.0
 my_data = ExtResource("5_8k568")
 parent_node = NodePath("../Node_Perforate")
 
-[node name="Node_Lagosuchus" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Lagosuchus" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 650.0
 offset_top = 200.0
@@ -95,7 +124,7 @@ offset_bottom = 200.0
 my_data = ExtResource("4_0wg30")
 parent_node = NodePath("../Node_Serrated")
 
-[node name="Node_Pools" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Pools" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 800.0
 offset_top = 200.0
@@ -104,7 +133,7 @@ offset_bottom = 200.0
 my_data = ExtResource("7_73oii")
 parent_node = NodePath("../Node_Lagosuchus")
 
-[node name="Node_Intra" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Intra" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 950.0
 offset_top = 200.0
@@ -113,7 +142,7 @@ offset_bottom = 200.0
 my_data = ExtResource("8_3oy8e")
 parent_node = NodePath("../Node_Pools")
 
-[node name="Node_Herrera" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Herrera" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1100.0
 offset_top = 200.0
@@ -122,7 +151,7 @@ offset_bottom = 200.0
 my_data = ExtResource("9_i47bq")
 parent_node = NodePath("../Node_Intra")
 
-[node name="Node_Hollow" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Hollow" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1250.0
 offset_top = 200.0
@@ -131,7 +160,7 @@ offset_bottom = 200.0
 my_data = ExtResource("10_r1lwx")
 parent_node = NodePath("../Node_Herrera")
 
-[node name="Node_Coelo" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Coelo" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1400.0
 offset_top = 200.0
@@ -140,7 +169,7 @@ offset_bottom = 200.0
 my_data = ExtResource("11_l60p0")
 parent_node = NodePath("../Node_Hollow")
 
-[node name="Node_Fused" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Fused" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1550.0
 offset_top = 200.0
@@ -149,7 +178,7 @@ offset_bottom = 200.0
 my_data = ExtResource("12_3oy8e")
 parent_node = NodePath("../Node_Coelo")
 
-[node name="Node_Crest" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Crest" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1700.0
 offset_top = 200.0
@@ -158,7 +187,7 @@ offset_bottom = 200.0
 my_data = ExtResource("12_xej3i")
 parent_node = NodePath("../Node_Fused")
 
-[node name="Node_Lilien" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Lilien" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1850.0
 offset_top = 200.0
@@ -167,7 +196,7 @@ offset_bottom = 200.0
 my_data = ExtResource("13_ojvhf")
 parent_node = NodePath("../Node_Crest")
 
-[node name="Node_Leaf" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Leaf" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 500.0
 offset_top = 500.0
@@ -176,7 +205,7 @@ offset_bottom = 500.0
 my_data = ExtResource("14_n8xt4")
 parent_node = NodePath("../Node_Perforate")
 
-[node name="Node_Eoraptor" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Eoraptor" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 650.0
 offset_top = 500.0
@@ -185,7 +214,7 @@ offset_bottom = 500.0
 my_data = ExtResource("15_kqhru")
 parent_node = NodePath("../Node_Leaf")
 
-[node name="Node_Ferns" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Ferns" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 800.0
 offset_top = 500.0
@@ -194,7 +223,7 @@ offset_bottom = 500.0
 my_data = ExtResource("16_37e72")
 parent_node = NodePath("../Node_Eoraptor")
 
-[node name="Node_LongNeck" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_LongNeck" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 950.0
 offset_top = 500.0
@@ -203,7 +232,7 @@ offset_bottom = 500.0
 my_data = ExtResource("18_i47bq")
 parent_node = NodePath("../Node_Leaf")
 
-[node name="Node_Panphagia" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Panphagia" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1100.0
 offset_top = 500.0
@@ -212,7 +241,7 @@ offset_bottom = 500.0
 my_data = ExtResource("17_qj14m")
 parent_node = NodePath("../Node_LongNeck")
 
-[node name="Node_River" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_River" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1250.0
 offset_top = 500.0
@@ -221,7 +250,7 @@ offset_bottom = 500.0
 my_data = ExtResource("18_03cs3")
 parent_node = NodePath("../Node_Panphagia")
 
-[node name="Node_Gastro" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Gastro" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1400.0
 offset_top = 500.0
@@ -230,7 +259,7 @@ offset_bottom = 500.0
 my_data = ExtResource("19_4r7it")
 parent_node = NodePath("../Node_River")
 
-[node name="Node_Plateo" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Plateo" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1550.0
 offset_top = 500.0
@@ -239,7 +268,7 @@ offset_bottom = 500.0
 my_data = ExtResource("20_yvj5v")
 parent_node = NodePath("../Node_Gastro")
 
-[node name="Node_Cycads" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Cycads" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1700.0
 offset_top = 500.0
@@ -248,7 +277,7 @@ offset_bottom = 500.0
 my_data = ExtResource("21_ha6hh")
 parent_node = NodePath("../Node_Plateo")
 
-[node name="Node_Quadruped" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Quadruped" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 1850.0
 offset_top = 500.0
@@ -257,7 +286,7 @@ offset_bottom = 500.0
 my_data = ExtResource("22_kw27y")
 parent_node = NodePath("../Node_Cycads")
 
-[node name="Node_Giant" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Giant" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 2000.0
 offset_top = 500.0
@@ -266,7 +295,7 @@ offset_bottom = 500.0
 my_data = ExtResource("23_pwsc5")
 parent_node = NodePath("../Node_Quadruped")
 
-[node name="Node_Rioja" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Rioja" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 2150.0
 offset_top = 500.0
@@ -275,7 +304,7 @@ offset_bottom = 500.0
 my_data = ExtResource("26_r1lwx")
 parent_node = NodePath("../Node_Giant")
 
-[node name="Node_Forest" parent="TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Forest" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 2300.0
 offset_top = 500.0

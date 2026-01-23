@@ -11,11 +11,26 @@ func _ready():
 	# Update whenever the manager says so
 	QuestManager.connect("quests_updated", _refresh_ui)
 	
+	visibility_changed.connect(_on_visibility_changed)
+	_on_visibility_changed()
 
-	# Initial draw
-	_refresh_ui()
+func _on_visibility_changed():
+	var scroll = $ScrollContainer
+	if visible:
+		scroll.visible = true
+		scroll.process_mode = PROCESS_MODE_INHERIT
+	else:
+		scroll.visible = false
+		scroll.process_mode = PROCESS_MODE_DISABLED
+	
+
+	# Initial draw - Defer to avoid viewport null error
+	# _refresh_ui() 
 
 func _refresh_ui():
+	# Guard: Only update if visible to prevent ScrollContainer errors in background
+	if not visible: return
+
 	# 1. Clear old items
 	for child in list_container.get_children():
 		child.queue_free()
@@ -37,11 +52,11 @@ func show_panel():
 	# 1. Force the manager to re-check everything right now
 	QuestManager._recalculate_all()
 	
-	# 2. Re-draw the visual list
-	_refresh_ui()
-	
-	# 3. Show the window
+	# 2. Show the window FIRST (so _refresh_ui passes the visibility check)
 	show()
+	
+	# 3. Re-draw the visual list
+	_refresh_ui()
 
 func _on_close_pressed():
 	AudioManager.play_sfx("click")

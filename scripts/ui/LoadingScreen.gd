@@ -1,7 +1,6 @@
 extends Control
 
 @onready var label = $Label
-@onready var progress_bar = $ProgressBar # Optional if you add one
 
 var min_load_time = 2.0
 var time_elapsed = 0.0

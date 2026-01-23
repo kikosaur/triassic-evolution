@@ -29,37 +29,33 @@ func _ready():
 # --- LOADING SYSTEM ---
 func _load_all_tasks():
 	active_quests.clear()
-	var folder_path = "res://resources/tasks/"
-	var dir = DirAccess.open(folder_path)
+	active_quests.clear()
 	
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		
-		while file_name != "":
-			if not dir.current_is_dir() and file_name.ends_with(".tres"):
-				var res = load(folder_path + file_name)
-				if res is TaskData:
-					var state = {
-						"data": res,
-						"current": 0,
-						"completed": false,
-						"claimed": false
-					}
-					active_quests.append(state)
-			
-			file_name = dir.get_next()
-		
-		# Sort by ID
-		active_quests.sort_custom(func(a, b): return a.data.id < b.data.id)
-		
-		# Run an initial check after a short delay to let Dinos load
-		await get_tree().create_timer(0.1).timeout
-		_recalculate_all()
-	else:
-		push_error("QuestManager: Could not find folder " + folder_path)
+	# FIX: Use Registry instead of DirAccess for Mobile compatibility!
+	var task_files = ResourceRegistry.TASK_FILES
+	
+	for res in task_files:
+		if res is TaskData:
+			var state = {
+				"data": res,
+				"current": 0,
+				"completed": false,
+				"claimed": false
+			}
+			active_quests.append(state)
+	
+	# Sort by ID
+	active_quests.sort_custom(func(a, b): return a.data.id < b.data.id)
+	
+	# Run an initial check after a short delay to let Dinos load
+	await get_tree().create_timer(0.1).timeout
+	_recalculate_all()
 
 # --- CHECKING LOGIC ---
+
+func reset_quests():
+	_load_all_tasks()
+	emit_signal("quests_updated")
 
 func _on_dna_changed(amount):
 	var needs_update = false

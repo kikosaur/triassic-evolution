@@ -14,6 +14,7 @@ passive_dna_yield = 230
 click_yield = 50
 icon = ExtResource("2_216op")
 required_research_id = "node_plateo"
+consumption_rate = 0.3
 ideal_biome_phase = 3
 scientific_name = "Plateosaurus engelhardti"
 description = "A heavy, barrel-chested giant. It is capable of walking on two legs or dropping to all four to feed."

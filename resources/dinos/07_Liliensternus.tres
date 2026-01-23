@@ -15,6 +15,7 @@ passive_dna_yield = 900
 click_yield = 120
 icon = ExtResource("2_57mc7")
 required_research_id = "node_lilien"
+consumption_rate = 0.35
 ideal_biome_phase = 3
 scientific_name = "Liliensternus liliensterni"
 description = "The largest predator of the Triassic. Recognizable by the distinct crests on its skull used for display."

@@ -10,9 +10,24 @@ const ITEM_SCENE = preload("res://scenes/ui/ShopItem.tscn")
 @export var habitat_products: Array[Resource] = []
 
 func _ready():
-	_populate_shop()
+	visibility_changed.connect(func(): if visible: _populate_shop())
+	# _populate_shop() # Defer to visibility to fix viewport errors
 	if GameManager.has_signal("research_unlocked"):
 		GameManager.connect("research_unlocked", _refresh_locks)
+	
+	visibility_changed.connect(_on_visibility_changed)
+	_on_visibility_changed()
+
+func _on_visibility_changed():
+	# Handle both scroll containers!
+	var scrolls = [$TabContainer/Dinosaurs, $TabContainer/Habitats]
+	for s in scrolls:
+		if visible:
+			s.visible = true
+			s.process_mode = PROCESS_MODE_INHERIT
+		else:
+			s.visible = false
+			s.process_mode = PROCESS_MODE_DISABLED
 
 func _populate_shop():
 	# 1. CLEAR OLD ITEMS (From both grids)
@@ -49,7 +64,7 @@ func _refresh_locks(_id):
 
 func _add_item_to_grid(dino_data, hab_data, target_grid):
 	var card = ITEM_SCENE.instantiate()
-	target_grid.add_child(card) 
+	target_grid.add_child(card)
 	
 	card.species_data = dino_data
 	card.habitat_data = hab_data

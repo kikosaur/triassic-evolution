@@ -22,6 +22,8 @@ GameManager="*res://scripts/managers/GameManager.gd"
 AuthManager="*res://scripts/managers/AuthManager.gd"
 QuestManager="*res://scripts/managers/QuestManager.gd"
 AudioManager="*res://scenes/managers/AudioManager.tscn"
+ResourceRegistry="*res://scripts/managers/ResourceRegistry.gd"
+TutorialManager="*res://scripts/managers/TutorialManager.gd"
 
 [display]
 

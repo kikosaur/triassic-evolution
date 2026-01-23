@@ -10,8 +10,11 @@ func _ready():
 func apply_cover_scale():
 	if texture == null: return
 	
+	var vp = get_viewport()
+	if not vp: return
+	
 	# A. Get the current screen size and image size
-	var viewport_size = get_viewport_rect().size
+	var viewport_size = vp.get_visible_rect().size
 	var image_size = texture.get_size()
 	
 	# B. Calculate how much we need to scale up to fill width vs height

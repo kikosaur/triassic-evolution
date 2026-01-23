@@ -12,9 +12,10 @@ var is_waiting_for_input = true
 func _ready():
 	# 1. Check if already logged in (Auto-Load feature)
 	# 1. Check if already logged in (Auto-Load feature)
+	# 1. Check if already logged in (Auto-Load feature)
 	if AuthManager.user_id != "":
-		# Go to Loading Screen
-		get_tree().change_scene_to_file("res://scenes/ui/LoadingScreen.tscn")
+		# We are already in MainGame, just remove the splash screen
+		queue_free()
 		return
 
 	# 2. Setup initial state

@@ -144,13 +144,18 @@ func _on_tick():
 	if is_dead or not species_data: return
 	
 	var ate_food = false
+	var rate = species_data.consumption_rate if species_data.consumption_rate != null else 0.05
+	
 	if species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
-		ate_food = GameManager.consume_vegetation(0.05)
+		ate_food = GameManager.consume_vegetation(rate)
 	else:
-		ate_food = GameManager.consume_critters(0.05)
+		ate_food = GameManager.consume_critters(rate)
 	
 	if ate_food:
-		GameManager.add_dna(species_data.passive_dna_yield)
+		# Scale reward by the time interval (Burst income)
+		var income = species_data.passive_dna_yield * passive_timer.wait_time
+		GameManager.add_dna(income)
+		
 		hunger = 0.0
 		target_prey = null
 		_play_eat_animation()
@@ -159,6 +164,9 @@ func _on_tick():
 		# Trigger Hunt Logic
 		if species_data.diet == DinosaurSpecies.Diet.CARNIVORE and hunger > 5.0 and target_prey == null:
 			target_prey = GameManager.get_nearest_herbivore(global_position)
+	
+	# Reset timer to new random interval
+	passive_timer.wait_time = randf_range(20.0, 30.0)
 
 func _play_eat_animation():
 	if is_eating: return
@@ -263,7 +271,9 @@ func _harvest_fossil():
 
 func _setup_passive_timer():
 	passive_timer = Timer.new()
-	passive_timer.wait_time = 1.0
+	passive_timer = Timer.new()
+	# Randomize eating interval to 20-30 seconds (User Request)
+	passive_timer.wait_time = randf_range(20.0, 30.0)
 	passive_timer.autostart = true
 	add_child(passive_timer)
 	passive_timer.timeout.connect(_on_tick)

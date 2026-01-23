@@ -25,6 +25,7 @@ var prestige_multiplier: float = 1.0
 # --- DATA TRACKING ---
 var unlocked_research_ids: Array = []
 var owned_dinosaurs: Dictionary = {} # THIS WAS MISSING!
+var tutorial_completed: bool = false # Tracks if player finished onboarding
 
 # --- DINO LIBRARY ---
 # Variable to hold the Dino Scene
@@ -54,25 +55,8 @@ func _ready():
 	add_child(auto_save_timer)
 	auto_save_timer.timeout.connect(_on_auto_save)
 	
-	# --- PASSIVE REGROWTH TIMER ---
-	var regrowth_timer = Timer.new()
-	regrowth_timer.wait_time = 10.0 # Grow every 10 seconds
-	regrowth_timer.autostart = true
-	add_child(regrowth_timer)
-	regrowth_timer.timeout.connect(_on_passive_regrowth)
+	# Passive regrowth removed by user request (Fix hunger mechanics)
 
-func _on_passive_regrowth() -> void:
-	# Grow Vegetation (+1%)
-	if vegetation_density < 100.0:
-		vegetation_density = clamp(vegetation_density + 1.0, 0, 100)
-	
-	# Grow Critters (Synergy: Needs Vegetation > 30%)
-	if vegetation_density > 30.0 and critter_density < 100.0:
-		critter_density = clamp(critter_density + 0.5, 0, 100)
-		
-	emit_signal("habitat_updated", vegetation_density, critter_density)
-	if DEBUG_MODE:
-		print("GameManager: Passive Regrowth tick.")
 
 func _on_auto_save() -> void:
 	# Only save if logged in!
@@ -227,7 +211,34 @@ func get_nearest_herbivore(hunter_position: Vector2) -> Node2D:
 				
 	return nearest_prey
 
-# --- SAVE / LOAD SYSTEM ---
+func reset_game_state():
+	if DEBUG_MODE:
+		print("GameManager: Resetting game state...")
+		
+	# 1. Reset Economy
+	current_dna = 0
+	fossils = 0
+	vegetation_density = 0.0
+	critter_density = 0.0
+	
+	# 2. Reset Research (Keep Starter Logic)
+	unlocked_research_ids.clear()
+	unlocked_research_ids.append("node_archosaur")
+	
+	# 3. Clear Dinosaurs
+	get_tree().call_group("dinos", "queue_free")
+	owned_dinosaurs.clear()
+	
+	# 4. Reset Quests
+	QuestManager.reset_quests()
+	tutorial_completed = false
+	
+	# 5. Update UI
+	emit_signal("dna_changed", current_dna)
+	emit_signal("fossils_changed", fossils)
+	emit_signal("habitat_updated", vegetation_density, critter_density)
+	# Trigger research update if easy, or just let UI refresh naturally
+
 
 func get_save_dictionary() -> Dictionary:
 	# 1. Basic Resources
@@ -237,6 +248,7 @@ func get_save_dictionary() -> Dictionary:
 		"unlocked_research": unlocked_research_ids,
 		"critter_density": critter_density,
 		"vegetation_density": vegetation_density,
+		"tutorial_completed": tutorial_completed,
 		
 		# --- ADD THIS LINE ---
 		"timestamp": Time.get_unix_time_from_system(),
@@ -277,6 +289,11 @@ func load_save_dictionary(data: Dictionary):
 	if "vegetation_density" in data:
 		vegetation_density = data["vegetation_density"]
 
+	if "tutorial_completed" in data:
+		tutorial_completed = data["tutorial_completed"]
+	else:
+		tutorial_completed = false
+
 	if "quests" in data:
 		QuestManager.load_save_data(data["quests"])
 	
@@ -315,10 +332,10 @@ func _calculate_offline_earnings(seconds_passed: float):
 		if not dino.is_dead and dino.species_data:
 			if dino.species_data.diet == 0: # Herbivore
 				herb_dps += dino.species_data.passive_dna_yield
-				herb_consumption += 0.05 # Consumes 0.05 per sec
+				herb_consumption += 0.002 # Reduced from 0.05 to match 25s interval
 			else: # Carnivore
 				carn_dps += dino.species_data.passive_dna_yield
-				carn_consumption += 0.05 # Consumes 0.05 per sec
+				carn_consumption += 0.002 # Reduced from 0.05 to match 25s interval
 	
 	# 3. Calculate Valid Time (Starvation limit)
 	var time_herb = seconds_passed

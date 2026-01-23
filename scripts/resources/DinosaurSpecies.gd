@@ -1,7 +1,7 @@
 extends Resource
 class_name DinosaurSpecies
 
-enum Diet { HERBIVORE, CARNIVORE }
+enum Diet {HERBIVORE, CARNIVORE}
 
 @export_group("Stats")
 @export var species_name: String = "Dino Name"
@@ -10,14 +10,15 @@ enum Diet { HERBIVORE, CARNIVORE }
 @export var diet: Diet = Diet.HERBIVORE
 @export var base_dna_cost: int = 10
 @export var passive_dna_yield: int = 1
-@export var click_yield: int = 1  # DNA bonus when clicking this dino
+@export var click_yield: int = 1 # DNA bonus when clicking this dino
 @export var icon: Texture2D
 
 @export var required_research_id: String = ""
 
 # --- NEW SURVIVAL STATS ---
 @export_group("Survival Stats")
-@export var ideal_biome_phase: int = 1  # 1=Desert, 2=Oasis, 3=Jungle
+@export var consumption_rate: float = 0.05 # Amount of resource to consume per tick
+@export var ideal_biome_phase: int = 1 # 1=Desert, 2=Oasis, 3=Jungle
 @export_range(0.0, 1.0) var tolerance: float = 0.5 # 1.0 = Invincible, 0.0 = Very Fragile
 @export var base_lifespan: float = 60.0 # How many seconds they live (under perfect conditions)
 

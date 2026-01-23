@@ -37,16 +37,36 @@ func _ready():
 		detail_panel.visible = false
 	)
 	
-	# Fill the grid
+	visibility_changed.connect(_on_visibility_changed)
+	_on_visibility_changed()
+
+func _on_visibility_changed():
+	var scrolls = [$TabContainer/Dinosaurs, $TabContainer/Traits, $TabContainer/Habitats]
+	for s in scrolls:
+		if visible:
+			s.visible = true
+			s.process_mode = PROCESS_MODE_INHERIT
+		else:
+			s.visible = false
+			s.process_mode = PROCESS_MODE_DISABLED
+	
+	# 3. Listen for visibility to refresh only when open
+	visibility_changed.connect(func(): if visible: refresh_gallery())
+	
+	# Fill data but dont instantiate UI yet
 	_load_dynamic_resources()
-	refresh_gallery()
+	# refresh_gallery() # Defer to visibility
 
 func _load_dynamic_resources():
 	all_traits.clear()
 	all_habitats.clear()
 	
-	_load_folder("res://resources/traits/", all_traits)
-	_load_folder("res://resources/habitats/", all_habitats)
+	# FIX for Mobile: Use Registry instead of DirAccess scanning
+	all_traits.append_array(ResourceRegistry.TRAIT_FILES)
+	all_habitats.append_array(ResourceRegistry.HABITAT_FILES)
+	
+	# _load_folder("res://resources/traits/", all_traits)
+	# _load_folder("res://resources/habitats/", all_habitats)
 	
 	# Optional: Sort by Name
 	all_traits.sort_custom(func(a, b): return a.display_name < b.display_name)
