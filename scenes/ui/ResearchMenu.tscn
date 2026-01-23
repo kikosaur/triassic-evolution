@@ -42,17 +42,19 @@ script = ExtResource("1_logic")
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -500.0
-offset_top = -300.0
-offset_right = 500.0
-offset_bottom = 300.0
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
 
 [node name="Content" type="Control" parent="ScrollContainer"]
 custom_minimum_size = Vector2(2500, 800)
@@ -314,3 +316,18 @@ offset_right = 2300.0
 offset_bottom = 500.0
 my_data = ExtResource("24_hsv2h")
 parent_node = NodePath("../Node_Rioja")
+
+[node name="CloseButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -80.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 45.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 24
+text = "[X]"
+
+[connection signal="pressed" from="CloseButton" to="." method="hide"]

@@ -25,6 +25,10 @@ extends Control
 
 var slot_scene = preload("res://scenes/ui/MuseumSlot.tscn")
 
+# --- DRAG LOGIC ---
+var _is_dragging: bool = false
+var _active_scroll: ScrollContainer = null
+
 func _ready():
 # Hide popup at start
 	detail_panel.visible = false
@@ -39,6 +43,32 @@ func _ready():
 	
 	visibility_changed.connect(_on_visibility_changed)
 	_on_visibility_changed()
+	
+	# Setup drag for all three scroll containers
+	var dino_scroll = $TabContainer/Dinosaurs
+	var trait_scroll = $TabContainer/Traits
+	var habitat_scroll = $TabContainer/Habitats
+	
+	if dino_scroll:
+		dino_scroll.gui_input.connect(func(event): _on_scroll_input(event, dino_scroll))
+	if trait_scroll:
+		trait_scroll.gui_input.connect(func(event): _on_scroll_input(event, trait_scroll))
+	if habitat_scroll:
+		habitat_scroll.gui_input.connect(func(event): _on_scroll_input(event, habitat_scroll))
+
+func _on_scroll_input(event, scroll_container):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_is_dragging = event.pressed
+			if event.pressed:
+				_active_scroll = scroll_container
+			else:
+				_active_scroll = null
+			
+	elif event is InputEventMouseMotion and _is_dragging and _active_scroll:
+		# Inverse the relative motion to "pull" the content
+		_active_scroll.scroll_horizontal -= event.relative.x
+		_active_scroll.scroll_vertical -= event.relative.y
 
 func _on_visibility_changed():
 	var scrolls = [$TabContainer/Dinosaurs, $TabContainer/Traits, $TabContainer/Habitats]

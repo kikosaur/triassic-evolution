@@ -49,7 +49,10 @@ func _ready() -> void:
 	click_zone.pressed.connect(_on_background_clicked)
 	# Listen for Habitat Changes
 	
-	btn_research.pressed.connect(func(): research_menu.visible = !research_menu.visible)
+	btn_research.pressed.connect(func(): 
+		research_menu.visible = !research_menu.visible
+		_toggle_ui_buttons(research_menu.visible)
+	)
 	
 	GameManager.connect("extinction_triggered", _show_extinction)
 	GameManager.connect("dinosaur_spawned", _spawn_dino)
@@ -71,19 +74,44 @@ func _ready() -> void:
 	# Open/Close the Shop
 	btn_shop.pressed.connect(func():
 		shop_panel.visible = !shop_panel.visible
-		# Optional: Close Research if opening Shop (to avoid overlap)
+		_toggle_ui_buttons(shop_panel.visible)
+		# Close other panels if opening Shop
 		if shop_panel.visible:
 			research_menu.visible = false
+			museum.visible = false
 		)
 		
 	btn_museum.pressed.connect(func():
-		museum.visible = true
-		museum.refresh_gallery() # Ensure it updates if we just unlocked something!
+		museum.visible = !museum.visible
+		if museum.visible:
+			museum.refresh_gallery() # Ensure it updates if we just unlocked something!
+			_toggle_ui_buttons(true)
+			# Close other panels
+			research_menu.visible = false
+			shop_panel.visible = false
+		else:
+			_toggle_ui_buttons(false)
 	)
 	
 	# btn_settings.pressed.connect... (Handled in TopPanel now)
 	
 	btn_tasks.pressed.connect(func(): quest_panel.show_panel())
+	
+	# Connect panel visibility changes to toggle buttons
+	shop_panel.visibility_changed.connect(func():
+		if not shop_panel.visible:
+			_toggle_ui_buttons(false)
+	)
+	
+	research_menu.visibility_changed.connect(func():
+		if not research_menu.visible:
+			_toggle_ui_buttons(false)
+	)
+	
+	museum.visibility_changed.connect(func():
+		if not museum.visible:
+			_toggle_ui_buttons(false)
+	)
 
 func _on_research_unlocked(_id):
 	_update_biome_visuals()
@@ -207,3 +235,18 @@ func _on_timer_timeout(): # Or wherever you calculated it
 	# FIX: Use the variable to update the UI!
 	# FIX: Use the variable to update the UI!
 	$UI_Layer/TopPanel.update_dps_label(total_dps)
+
+# Helper function to hide/show UI buttons when full-screen panels are active
+func _toggle_ui_buttons(hide: bool):
+	if hide:
+		# Hide all UI buttons when a full-screen panel is open
+		btn_shop.visible = false
+		btn_research.visible = false
+		btn_museum.visible = false
+		btn_tasks.visible = false
+	else:
+		# Show all UI buttons when panels are closed
+		btn_shop.visible = true
+		btn_research.visible = true
+		btn_museum.visible = true
+		btn_tasks.visible = true

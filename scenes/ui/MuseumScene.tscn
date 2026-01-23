@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://ifcqyuyvc104"]
+    [gd_scene load_steps=29 format=3 uid="uid://ifcqyuyvc104"]
 
 [ext_resource type="Script" uid="uid://cyvc4imibflhu" path="res://scripts/ui/MuseumScene.gd" id="1_81hgk"]
 [ext_resource type="Resource" uid="uid://p8ukqi65mh8o" path="res://resources/dinos/00_Archosaur.tres" id="3_pg7n5"]
@@ -31,11 +31,15 @@
 
 [node name="MuseumScene" type="Control"]
 layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("12_theme")
@@ -46,15 +50,15 @@ all_habitats = Array[Resource]([ExtResource("24_smn8j"), ExtResource("25_0xwfh")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -500.0
-offset_top = -250.0
-offset_right = 500.0
-offset_bottom = 250.0
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -64,23 +68,23 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -101.5
-offset_top = -250.0
+offset_top = 5.0
 offset_right = 101.5
-offset_bottom = -227.0
+offset_bottom = 28.0
 grow_horizontal = 2
 text = "PALEONTOLOGY MUSEUM"
 
 [node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -500.0
-offset_top = -245.0
-offset_right = 500.0
-offset_bottom = 249.0
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 40.0
+offset_right = -10.0
+offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 2
 current_tab = 0
@@ -88,6 +92,8 @@ current_tab = 0
 [node name="Dinosaurs" type="ScrollContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
 metadata/_tab_index = 0
 
 [node name="Grid" type="GridContainer" parent="TabContainer/Dinosaurs"]
@@ -98,6 +104,8 @@ columns = 5
 visible = false
 visible = false
 layout_mode = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
 metadata/_tab_index = 1
 
 [node name="Grid" type="GridContainer" parent="TabContainer/Traits"]
@@ -108,6 +116,8 @@ columns = 5
 visible = false
 visible = false
 layout_mode = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
 metadata/_tab_index = 2
 
 [node name="Grid" type="GridContainer" parent="TabContainer/Habitats"]
@@ -116,13 +126,14 @@ columns = 5
 
 [node name="BtnClose" type="Button" parent="."]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-offset_left = 465.0
-offset_top = -249.0
-offset_right = 500.0
-offset_bottom = -218.0
-grow_horizontal = 2
+offset_left = -80.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 36.0
+grow_horizontal = 0
 text = "  X  "
 
 [node name="DetailPanel" type="Panel" parent="."]

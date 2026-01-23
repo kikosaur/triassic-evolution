@@ -9,6 +9,10 @@ const ITEM_SCENE = preload("res://scenes/ui/ShopItem.tscn")
 @export var dino_products: Array[Resource] = []
 @export var habitat_products: Array[Resource] = []
 
+# --- DRAG LOGIC ---
+var _is_dragging: bool = false
+var _active_scroll: ScrollContainer = null
+
 func _ready():
 	visibility_changed.connect(func(): if visible: _populate_shop())
 	# _populate_shop() # Defer to visibility to fix viewport errors
@@ -17,6 +21,29 @@ func _ready():
 	
 	visibility_changed.connect(_on_visibility_changed)
 	_on_visibility_changed()
+	
+	# Setup drag for both scroll containers
+	var dino_scroll = $TabContainer/Dinosaurs
+	var hab_scroll = $TabContainer/Habitats
+	
+	if dino_scroll:
+		dino_scroll.gui_input.connect(func(event): _on_scroll_input(event, dino_scroll))
+	if hab_scroll:
+		hab_scroll.gui_input.connect(func(event): _on_scroll_input(event, hab_scroll))
+
+func _on_scroll_input(event, scroll_container):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			_is_dragging = event.pressed
+			if event.pressed:
+				_active_scroll = scroll_container
+			else:
+				_active_scroll = null
+			
+	elif event is InputEventMouseMotion and _is_dragging and _active_scroll:
+		# Inverse the relative motion to "pull" the content
+		_active_scroll.scroll_horizontal -= event.relative.x
+		_active_scroll.scroll_vertical -= event.relative.y
 
 func _on_visibility_changed():
 	# Handle both scroll containers!

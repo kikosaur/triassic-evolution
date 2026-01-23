@@ -17,15 +17,15 @@
 [ext_resource type="Resource" uid="uid://bc2k2eafgc0rt" path="res://resources/habitat/Item_DragonflySwarm.tres" id="14_0pf5p"]
 
 [node name="ShopPanel" type="Panel"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -500.0
-offset_top = -250.0
-offset_right = 500.0
-offset_bottom = 250.0
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_1rqtx")
@@ -57,6 +57,8 @@ current_tab = 0
 
 [node name="Dinosaurs" type="ScrollContainer" parent="TabContainer"]
 layout_mode = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
 metadata/_tab_index = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="TabContainer/Dinosaurs"]
@@ -79,6 +81,8 @@ columns = 3
 [node name="Habitats" type="ScrollContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
 metadata/_tab_index = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="TabContainer/Habitats"]
