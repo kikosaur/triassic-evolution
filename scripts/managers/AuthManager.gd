@@ -20,6 +20,7 @@ var user_id: String = ""
 
 # --- LOGGING (Set to false for production) ---
 const DEBUG_MODE: bool = false
+const SESSION_FILE: String = "user://session.data"
 
 func _ready() -> void:
 	# Load secrets from config file
@@ -29,6 +30,9 @@ func _ready() -> void:
 	_http_request = HTTPRequest.new()
 	add_child(_http_request)
 	_http_request.request_completed.connect(_on_request_completed)
+	
+	# Try to restore session
+	load_session()
 
 func _load_secrets() -> void:
 	var config = ConfigFile.new()
@@ -65,6 +69,41 @@ func _load_secrets() -> void:
 			
 	_config_loaded = true
 
+	_config_loaded = true
+
+# --- SESSION MANAGEMENT ---
+
+func save_session(id: String, token: String) -> void:
+	var file = FileAccess.open(SESSION_FILE, FileAccess.WRITE)
+	if file:
+		var data = {
+			"user_id": id,
+			"user_token": token
+		}
+		file.store_string(JSON.stringify(data))
+		if DEBUG_MODE:
+			print("AuthManager: Session saved.")
+
+func load_session() -> void:
+	if not FileAccess.file_exists(SESSION_FILE):
+		return
+		
+	var file = FileAccess.open(SESSION_FILE, FileAccess.READ)
+	if file:
+		var content = file.get_as_text()
+		var json = JSON.parse_string(content)
+		if json:
+			user_id = json.get("user_id", "")
+			user_token = json.get("user_token", "")
+			if DEBUG_MODE:
+				print("AuthManager: Session restored for ", user_id)
+
+func delete_session() -> void:
+	if FileAccess.file_exists(SESSION_FILE):
+		DirAccess.remove_absolute(SESSION_FILE)
+		if DEBUG_MODE:
+			print("AuthManager: Session deleted.")
+
 # --- PUBLIC FUNCTIONS ---
 
 func sign_up(email: String, password: String, full_name: String, dob: String, username: String) -> void:
@@ -99,6 +138,7 @@ func login(email: String, password: String) -> void:
 	_send_request(url, body)
 
 func logout() -> void:
+	delete_session() # Clear save
 	user_token = ""
 	user_id = ""
 	GameManager.reset_game_state() # Reset persistent data
@@ -147,6 +187,7 @@ func _on_request_completed(_result: int, response_code: int, _headers: PackedStr
 	elif _current_action == "login":
 		user_token = response["access_token"]
 		user_id = response["user"]["id"]
+		save_session(user_id, user_token) # Persist login
 		emit_signal("auth_result", true, "Login Successful!")
 		emit_signal("user_logged_in", response["user"])
 		

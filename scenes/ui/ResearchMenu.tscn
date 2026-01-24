@@ -37,20 +37,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_i47bq")
 script = ExtResource("1_logic")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 visible = false
 layout_mode = 1
 anchors_preset = 15
-anchor_left = 0.0
-anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3
@@ -71,8 +66,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_i47bq")
 mouse_filter = 2
+theme = ExtResource("1_i47bq")
 
 [node name="TreeContainer" type="Control" parent="ScrollContainer/Content"]
 custom_minimum_size = Vector2(2500, 800)
@@ -327,7 +322,8 @@ offset_top = 5.0
 offset_right = -10.0
 offset_bottom = 45.0
 grow_horizontal = 0
+theme = ExtResource("1_i47bq")
 theme_override_font_sizes/font_size = 24
-text = "[X]"
+text = "X"
 
 [connection signal="pressed" from="CloseButton" to="." method="hide"]

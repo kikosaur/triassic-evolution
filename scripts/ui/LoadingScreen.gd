@@ -29,4 +29,5 @@ func _on_data_loaded(_success):
 func _check_transition():
 	if data_loaded and time_elapsed >= min_load_time:
 		set_process(false) # Stop checking
-		get_tree().change_scene_to_file("res://scenes/world/MainGame.tscn")
+		print("LoadingScreen: Transitioning to MainGame...")
+		get_tree().call_deferred("change_scene_to_file", "res://scenes/world/MainGame.tscn")

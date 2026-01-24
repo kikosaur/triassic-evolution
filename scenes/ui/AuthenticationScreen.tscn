@@ -1,9 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://c7pupnlqku0qv"]
+[gd_scene load_steps=3 format=3 uid="uid://c7pupnlqku0qv"]
 
 [ext_resource type="Script" uid="uid://dn3jwg7lx54gv" path="res://scripts/ui/AuthenticationScreen.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="2_theme"]
-[ext_resource type="Texture2D" uid="uid://ce201kx6kh82p" path="res://assets/habitat-transition/06 Forest.png" id="3_bg"]
-[ext_resource type="Script" path="res://scenes/world/BackgroundScaler.gd" id="4_scaler"]
 
 [node name="AuthenticationScreen" type="Control"]
 layout_mode = 3
@@ -14,10 +12,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_script")
-
-[node name="Background" type="Sprite2D" parent="."]
-texture = ExtResource("3_bg")
-script = ExtResource("4_scaler")
 
 [node name="LoginPanel" type="Panel" parent="."]
 layout_mode = 1

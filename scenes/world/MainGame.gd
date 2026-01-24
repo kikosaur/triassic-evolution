@@ -43,13 +43,14 @@ const DEBUG_MODE: bool = false
 @onready var quest_panel = $UI_Layer/QuestPanel
 
 func _ready() -> void:
+	print("MainGame: _ready() called!")
 	if DEBUG_MODE:
 		print("MainGame: Scene started")
 	AudioManager.play_music()
 	click_zone.pressed.connect(_on_background_clicked)
 	# Listen for Habitat Changes
 	
-	btn_research.pressed.connect(func(): 
+	btn_research.pressed.connect(func():
 		research_menu.visible = !research_menu.visible
 		_toggle_ui_buttons(research_menu.visible)
 	)
@@ -237,8 +238,8 @@ func _on_timer_timeout(): # Or wherever you calculated it
 	$UI_Layer/TopPanel.update_dps_label(total_dps)
 
 # Helper function to hide/show UI buttons when full-screen panels are active
-func _toggle_ui_buttons(hide: bool):
-	if hide:
+func _toggle_ui_buttons(should_hide: bool):
+	if should_hide:
 		# Hide all UI buttons when a full-screen panel is open
 		btn_shop.visible = false
 		btn_research.visible = false

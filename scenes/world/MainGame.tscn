@@ -22,7 +22,6 @@
 [ext_resource type="Texture2D" uid="uid://bmg2rghxviulq" path="res://assets/ui/museum.png" id="19_b5gth"]
 [ext_resource type="PackedScene" uid="uid://besvm1u4muhdt" path="res://scenes/ui/WelcomeBackPanel.tscn" id="21_3sbe1"]
 [ext_resource type="Texture2D" uid="uid://eri1qqqy16y5" path="res://assets/ui/tasks.png" id="21_21u4d"]
-[ext_resource type="PackedScene" uid="uid://c77xp245t26vp" path="res://scenes/ui/StartScreen.tscn" id="21_b5gth"]
 [ext_resource type="PackedScene" uid="uid://b8io3jmork557" path="res://scenes/ui/SettingsPanel.tscn" id="22_b5gth"]
 [ext_resource type="PackedScene" uid="uid://ctji0a0bb8gxy" path="res://scenes/ui/QuestPanel.tscn" id="23_jp2mt"]
 
@@ -157,7 +156,6 @@ offset_left = -500.0
 offset_right = 0.0
 grow_horizontal = 0
 
-[node name="StartScreen" parent="UI_Layer" instance=ExtResource("21_b5gth")]
 
 [node name="SettingsPanel" parent="UI_Layer" instance=ExtResource("22_b5gth")]
 visible = false

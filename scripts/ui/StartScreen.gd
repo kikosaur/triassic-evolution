@@ -3,7 +3,7 @@ extends Control
 # --- NODES ---
 @onready var prompt_label = $VBoxContainer/LblPrompt
 @onready var title_container = $VBoxContainer
-@onready var auth_panel = $AuthPanel # Ensure this matches your node name!
+@onready var auth_screen = $AuthenticationScreen
 @onready var btn_settings = $BtnSettings
 @onready var settings_panel = $SettingsPanel
 # --- STATE ---
@@ -11,16 +11,12 @@ var is_waiting_for_input = true
 
 func _ready():
 	# 1. Check if already logged in (Auto-Load feature)
-	# 1. Check if already logged in (Auto-Load feature)
-	# 1. Check if already logged in (Auto-Load feature)
-	if AuthManager.user_id != "":
-		# We are already in MainGame, just remove the splash screen
-		queue_free()
-		return
-
+	# NOTE: We now check this AFTER user interaction in _transition_to_auth
+	# if AuthManager.user_id != "":
+	# ...
 	# 2. Setup initial state
-	auth_panel.visible = false
-	btn_settings.visible = false
+	auth_screen.visible = false
+	btn_settings.visible = true
 	
 	# 3. Animate the prompt (Blinking)
 	var tween = create_tween().set_loops()
@@ -30,17 +26,26 @@ func _ready():
 	# 4. Listen for login success
 	AuthManager.user_logged_in.connect(_on_login_success)
 	btn_settings.pressed.connect(func(): settings_panel.visible = true)
+	
+	# 5. Connect Click Zone
+	var click_zone = find_child("ClickZone")
+	if click_zone:
+		click_zone.pressed.connect(_transition_to_auth)
 
 func _input(event):
-	# Detect "Press Anywhere"
+	# Detect "Press Anywhere" (Keys only, mouse is handled by ClickZone)
 	if is_waiting_for_input:
-		if event is InputEventMouseButton and event.pressed:
-			_transition_to_auth()
-		elif event is InputEventKey and event.pressed:
+		if event is InputEventKey and event.pressed and not event.echo:
 			_transition_to_auth()
 
 func _transition_to_auth():
 	is_waiting_for_input = false
+	
+	# CHECK LOGIN STATUS HERE
+	if AuthManager.user_id != "":
+		# Already logged in? Skip auth screen and load game
+		get_tree().call_deferred("change_scene_to_file", "res://scenes/ui/LoadingScreen.tscn")
+		return
 	
 	# Create a smooth animation
 	var tween = create_tween().set_parallel(true)
@@ -52,9 +57,9 @@ func _transition_to_auth():
 	# tween.tween_property(title_container, "position:y", title_container.position.y - 100, 0.5)
 	
 	# 3. Reveal Auth Panel and Settings
-	auth_panel.visible = true
-	auth_panel.modulate.a = 0.0 # Start invisible
-	tween.tween_property(auth_panel, "modulate:a", 1.0, 0.5)
+	auth_screen.visible = true
+	auth_screen.modulate.a = 0.0 # Start invisible
+	tween.tween_property(auth_screen, "modulate:a", 1.0, 0.5)
 	
 	btn_settings.visible = true
 
