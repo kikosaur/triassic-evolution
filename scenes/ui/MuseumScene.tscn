@@ -72,6 +72,7 @@ offset_top = 5.0
 offset_right = 101.5
 offset_bottom = 28.0
 grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
 text = "PALEONTOLOGY MUSEUM"
 
 [node name="TabContainer" type="TabContainer" parent="."]
@@ -98,6 +99,8 @@ metadata/_tab_index = 0
 
 [node name="Grid" type="GridContainer" parent="TabContainer/Dinosaurs"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 columns = 5
 
 [node name="Traits" type="ScrollContainer" parent="TabContainer"]
@@ -110,6 +113,8 @@ metadata/_tab_index = 1
 
 [node name="Grid" type="GridContainer" parent="TabContainer/Traits"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 columns = 5
 
 [node name="Habitats" type="ScrollContainer" parent="TabContainer"]
@@ -122,9 +127,12 @@ metadata/_tab_index = 2
 
 [node name="Grid" type="GridContainer" parent="TabContainer/Habitats"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 columns = 5
 
 [node name="BtnClose" type="Button" parent="."]
+custom_minimum_size = Vector2(60, 48)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -132,8 +140,10 @@ anchor_right = 1.0
 offset_left = -80.0
 offset_top = 5.0
 offset_right = -10.0
-offset_bottom = 36.0
+offset_bottom = 53.0
 grow_horizontal = 0
+theme_override_constants/h_separation = 8
+theme_override_font_sizes/font_size = 18
 text = "  X  "
 
 [node name="DetailPanel" type="Panel" parent="."]
@@ -203,11 +213,15 @@ theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
 autowrap_mode = 3
 
 [node name="BtnClosePopup" type="Button" parent="DetailPanel"]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -35.0
-offset_bottom = 31.0
+offset_left = -58.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 53.0
 grow_horizontal = 0
+theme_override_font_sizes/font_size = 18
 text = "  X  "

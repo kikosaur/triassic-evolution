@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://54irjixwj5ki" path="res://scripts/ui/MuseumSlot.gd" id="1_o7xb0"]
 
 [node name="MuseumSlot" type="Button"]
-custom_minimum_size = Vector2(200, 250)
+custom_minimum_size = Vector2(220, 270)
 theme = ExtResource("1_ltpfo")
 script = ExtResource("1_o7xb0")
 
@@ -17,7 +17,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
-custom_minimum_size = Vector2(200, 180)
+custom_minimum_size = Vector2(220, 200)
 layout_mode = 2
 size_flags_vertical = 3
 expand_mode = 1
@@ -25,5 +25,6 @@ stretch_mode = 5
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 16
 text = "???"
 horizontal_alignment = 1

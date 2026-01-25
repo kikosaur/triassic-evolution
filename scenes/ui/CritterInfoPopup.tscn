@@ -1,9 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8xk2p5n7qnaa"]
+[gd_scene load_steps=2 format=3 uid="uid://fjphn8fnjrkk"]
 
-[ext_resource type="Script" path="res://scripts/ui/DNAInfoPopup.gd" id="1_popup"]
-[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="2_theme"]
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_theme"]
 
-[node name="DNAInfoPopup" type="Panel"]
+[node name="CritterInfoPopup" type="Panel"]
 custom_minimum_size = Vector2(400, 350)
 anchors_preset = 8
 anchor_left = 0.5
@@ -16,7 +15,6 @@ offset_right = 200.0
 offset_bottom = 175.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_popup")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -25,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_theme")
+theme = ExtResource("1_theme")
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
@@ -37,13 +35,26 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
-text = "DNA Points"
+text = "Critters"
 horizontal_alignment = 1
 
 [node name="ContentLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
-text = "DNA information will appear here"
+text = "[b]Food Source for Carnivores[/b]
+
+[color=green]Used For:[/color]
+• Feeding carnivore dinosaurs
+• Unlocking biome transitions
+• Protecting herbivores
+
+[color=cyan]How to Increase:[/color]
+• Buy from Habitat Shop
+• Jar of Beetles (+15%)
+• Dragonfly Swarm (+60%)
+
+[color=orange]WARNING:[/color]
+If critters run out, carnivores will hunt your herbivores!"
 fit_content = false
 scroll_active = false

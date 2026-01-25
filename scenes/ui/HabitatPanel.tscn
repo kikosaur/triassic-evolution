@@ -2,6 +2,8 @@
 
 [ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_khjsv"]
 [ext_resource type="Script" uid="uid://bd4k5xf3cdbro" path="res://scripts/ui/HabitatPanel.gd" id="1_noai0"]
+[ext_resource type="PackedScene" uid="uid://c8xk2p5n7qnbb" path="res://scenes/ui/VegetationInfoPopup.tscn" id="3_veg_popup"]
+[ext_resource type="PackedScene" uid="uid://d9xk2p5n7qncc" path="res://scenes/ui/CritterInfoPopup.tscn" id="4_crit_popup"]
 
 [node name="HabitatPanel" type="Panel"]
 anchors_preset = 3
@@ -31,18 +33,58 @@ theme_override_constants/margin_bottom = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
-[node name="VegLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="VegSection" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VegLabel" type="Label" parent="MarginContainer/VBoxContainer/VegSection"]
 layout_mode = 2
 text = "Vegetation"
 
-[node name="VegBar" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
+[node name="VegBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/VegSection"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CritterLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="CritterSection" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CritterLabel" type="Label" parent="MarginContainer/VBoxContainer/CritterSection"]
 layout_mode = 2
 text = "Critters"
 
-[node name="CritterBar" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
+[node name="CritterBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/CritterSection"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="VegetationInfoPopup" parent="." instance=ExtResource("3_veg_popup")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -175.0
+offset_right = 200.0
+offset_bottom = 175.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CritterInfoPopup" parent="." instance=ExtResource("4_crit_popup")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -175.0
+offset_right = 200.0
+offset_bottom = 175.0
+grow_horizontal = 2
+grow_vertical = 2

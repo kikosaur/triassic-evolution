@@ -3,11 +3,8 @@ extends Panel
 # DNA Info Popup - Small popup to explain DNA currency
 @onready var title_lbl = $MarginContainer/VBoxContainer/TitleLabel
 @onready var content_text = $MarginContainer/VBoxContainer/ContentLabel
-@onready var close_btn = $MarginContainer/VBoxContainer/CloseButton
 
 func _ready():
-	# Connect the close button signal
-	close_btn.pressed.connect(func(): hide())
 	hide() # Start hidden
 
 func show_dna_info():

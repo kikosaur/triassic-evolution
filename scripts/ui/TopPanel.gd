@@ -19,6 +19,15 @@ func _ready():
 	var btn_settings = find_child("BtnSettings", true, false)
 	if btn_settings:
 		btn_settings.pressed.connect(_on_settings_pressed)
+	
+	# Connect section containers for click-anywhere behavior
+	var dna_section = find_child("DNASection", true, false)
+	if dna_section:
+		dna_section.gui_input.connect(_on_dna_section_input)
+	
+	var fossil_section = find_child("FossilSection", true, false)
+	if fossil_section:
+		fossil_section.gui_input.connect(_on_fossil_section_input)
 
 func _on_settings_pressed():
 	# Find the SettingsPanel in the scene tree (it's likely a sibling or in UI_Layer)
@@ -54,12 +63,27 @@ func _update_dna(amount):
 func _update_fossils(amount):
 	fossil_label.text = GameManager.format_number(amount)
 
+# Helper function to center a popup on the viewport
+func _center_popup_on_viewport(popup: Control):
+	var viewport_size = get_viewport_rect().size
+	var popup_size = popup.size
+	
+	# Calculate center position
+	var center_x = (viewport_size.x - popup_size.x) / 2.0
+	var center_y = (viewport_size.y - popup_size.y) / 2.0
+	
+	# Set position (global position for proper centering)
+	popup.global_position = Vector2(center_x, center_y)
+
 # DNA button press and hold
 func _on_dna_button_down():
 	if dna_info_popup.has_method("show_dna_info"):
 		dna_info_popup.show_dna_info()
 	else:
 		dna_info_popup.show()
+	
+	# Center on viewport
+	_center_popup_on_viewport(dna_info_popup)
 	dna_info_popup.move_to_front()
 
 func _on_dna_button_up():
@@ -67,7 +91,27 @@ func _on_dna_button_up():
 
 func _on_fossil_button_down():
 	fossil_info_popup.show()
+	
+	# Center on viewport
+	_center_popup_on_viewport(fossil_info_popup)
 	fossil_info_popup.move_to_front()
 
 func _on_fossil_button_up():
 	fossil_info_popup.hide()
+
+# Section-wide input handlers (click anywhere in section)
+func _on_dna_section_input(event: InputEvent):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_on_dna_button_down()
+			else:
+				_on_dna_button_up()
+
+func _on_fossil_section_input(event: InputEvent):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_on_fossil_button_down()
+			else:
+				_on_fossil_button_up()
