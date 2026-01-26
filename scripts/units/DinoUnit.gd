@@ -46,6 +46,9 @@ func _play_scaled_anim(anim_name: String):
 			_update_scale_for_current_anim()
 
 func _update_scale_for_current_anim():
+	# SAFETY: If no animation is playing (default ""), get_frame_texture will crash.
+	if anim.animation == "": return
+	
 	var tex = anim.sprite_frames.get_frame_texture(anim.animation, anim.frame)
 	if tex:
 		var raw_width = float(tex.get_width())
