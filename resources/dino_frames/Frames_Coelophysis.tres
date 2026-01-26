@@ -1,9 +1,26 @@
-[gd_resource type="SpriteFrames" load_steps=18 format=3 uid="uid://bv21cdyq62sb8"]
+[gd_resource type="SpriteFrames" load_steps=23 format=3 uid="uid://bv21cdyq62sb8"]
 
 [ext_resource type="Texture2D" uid="uid://wdq3p0qtp20f" path="res://assets/dinosaurs/die/06.png" id="1_775ko"]
 [ext_resource type="Texture2D" uid="uid://c5rigtjl7b135" path="res://assets/dinosaurs/05-1.png" id="1_l7djl"]
+[ext_resource type="Texture2D" uid="uid://tsyan3sqxhxl" path="res://assets/dinosaurs/attack/coelophysis.png" id="1_sgfsi"]
 [ext_resource type="Texture2D" uid="uid://ciqvgq8b4b5fw" path="res://assets/dinosaurs/05-2.png" id="2_775ko"]
 [ext_resource type="Texture2D" uid="uid://qmew0i31taiq" path="res://assets/dinosaurs/eat/06.png" id="2_ariol"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7sm7t"]
+atlas = ExtResource("1_sgfsi")
+region = Rect2(0, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sn8qt"]
+atlas = ExtResource("1_sgfsi")
+region = Rect2(1408, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0h4gc"]
+atlas = ExtResource("1_sgfsi")
+region = Rect2(0, 752, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fcjbm"]
+atlas = ExtResource("1_sgfsi")
+region = Rect2(1408, 752, 1408, 752)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iusad"]
 atlas = ExtResource("1_775ko")
@@ -59,6 +76,23 @@ region = Rect2(1408, 761, 1408, 561)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7sm7t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sn8qt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0h4gc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fcjbm")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_iusad")

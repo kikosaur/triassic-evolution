@@ -1,14 +1,17 @@
-[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://dbp8euycw0w57"]
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://dbp8euycw0w57"]
 
 [ext_resource type="Texture2D" uid="uid://ksnh5hdlfxt4" path="res://assets/habitat_traits/H01_Ephemeral_Pools.png" id="1_u2cus"]
 [ext_resource type="Resource" uid="uid://cgwit1labfvwm" path="res://resources/research/Res_Lagosuchus.tres" id="2_cx87w"]
 [ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_1ybv1"]
+[ext_resource type="Resource" path="res://resources/habitats/Habitat_Pools.tres" id="4_habitat"]
 
 [resource]
 script = ExtResource("3_1ybv1")
 id = "node_pools"
 display_name = "Primordial Pools"
 icon = ExtResource("1_u2cus")
+description = "Temporary bodies of water formed by rainfall, crucial for early Triassic survival."
 type = 2
 dna_cost = 600
 parent_research = ExtResource("2_cx87w")
+unlock_habitat = ExtResource("4_habitat")

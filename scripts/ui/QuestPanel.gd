@@ -31,22 +31,28 @@ func _refresh_ui():
 	# Guard: Only update if visible to prevent ScrollContainer errors in background
 	if not visible: return
 
-	# 1. Clear old items
-	for child in list_container.get_children():
-		child.queue_free()
-	
-	# 2. Create new items
 	var all_quests = QuestManager.active_quests
+	var current_children = list_container.get_children()
 	
+	# 1. Update Existing / Create New
 	for i in range(all_quests.size()):
 		var q_state = all_quests[i]
+		var item
 		
-		# Optional: Only show unclaimed quests (remove this if you want to see history)
-		# if q_state.claimed: continue 
-		
-		var item = ITEM_SCENE.instantiate()
-		list_container.add_child(item)
+		if i < current_children.size():
+			item = current_children[i]
+		else:
+			item = ITEM_SCENE.instantiate()
+			list_container.add_child(item)
+			
 		item.setup(q_state, i)
+		item.visible = true
+		
+	# 2. Hide/Free Extras
+	if current_children.size() > all_quests.size():
+		for i in range(all_quests.size(), current_children.size()):
+			current_children[i].visible = false
+			# Optional: current_children[i].queue_free() if you want to be strict
 
 func show_panel():
 	# 1. Force the manager to re-check everything right now

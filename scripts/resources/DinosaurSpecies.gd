@@ -9,6 +9,7 @@ enum Diet {HERBIVORE, CARNIVORE}
 @export var animations: SpriteFrames
 @export var diet: Diet = Diet.HERBIVORE
 @export var base_dna_cost: int = 10
+@export var base_fossil_cost: int = 2 # NEW: Premium Cost
 @export var passive_dna_yield: int = 1
 @export var click_yield: int = 1 # DNA bonus when clicking this dino
 @export var global_click_bonus: int = 1 # Added to GLOBAL click value for every active unit of this species

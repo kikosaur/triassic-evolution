@@ -134,17 +134,27 @@ func _handle_movement(delta):
 	# Hunting Logic
 	if target_prey != null and is_instance_valid(target_prey):
 		dest = target_prey.global_position
-		move_speed = 60.0
-		if position.distance_to(dest) < 15.0:
+		move_speed = 120.0 # BOOSTED: Fast charge!
+		# Stop BESIDE the prey (30px gap), not inside it
+		if position.distance_to(dest) < 40.0:
 			_eat_prey(target_prey)
+			return # Stop moving
 
 	# Movement Physics
 	if position.distance_to(dest) > 5.0:
 		is_moving = true
 		position = position.move_toward(dest, move_speed * delta)
 		
-		# ANIMATION: Walk
-		_play_scaled_anim("walk")
+		# ANIMATION LOGIC
+		if target_prey != null:
+			# CHARGING: Play "attack" if available, else walk
+			if anim.sprite_frames.has_animation("attack"):
+				_play_scaled_anim("attack")
+			else:
+				_play_scaled_anim("walk")
+		else:
+			# WANDERING: Just walk
+			_play_scaled_anim("walk")
 			
 		# FLIP
 		if dest.x < position.x:
@@ -168,26 +178,40 @@ func _on_tick():
 	var ate_food = false
 	var rate = species_data.consumption_rate if species_data.consumption_rate != null else 0.05
 	
+	# --- HERBIVORES ---
 	if species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
-		ate_food = GameManager.consume_vegetation(rate)
+		if GameManager.vegetation_density > 0:
+			ate_food = GameManager.consume_vegetation(rate)
+			# Only play eat animation if we actually ate something real
+			if ate_food:
+				_play_eat_animation()
+				# Generate DNA
+				var income = species_data.passive_dna_yield * passive_timer.wait_time
+				GameManager.add_dna(income)
+		else:
+			# Vegetation is 0%. Stop eating, just walk/idle.
+			ate_food = false
+			pass
+
+	# --- CARNIVORES ---
 	else:
-		ate_food = GameManager.consume_critters(rate)
+		if GameManager.critter_density > 0:
+			ate_food = GameManager.consume_critters(rate)
+			if ate_food:
+				# Generate DNA
+				var income = species_data.passive_dna_yield * passive_timer.wait_time
+				GameManager.add_dna(income)
+				target_prey = null # Satisfied, stop hunting
+		else:
+			# Critters are 0%. Trigger HUNT MODE.
+			ate_food = false
+			# Trigger Hunt Logic immediately
+			if target_prey == null:
+				target_prey = GameManager.get_nearest_herbivore(global_position)
+				if target_prey:
+					pass
 	
-	if ate_food:
-		# Scale reward by the time interval (Burst income)
-		var income = species_data.passive_dna_yield * passive_timer.wait_time
-		GameManager.add_dna(income)
-		
-		hunger = 0.0
-		target_prey = null
-		_play_eat_animation()
-	else:
-		hunger += 1.0
-		# Trigger Hunt Logic
-		if species_data.diet == DinosaurSpecies.Diet.CARNIVORE and hunger > 5.0 and target_prey == null:
-			target_prey = GameManager.get_nearest_herbivore(global_position)
-	
-	# Reset timer to new random interval
+	# Reset timer to new random interval (20-30s)
 	passive_timer.wait_time = randf_range(20.0, 30.0)
 
 func _play_eat_animation():
@@ -197,9 +221,11 @@ func _play_eat_animation():
 	# Play "eat" animation if it exists
 	if anim.sprite_frames.has_animation("eat"):
 		_play_scaled_anim("eat")
-		await anim.animation_finished # Wait for it to finish
+		# FIX: Do NOT use 'await anim.animation_finished' because if the sprite 
+		# loop is ON, it never finishes! Use a fixed time instead.
+		await get_tree().create_timer(1.2).timeout
 	else:
-		# Fallback if no eat animation: just wait 0.5s
+		# Fallback if no eat animation: wait 0.5s
 		await get_tree().create_timer(0.5).timeout
 	
 	is_eating = false

@@ -36,3 +36,8 @@ func _on_scroll_input(event):
 		# Inverse the relative motion to "pull" the map
 		scroll_container.scroll_horizontal -= event.relative.x
 		scroll_container.scroll_vertical -= event.relative.y
+
+func open_research_popup(research_def: ResearchDef):
+	var popup = $ResearchPopup
+	if popup:
+		popup.setup(research_def)

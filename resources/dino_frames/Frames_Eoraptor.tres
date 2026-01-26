@@ -1,9 +1,27 @@
-[gd_resource type="SpriteFrames" load_steps=18 format=3 uid="uid://18f7trafdej3"]
+[gd_resource type="SpriteFrames" load_steps=24 format=3 uid="uid://18f7trafdej3"]
 
 [ext_resource type="Texture2D" uid="uid://bbn6smi0oeqy1" path="res://assets/dinosaurs/die/03.png" id="1_0wta0"]
+[ext_resource type="Texture2D" uid="uid://ba3dv70gakdg3" path="res://assets/dinosaurs/attack/eoraptor.png" id="1_g4tpu"]
 [ext_resource type="Texture2D" uid="uid://bero8kmgap2v5" path="res://assets/dinosaurs/02-1.png" id="1_uy0rq"]
 [ext_resource type="Texture2D" uid="uid://7os2yt2q3m80" path="res://assets/dinosaurs/02-2.png" id="2_0wta0"]
 [ext_resource type="Texture2D" uid="uid://8eu8jyqgwnbc" path="res://assets/dinosaurs/eat/03.png" id="2_bejvm"]
+[ext_resource type="Texture2D" uid="uid://b78wc6jtq6t2u" path="res://assets/dinosaurs/attack/eoraptor2.png" id="2_ntp6n"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a4032"]
+atlas = ExtResource("1_g4tpu")
+region = Rect2(0, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kpy4c"]
+atlas = ExtResource("1_g4tpu")
+region = Rect2(1408, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uw36s"]
+atlas = ExtResource("1_g4tpu")
+region = Rect2(0, 752, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjsql"]
+atlas = ExtResource("2_ntp6n")
+region = Rect2(0, 752, 1408, 752)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_olmx5"]
 atlas = ExtResource("1_0wta0")
@@ -59,6 +77,23 @@ region = Rect2(1407, 740, 1407, 688)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a4032")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kpy4c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uw36s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fjsql")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_olmx5")

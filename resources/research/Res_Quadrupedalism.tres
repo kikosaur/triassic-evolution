@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://cdqs1216c16xt"]
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://cdqs1216c16xt"]
 
 [ext_resource type="Texture2D" uid="uid://b4pkb7q3xjep0" path="res://assets/traits/T011_Quadrupedalism.png" id="1_pplnr"]
 [ext_resource type="Resource" uid="uid://bieatstnxlvki" path="res://resources/research/Res_Cycads.tres" id="2_6n0xh"]
 [ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_cdiuf"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_Quadrupedalism.tres" id="4_trait"]
 
 [resource]
 script = ExtResource("3_cdiuf")
@@ -12,3 +13,4 @@ icon = ExtResource("1_pplnr")
 type = 1
 dna_cost = 4000
 parent_research = ExtResource("2_6n0xh")
+unlock_trait = ExtResource("4_trait")

@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_x52go")
 species_name = "Coelophysis"
-visual_scale = 3.2
+visual_scale = 1.8
 animations = ExtResource("1_pb518")
 diet = 1
 base_dna_cost = 7500
@@ -20,4 +20,5 @@ ideal_biome_phase = 3
 base_lifespan = 240.0
 scientific_name = "Coelophysis bauri"
 length = "1m × 3m"
+time_period = "221–196 Million Years Ago"
 description = "Fast, slender hunters that rely on speed rather than strength. Their hollow bones make them incredibly light."

@@ -2,14 +2,13 @@
 
 [ext_resource type="Texture2D" uid="uid://ej8s8d67j5pc" path="res://assets/dino_icon/Archosaur.png" id="1_6y145"]
 [ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="2_4bykm"]
-
-[sub_resource type="Resource" id="Resource_763dp"]
-metadata/__load_path__ = "res://resources/dinos/Archosaur.tres"
+[ext_resource type="Resource" uid="uid://p8ukqi65mh8o" path="res://resources/dinos/00_Archosaur.tres" id="3_dino"]
 
 [resource]
 script = ExtResource("2_4bykm")
 id = "node_archosaur"
 display_name = "Archosaur"
 icon = ExtResource("1_6y145")
+description = "The 'great-grandfather' of dinosaurs and crocodiles. A rugged survivor of the arid scrublands."
 dna_cost = 0
-unlock_species = SubResource("Resource_763dp")
+unlock_species = ExtResource("3_dino")

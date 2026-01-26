@@ -21,7 +21,27 @@ func setup(research_def: ResearchDef):
 	current_research = research_def
 	
 	name_label.text = research_def.display_name
-	desc_label.text = research_def.description
+	
+	# IMPROVEMENT: Use the description from the linked resource if available
+	# This ensures the details match the actual item (Dino, Trait, Habitat)
+	var final_desc = research_def.description
+	
+	if research_def.unlock_species and "description" in research_def.unlock_species:
+		final_desc = research_def.unlock_species.description
+	elif "unlock_trait" in research_def and research_def.unlock_trait and "description" in research_def.unlock_trait:
+		final_desc = research_def.unlock_trait.description
+	elif "unlock_habitat" in research_def and research_def.unlock_habitat:
+		# HabitatDefs use 'display_name', but verify just in case
+		var hab = research_def.unlock_habitat
+		if "description" in hab and hab.description != "":
+			final_desc = hab.description
+		elif "display_name" in hab:
+			final_desc = "Unlocks: " + hab.display_name
+		elif "name" in hab:
+			final_desc = "Unlocks: " + hab.name
+			
+	desc_label.text = final_desc
+	
 	if research_def.icon:
 		icon_rect.texture = research_def.icon
 		

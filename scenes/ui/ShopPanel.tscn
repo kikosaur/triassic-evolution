@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c5xetkp3c7xg"]
+[gd_scene load_steps=18 format=3 uid="uid://c5xetkp3c7xg"]
 
 [ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_1rqtx"]
 [ext_resource type="Resource" uid="uid://p8ukqi65mh8o" path="res://resources/dinos/00_Archosaur.tres" id="2_0afna"]
@@ -15,6 +15,8 @@
 [ext_resource type="Resource" uid="uid://byvtwx1edrsbc" path="res://resources/habitat/Item_CycadCrate.tres" id="12_4vjsq"]
 [ext_resource type="Resource" uid="uid://jx4uf6mca1ap" path="res://resources/habitat/Item_BugJar.tres" id="13_0jjce"]
 [ext_resource type="Resource" uid="uid://bc2k2eafgc0rt" path="res://resources/habitat/Item_DragonflySwarm.tres" id="14_0pf5p"]
+[ext_resource type="FontFile" uid="uid://bwwxs05nocmm8" path="res://assets/fonts/PressStart2P-Regular.ttf" id="16_0pf5p"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ShopPopup.tscn" id="popup_scene"]
 
 [node name="ShopPanel" type="Panel"]
 anchors_preset = 15
@@ -32,11 +34,14 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -32.0
-offset_right = 32.0
-offset_bottom = 23.0
+offset_left = -85.5
+offset_top = 14.0
+offset_right = 85.5
+offset_bottom = 49.0
 grow_horizontal = 2
-text = "MARKET"
+theme_override_fonts/font = ExtResource("16_0pf5p")
+theme_override_font_sizes/font_size = 25
+text = "DINO MARKET"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -45,8 +50,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 23.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_font_sizes/font_size = 25
 current_tab = 0
 
 [node name="Dinosaurs" type="ScrollContainer" parent="TabContainer"]
@@ -101,12 +108,14 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -80.0
-offset_top = 5.0
-offset_right = -10.0
-offset_bottom = 45.0
+offset_left = -100.0
+offset_bottom = 100.0
 grow_horizontal = 0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 50
 text = "X"
+
+[node name="ShopPopup" parent="." instance=ExtResource("popup_scene")]
+visible = false
+layout_mode = 1
 
 [connection signal="pressed" from="CloseButton" to="." method="hide"]

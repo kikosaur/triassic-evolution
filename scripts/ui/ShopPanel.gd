@@ -57,7 +57,12 @@ func _on_visibility_changed():
 			s.process_mode = PROCESS_MODE_DISABLED
 
 func _populate_shop():
-	# 1. CLEAR OLD ITEMS (From both grids)
+	# OPTIMIZATION: Only instantiate if empty
+	if dino_grid.get_child_count() > 0:
+		_refresh_items()
+		return
+
+	# 1. CLEAR OLD ITEMS (Only if force reset needed, but here we assume safe start)
 	for child in dino_grid.get_children(): child.queue_free()
 	for child in hab_grid.get_children(): child.queue_free()
 	
@@ -68,6 +73,16 @@ func _populate_shop():
 	# 3. FILL HABITAT TAB
 	for hab in habitat_products:
 		_create_card(null, hab, hab_grid)
+
+func _refresh_items():
+	# Update all existing cards
+	for card in dino_grid.get_children():
+		if card.has_method("_check_lock_status"): card._check_lock_status()
+		if card.has_method("_update_display"): card._update_display()
+		
+	for card in hab_grid.get_children():
+		if card.has_method("_check_lock_status"): card._check_lock_status()
+		if card.has_method("_update_display"): card._update_display()
 
 # We added a 'target_grid' argument so we know where to put the card
 func _create_card(dino_data, hab_data, target_grid):
@@ -111,4 +126,13 @@ func _add_item_to_grid(dino_data, hab_data, target_grid):
 		card._update_display()
 	
 	# 4. RE-RUN VISIBILITY CHECK IMMEDIATELY
+	# 4. RE-RUN VISIBILITY CHECK IMMEDIATELY
 	card._process(0)
+
+func open_shop_popup(item_data):
+	var popup = $ShopPopup
+	if popup:
+		if item_data is DinosaurSpecies:
+			popup.setup_dinosaur(item_data)
+		elif item_data is HabitatProduct:
+			popup.setup_habitat(item_data)

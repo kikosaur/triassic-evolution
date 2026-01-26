@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_iysgw")
 species_name = "Panphagia"
-visual_scale = 3.0
+visual_scale = 1.6
 animations = ExtResource("1_4ammk")
 base_dna_cost = 3000
 passive_dna_yield = 53
@@ -19,4 +19,5 @@ ideal_biome_phase = 2
 base_lifespan = 180.0
 scientific_name = "Panphagia protos"
 length = "0.7m × 1.5m"
+time_period = "231–228 Million Years Ago"
 description = "It looks like a meat-eater, but its stomach is evolving to digest plants. A transitionary species."

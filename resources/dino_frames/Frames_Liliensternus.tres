@@ -1,9 +1,26 @@
-[gd_resource type="SpriteFrames" load_steps=18 format=3 uid="uid://4grne4mo0gq4"]
+[gd_resource type="SpriteFrames" load_steps=23 format=3 uid="uid://4grne4mo0gq4"]
 
 [ext_resource type="Texture2D" uid="uid://bv2t1s4wnut0j" path="res://assets/dinosaurs/die/08.png" id="1_18jba"]
+[ext_resource type="Texture2D" uid="uid://bgcijbp3mo4a3" path="res://assets/dinosaurs/attack/lilien.png" id="1_67f1c"]
 [ext_resource type="Texture2D" uid="uid://crwt6silivjb1" path="res://assets/dinosaurs/07-1.png" id="1_c2cwu"]
 [ext_resource type="Texture2D" uid="uid://385xi58xlsi1" path="res://assets/dinosaurs/07-2.png" id="2_18jba"]
 [ext_resource type="Texture2D" uid="uid://24voihghcefs" path="res://assets/dinosaurs/eat/08.png" id="2_bim5u"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_umr70"]
+atlas = ExtResource("1_67f1c")
+region = Rect2(0, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xh43p"]
+atlas = ExtResource("1_67f1c")
+region = Rect2(1408, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x42q4"]
+atlas = ExtResource("1_67f1c")
+region = Rect2(0, 752, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_05tmn"]
+atlas = ExtResource("1_67f1c")
+region = Rect2(1408, 752, 1408, 752)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lxnef"]
 atlas = ExtResource("1_18jba")
@@ -59,6 +76,23 @@ region = Rect2(1408, 752, 1408, 752)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_umr70")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xh43p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x42q4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_05tmn")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lxnef")

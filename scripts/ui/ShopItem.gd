@@ -1,93 +1,107 @@
-extends Panel # Changed from PanelContainer to match the new "Card" root
+extends Panel
 
 @export var species_data: DinosaurSpecies
 @export var habitat_data: HabitatProduct
+
 @export var required_research_id: String = ""
 
-# --- UPDATED UI REFERENCES (Vertical Layout) ---
-@onready var icon_rect = $MarginContainer/VBoxContainer/IconRect
 @onready var name_lbl = $MarginContainer/VBoxContainer/NameLabel
-@onready var price_lbl = $MarginContainer/VBoxContainer/PriceLabel # We use this for Cost/Stats now
-@onready var buy_btn = $MarginContainer/VBoxContainer/BuyButton
-@onready var diet_icon = %DietIcon
+# @onready var price_lbl = ... (Removed)
+@onready var dna_lbl = $MarginContainer/VBoxContainer/CostContainer/HBoxDNA/Label
+@onready var fos_lbl = $MarginContainer/VBoxContainer/CostContainer/HBoxFossil/Label
 
-# Preload diet icons
-var herbivore_icon = preload("res://assets/ui/herbivore_icon.svg")
-var carnivore_icon = preload("res://assets/ui/carnivore_icon.svg")
+@onready var icon_rect = $MarginContainer/VBoxContainer/IconRect
+@onready var diet_icon = %DietIcon # Unique Name
+@onready var click_btn = $ClickButton
 
 func _ready():
-	buy_btn.pressed.connect(_on_buy)
+	click_btn.pressed.connect(_on_click)
+	
+	# Optimization: Listen for unlock events instead of polling in _process
+	if GameManager.has_signal("research_unlocked"):
+		GameManager.connect("research_unlocked", _on_research_unlocked)
+		
+	# Initial Checks
+	_setup_static_icons()
 	_update_display()
+	_check_lock_status()
+
+func _setup_static_icons():
+	# Manually load icons to avoid .tscn Parse Errors with new assets
+	var dna_icon = $MarginContainer/VBoxContainer/CostContainer/HBoxDNA/Icon
+	var fos_icon = $MarginContainer/VBoxContainer/CostContainer/HBoxFossil/Icon
+	
+	dna_icon.texture = load("res://assets/ui/dna_icon.svg")
+	fos_icon.texture = load("res://assets/ui/fossil_icon.svg")
+
+	
+func _on_research_unlocked(_id):
+	_check_lock_status()
+	
+func _check_lock_status():
+	var is_locked = false
+	if required_research_id != "":
+		if not GameManager.is_research_unlocked(null): # Helper hack or check list directly
+			# We can check list directly since we are in UI
+			if required_research_id not in GameManager.unlocked_research_ids:
+				is_locked = true
+			
+	if is_locked:
+		modulate = Color(0.5, 0.5, 0.5) # Dimmed
+		click_btn.disabled = true
+	else:
+		modulate = Color(1, 1, 1)
+		click_btn.disabled = false
 
 func _update_display():
-	# CASE 1: SELLING A DINO
+	# CASE 1: SELLING DINOSAUR
 	if species_data:
 		name_lbl.text = species_data.species_name
-		var cost = GameManager.get_dino_cost(species_data)
-		price_lbl.text = GameManager.format_number(cost) + " DNA"
+		
+		# Show DNA Cost / Fossil Cost
+		var cost_dna = GameManager.get_dino_cost(species_data)
+		var cost_fos = GameManager.get_dino_fossil_cost(species_data)
+		
+		dna_lbl.text = GameManager.format_number(cost_dna)
+		fos_lbl.text = str(cost_fos)
+		
 		if species_data.icon:
 			icon_rect.texture = species_data.icon
-		
-		# Set diet icon
-		if species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
-			diet_icon.texture = herbivore_icon
-			diet_icon.visible = true
-		else: # CARNIVORE
-			diet_icon.texture = carnivore_icon
-			diet_icon.visible = true
-	
+			
+		# Diet Icon Logic (Optional, keep if previously existing)
+		match species_data.diet:
+			0: diet_icon.modulate = Color(0, 1, 0) # Green (Herb)
+			1: diet_icon.modulate = Color(1, 0, 0) # Red (Carn)
+			2: diet_icon.modulate = Color(1, 1, 0) # Omnivore
+			
 	# CASE 2: SELLING HABITAT
 	elif habitat_data:
 		name_lbl.text = habitat_data.name
 		var cost = GameManager.get_habitat_cost(habitat_data)
-		# Format: "500 DNA | +10%"
-		price_lbl.text = GameManager.format_number(cost) + " DNA\n+" + str(habitat_data.density_gain) + "% Density"
+		var cost_fos = habitat_data.fossil_cost if "fossil_cost" in habitat_data else 1
+		
+		dna_lbl.text = GameManager.format_number(cost)
+		fos_lbl.text = str(cost_fos)
+		
 		if habitat_data.icon:
 			icon_rect.texture = habitat_data.icon
 		
-		# Hide diet icon for habitats
-		diet_icon.visible = false
+		# Clear Diet Icon for Habitats
+		diet_icon.texture = null
+		
+	# FORCE LOCK CHECK ON UPDATE
+	_check_lock_status()
 
-func _process(_delta):
-	# 1. VISIBILITY CHECK (The "Locked" System) (Unchanged)
-	if required_research_id != "":
-		visible = (required_research_id in GameManager.unlocked_research_ids)
+func _on_click():
+	# Double check lock
+	if click_btn.disabled: return
 
-	# 2. AFFORDABILITY CHECK
-	var cost = 0
-	if species_data:
-		cost = GameManager.get_dino_cost(species_data)
-	if habitat_data:
-		cost = GameManager.get_habitat_cost(habitat_data)
-	
-	if GameManager.current_dna >= cost:
-		buy_btn.disabled = false
-		buy_btn.text = "HATCH" if species_data else "BUILD"
+	# Find parent ShopPanel and open popup
+	var shop = find_parent("ShopPanel")
+	if shop and shop.has_method("open_shop_popup"):
+		if species_data:
+			shop.open_shop_popup(species_data)
+		elif habitat_data:
+			shop.open_shop_popup(habitat_data)
 	else:
-		buy_btn.disabled = true
-		buy_btn.text = "NEED DNA"
-
-func _on_buy():
-	# BUYING DINO
-	AudioManager.play_sfx("click")
-	if species_data:
-		var cost = GameManager.get_dino_cost(species_data)
-		if GameManager.try_spend_dna(cost):
-			GameManager.trigger_dino_spawn(species_data)
-			_update_display() # Update price for next one!
-			
-	# BUYING HABITAT
-	elif habitat_data:
-		var cost = GameManager.get_habitat_cost(habitat_data)
-		if GameManager.try_spend_dna(cost):
-			if habitat_data.type == HabitatProduct.ProductType.VEGETATION:
-				GameManager.vegetation_density += habitat_data.density_gain
-			else:
-				GameManager.critter_density += habitat_data.density_gain
-			
-			# Clamp to 100%
-			if GameManager.vegetation_density > 100: GameManager.vegetation_density = 100
-			if GameManager.critter_density > 100: GameManager.critter_density = 100
-			
-			GameManager.emit_signal("habitat_updated", GameManager.vegetation_density, GameManager.critter_density)
-			_update_display() # Update price!
+		print("ShopItem: Could not find ShopPanel!")

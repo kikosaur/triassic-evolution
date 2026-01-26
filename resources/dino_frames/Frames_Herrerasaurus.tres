@@ -1,9 +1,27 @@
-[gd_resource type="SpriteFrames" load_steps=18 format=3 uid="uid://drpwwthvbpj2x"]
+[gd_resource type="SpriteFrames" load_steps=24 format=3 uid="uid://drpwwthvbpj2x"]
 
 [ext_resource type="Texture2D" uid="uid://bd0jjls26irpv" path="res://assets/dinosaurs/die/04.png" id="1_p4wcl"]
+[ext_resource type="Texture2D" uid="uid://c42yjqkmslqnl" path="res://assets/dinosaurs/attack/Herrasaurus.png" id="1_r3nie"]
 [ext_resource type="Texture2D" uid="uid://dsb2xxckgjc7r" path="res://assets/dinosaurs/03-1.png" id="1_rsdpm"]
+[ext_resource type="Texture2D" uid="uid://cqvwgxauwults" path="res://assets/dinosaurs/attack/Herrasaurus2.png" id="2_e3tog"]
 [ext_resource type="Texture2D" uid="uid://cs53c6ls6deby" path="res://assets/dinosaurs/03-2.png" id="2_p4wcl"]
 [ext_resource type="Texture2D" uid="uid://hsnvej540xnt" path="res://assets/dinosaurs/eat/04.png" id="2_q82hh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_moljq"]
+atlas = ExtResource("1_r3nie")
+region = Rect2(0, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yxp7c"]
+atlas = ExtResource("1_r3nie")
+region = Rect2(1408, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_thgn7"]
+atlas = ExtResource("2_e3tog")
+region = Rect2(1408, 752, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjdpy"]
+atlas = ExtResource("2_e3tog")
+region = Rect2(0, 752, 1408, 752)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5sy11"]
 atlas = ExtResource("1_p4wcl")
@@ -59,6 +77,23 @@ region = Rect2(1408, 752, 1408, 752)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_moljq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yxp7c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_thgn7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wjdpy")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5sy11")

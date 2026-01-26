@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://d1pvlplrkkm5d"]
+[gd_scene load_steps=32 format=3 uid="uid://d1pvlplrkkm5d"]
 
 [ext_resource type="PackedScene" uid="uid://c00m4rc8me8mk" path="res://scenes/ui/ResearchNode.tscn" id="1_227w5"]
 [ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="1_i47bq"]
@@ -29,6 +29,8 @@
 [ext_resource type="Resource" uid="uid://5oqoew1xql4g" path="res://resources/research/Res_Gigantism.tres" id="23_pwsc5"]
 [ext_resource type="Resource" uid="uid://cnip6u6ff77pd" path="res://resources/research/Res_Forest.tres" id="24_hsv2h"]
 [ext_resource type="Resource" uid="uid://c38wg5mjivw52" path="res://resources/research/Res_Riojasaurus.tres" id="26_r1lwx"]
+[ext_resource type="FontFile" uid="uid://bwwxs05nocmm8" path="res://assets/fonts/PressStart2P-Regular.ttf" id="31_xej3i"]
+[ext_resource type="PackedScene" uid="uid://bdwhyprxyinfn" path="res://scenes/ui/ResearchPopup.tscn" id="popup_scene"]
 
 [node name="ResearchMenu" type="Control"]
 layout_mode = 3
@@ -41,7 +43,6 @@ theme = ExtResource("1_i47bq")
 script = ExtResource("1_logic")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,6 +69,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("1_i47bq")
+
+[node name="Label" type="Label" parent="ScrollContainer/Content/Panel"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 100.0
+offset_right = 370.0
+offset_bottom = 153.0
+theme_override_fonts/font = ExtResource("31_xej3i")
+theme_override_font_sizes/font_size = 25
+text = "UNLOCK ALL
+RESEARCH!"
 
 [node name="TreeContainer" type="Control" parent="ScrollContainer/Content"]
 custom_minimum_size = Vector2(2500, 800)
@@ -96,32 +108,32 @@ offset_bottom = 350.0
 my_data = ExtResource("3_nfsx2")
 parent_node = NodePath("../Node_Archosaur")
 
-[node name="Node_Perforate" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Lagosuchus" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 350.0
 offset_top = 350.0
-offset_right = 350.0
-offset_bottom = 350.0
-my_data = ExtResource("4_4kojt")
+offset_right = 430.0
+offset_bottom = 490.0
+my_data = ExtResource("4_0wg30")
 parent_node = NodePath("../Node_Upright")
 
-[node name="Node_Serrated" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Perforate" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 500.0
 offset_top = 200.0
-offset_right = 500.0
-offset_bottom = 200.0
-my_data = ExtResource("5_8k568")
-parent_node = NodePath("../Node_Perforate")
+offset_right = 580.0
+offset_bottom = 340.0
+my_data = ExtResource("4_4kojt")
+parent_node = NodePath("../Node_Lagosuchus")
 
-[node name="Node_Lagosuchus" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
+[node name="Node_Serrated" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
 offset_left = 650.0
 offset_top = 200.0
-offset_right = 650.0
-offset_bottom = 200.0
-my_data = ExtResource("4_0wg30")
-parent_node = NodePath("../Node_Serrated")
+offset_right = 730.0
+offset_bottom = 340.0
+my_data = ExtResource("5_8k568")
+parent_node = NodePath("../Node_Perforate")
 
 [node name="Node_Pools" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
@@ -130,7 +142,7 @@ offset_top = 200.0
 offset_right = 800.0
 offset_bottom = 200.0
 my_data = ExtResource("7_73oii")
-parent_node = NodePath("../Node_Lagosuchus")
+parent_node = NodePath("../Node_Serrated")
 
 [node name="Node_Intra" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
@@ -202,7 +214,7 @@ offset_top = 500.0
 offset_right = 500.0
 offset_bottom = 500.0
 my_data = ExtResource("14_n8xt4")
-parent_node = NodePath("../Node_Perforate")
+parent_node = NodePath("../Node_Lagosuchus")
 
 [node name="Node_Eoraptor" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0
@@ -317,13 +329,15 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -80.0
-offset_top = 5.0
-offset_right = -10.0
-offset_bottom = 45.0
+offset_left = -100.0
+offset_bottom = 100.0
 grow_horizontal = 0
 theme = ExtResource("1_i47bq")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 50
 text = "X"
+
+[node name="ResearchPopup" parent="." instance=ExtResource("popup_scene")]
+visible = false
+layout_mode = 1
 
 [connection signal="pressed" from="CloseButton" to="." method="hide"]

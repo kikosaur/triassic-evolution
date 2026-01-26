@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://dokfn21d77bsq"]
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://dokfn21d77bsq"]
 
 [ext_resource type="Texture2D" uid="uid://ddiwy60bxpjo0" path="res://assets/traits/T06_Gastroliths.png" id="1_stpfy"]
 [ext_resource type="Resource" uid="uid://dqpvaomvoc54q" path="res://resources/research/Res_River.tres" id="2_1kivw"]
 [ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_8m8wk"]
+[ext_resource type="Resource" path="res://resources/traits/Trait_Gastroliths.tres" id="4_trait"]
 
 [resource]
 script = ExtResource("3_8m8wk")
@@ -12,3 +13,4 @@ icon = ExtResource("1_stpfy")
 type = 1
 dna_cost = 1500
 parent_research = ExtResource("2_1kivw")
+unlock_trait = ExtResource("4_trait")

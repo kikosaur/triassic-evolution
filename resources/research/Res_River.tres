@@ -1,14 +1,17 @@
-[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://dqpvaomvoc54q"]
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://dqpvaomvoc54q"]
 
 [ext_resource type="Texture2D" uid="uid://d4jqmquu6jv85" path="res://assets/habitat_traits/H03_River_System.png" id="1_ufv2x"]
 [ext_resource type="Resource" uid="uid://ckainrtb3skft" path="res://resources/research/Res_Panphagia.tres" id="2_uepos"]
 [ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_r00lk"]
+[ext_resource type="Resource" path="res://resources/habitats/Habitat_River.tres" id="4_habitat"]
 
 [resource]
 script = ExtResource("3_r00lk")
 id = "node_river"
 display_name = "River Delta"
 icon = ExtResource("1_ufv2x")
+description = "Flowing water networks that support lush vegetation and sustain larger populations."
 type = 2
 dna_cost = 1000
 parent_research = ExtResource("2_uepos")
+unlock_habitat = ExtResource("4_habitat")

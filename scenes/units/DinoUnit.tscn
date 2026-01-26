@@ -6,6 +6,7 @@
 animations = []
 
 [node name="DinoUnit" type="CharacterBody2D" groups=["dinos"]]
+y_sort_enabled = true
 script = ExtResource("1_y6qrp")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]

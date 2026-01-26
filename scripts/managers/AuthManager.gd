@@ -246,6 +246,16 @@ func load_game_from_cloud() -> void:
 	db_request.request(url, headers, HTTPClient.METHOD_GET)
 
 func _on_load_completed(_res: int, code: int, _head: PackedStringArray, body: PackedByteArray) -> void:
+	# 1. Check for Token Expiry (401)
+	if code == 401 or code == 403:
+		if DEBUG_MODE:
+			print("AuthManager: Session expired or invalid. Logging out.")
+		delete_session() # Clear the bad token
+		user_id = ""
+		user_token = ""
+		emit_signal("save_data_loaded", false) # Signal FAILURE
+		return
+
 	if code != 200:
 		if DEBUG_MODE:
 			print("AuthManager: Error loading save, code ", code)
@@ -267,5 +277,28 @@ func _on_load_completed(_res: int, code: int, _head: PackedStringArray, body: Pa
 		# Ensure we start fresh (clear any old data in memory)
 		GameManager.reset_game_state()
 		
-		# Even if no save, we are done loading (fresh start)
-		emit_signal("save_data_loaded", true)
+# --- LOCAL SAVE (BACKUP / EXTERNAL) ---
+
+const LOCAL_SAVE_FILE: String = "user://offline_save.json"
+
+func save_game_local(save_data: Dictionary) -> void:
+	var file = FileAccess.open(LOCAL_SAVE_FILE, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(save_data))
+		if DEBUG_MODE:
+			print("AuthManager: Local backup saved.")
+
+func load_game_local() -> bool:
+	if not FileAccess.file_exists(LOCAL_SAVE_FILE):
+		return false
+		
+	var file = FileAccess.open(LOCAL_SAVE_FILE, FileAccess.READ)
+	if file:
+		var content = file.get_as_text()
+		var json = JSON.parse_string(content)
+		if json:
+			if DEBUG_MODE:
+				print("AuthManager: Local save found, loading...")
+			GameManager.load_save_dictionary(json)
+			return true
+	return false

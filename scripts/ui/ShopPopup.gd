@@ -5,6 +5,9 @@ extends Panel
 @onready var desc_label = %DescLabel
 @onready var btn_dna = %BtnDNA
 @onready var btn_fossil = %BtnFossil
+@onready var lbl_diet = %DietLabel
+@onready var lbl_life = %LifespanLabel
+@onready var lbl_traits = %TraitsLabel
 
 var current_species: DinosaurSpecies
 var current_habitat: HabitatProduct
@@ -21,6 +24,33 @@ func setup_dinosaur(species: DinosaurSpecies):
 	name_label.text = species.species_name
 	desc_label.text = species.description if "description" in species else "A prehistoric dinosaur."
 	
+	# 1. DIET
+	var diet_str = "Unknown"
+	if species.diet == 0: diet_str = "Herbivore 🌿"
+	elif species.diet == 1: diet_str = "Carnivore 🥩"
+	lbl_diet.text = "Diet: " + diet_str
+	
+	# 2. LIFESPAN
+	lbl_life.text = "Lifespan: %s Seconds (Years in Game)" % str(species.base_lifespan)
+	
+	# 3. TRAITS
+	# Assuming 'traits' is an Array[DinoTrait]
+	# If property doesn't exist, handle safely
+	var trait_list = []
+	if "traits" in species and species.traits:
+		for t in species.traits:
+			if "display_name" in t: trait_list.append(t.display_name)
+	
+	if trait_list.is_empty():
+		lbl_traits.text = "Traits: None"
+	else:
+		lbl_traits.text = "Traits: " + ", ".join(trait_list)
+		
+	# Show all stats
+	lbl_diet.visible = true
+	lbl_life.visible = true
+	lbl_traits.visible = true
+	
 	if species.icon:
 		icon_rect.texture = species.icon
 		
@@ -34,6 +64,20 @@ func setup_habitat(habitat: HabitatProduct):
 	name_label.text = habitat.name
 	# Habitat might not have description yet, add fallback
 	desc_label.text = "Enhances habitat density."
+	
+	# REUSE LABELS FOR HABITAT INFO
+	
+	# 1. TARGET (Diet Label)
+	if habitat.type == 0: # VEGETATION
+		lbl_diet.text = "Target: Herbivores 🌿"
+	else:
+		lbl_diet.text = "Target: Carnivores 🥩"
+		
+	# 2. DENSITY (Lifespan Label)
+	lbl_life.text = "Gain: +%s Density" % str(habitat.density_gain)
+	
+	# 3. HIDE TRAITS
+	lbl_traits.visible = false
 	
 	if habitat.icon:
 		icon_rect.texture = habitat.icon

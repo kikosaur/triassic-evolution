@@ -12,6 +12,7 @@ extends Panel
 @onready var info_panel = $InfoPanel
 var time_warp_btn: Button
 var logout_btn: Button
+var extinction_btn: Button
 
 # --- DEFINE YOUR TEXT HERE ---
 # We use BBCode ([b], [color]) to make the text look nice.
@@ -77,6 +78,32 @@ func _ready():
 	logout_btn = get_node_or_null("MarginContainer/VBoxContainer/BtnLogout")
 	if logout_btn:
 		logout_btn.pressed.connect(_on_logout_pressed)
+		
+	# 6. CONNECT EXTINCTION BUTTON
+	extinction_btn = get_node_or_null("MarginContainer/VBoxContainer/BtnExtinction")
+	if extinction_btn:
+		extinction_btn.pressed.connect(_on_extinction_pressed)
+		
+	# Refresh button visibility when opening settings
+	visibility_changed.connect(_on_visibility_changed)
+
+func _on_visibility_changed():
+	if visible:
+		_check_extinction_status()
+
+func _check_extinction_status():
+	if not extinction_btn: return
+	
+	if GameManager.is_win_condition_met():
+		extinction_btn.visible = true
+	else:
+		extinction_btn.visible = false
+
+func _on_extinction_pressed():
+	AudioManager.play_sfx("click")
+	# Trigger the event manually
+	GameManager.trigger_extinction()
+	hide()
 
 func _on_logout_pressed():
 	AudioManager.play_sfx("click")

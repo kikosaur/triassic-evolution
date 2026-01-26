@@ -24,8 +24,15 @@ var prestige_multiplier: float = 1.0
 
 # --- DATA TRACKING ---
 var unlocked_research_ids: Array = []
-var owned_dinosaurs: Dictionary = {} # THIS WAS MISSING!
-var tutorial_completed: bool = false # Tracks if player finished onboarding
+var owned_dinosaurs: Dictionary = {}
+var tutorial_completed: bool = false
+
+# --- CACHED STATS (Optimization) ---
+var _cached_dna_per_sec: int = 0
+var _cached_click_bonus: int = 0
+var _cached_dino_counts: Dictionary = {}
+var _cached_herbivores: Array = [] # New: Fast access for hunting
+var _cached_carnivores: Array = [] # New: Fast access (future proof)
 
 # --- DINO LIBRARY ---
 # Variable to hold the Dino Scene
@@ -55,6 +62,13 @@ func _ready():
 	add_child(auto_save_timer)
 	auto_save_timer.timeout.connect(_on_auto_save)
 	
+	# LISTEN FOR QUEST UPDATES
+	if QuestManager.has_signal("quests_updated"):
+		QuestManager.quests_updated.connect(_check_win_condition)
+		
+	# LISTEN FOR OWN RESEARCH UPDATES
+	research_unlocked.connect(_check_win_condition)
+	
 	# Passive regrowth removed by user request (Fix hunger mechanics)
 	
 	# Time System
@@ -76,19 +90,25 @@ func _setup_year_timer():
 
 
 func _on_auto_save() -> void:
-	# Only save if logged in!
+	var data = get_save_dictionary()
+	
+	# Always save local backup
+	AuthManager.save_game_local(data)
+	
+	# Only save cloud if logged in!
 	if AuthManager.user_id != "":
 		if DEBUG_MODE:
-			print("GameManager: Auto-saving...")
-		var data = get_save_dictionary()
+			print("GameManager: Cloud Auto-saving...")
 		AuthManager.save_game_to_cloud(data)
 
 
 func _notification(what):
 	# Save when the player quits the window
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		var data = get_save_dictionary()
+		AuthManager.save_game_local(data)
+		
 		if AuthManager.user_id != "":
-			var data = get_save_dictionary()
 			AuthManager.save_game_to_cloud(data)
 
 # --- CORE ECONOMY FUNCTIONS ---
@@ -149,30 +169,29 @@ func buy_critters():
 
 # --- CONSUMPTION LOGIC ---
 func consume_vegetation(amount: float) -> bool:
-	if vegetation_density >= amount:
-		vegetation_density -= amount
-		emit_signal("habitat_updated", vegetation_density, critter_density)
-		return true
-	return false
+	# USER REQUEST: Allow consumption even if it surpasses available amount.
+	# This means we just drain to 0 and always return true.
+	vegetation_density = max(0.0, vegetation_density - amount)
+	emit_signal("habitat_updated", vegetation_density, critter_density)
+	return true
 
 func consume_critters(amount: float) -> bool:
-	if critter_density >= amount:
-		critter_density -= amount
-		emit_signal("habitat_updated", vegetation_density, critter_density)
-		return true
-	return false
+	# USER REQUEST: Allow consumption even if it surpasses available amount.
+	critter_density = max(0.0, critter_density - amount)
+	emit_signal("habitat_updated", vegetation_density, critter_density)
+	return true
 
 # --- RESEARCH FUNCTIONS ---
 func is_research_unlocked(research_def: ResearchDef) -> bool:
 	if research_def == null: return true
 	return research_def.id in unlocked_research_ids
 
-func try_unlock_research(research_def: ResearchDef) -> void:
-	if research_def.id in unlocked_research_ids: return
+func try_unlock_research(research_def: ResearchDef) -> bool:
+	if research_def.id in unlocked_research_ids: return false
 
 	if research_def.parent_research:
 		if research_def.parent_research.id not in unlocked_research_ids:
-			return
+			return false
 
 	if try_spend_dna(research_def.dna_cost):
 		unlocked_research_ids.append(research_def.id)
@@ -186,6 +205,27 @@ func try_unlock_research(research_def: ResearchDef) -> void:
 			trigger_dino_spawn(research_def.unlock_species)
 			if DEBUG_MODE:
 				print("GameManager: Breakthrough! Free ", research_def.unlock_species.species_name)
+		return true
+	return false
+
+func try_unlock_research_with_fossils(research_def: ResearchDef) -> bool:
+	if research_def.id in unlocked_research_ids: return false
+
+	# Fossil Unlock might SKIP parent requirements? 
+	# User Request implied "Fast Track". But to be safe, let's enforce parents for now.
+	if research_def.parent_research:
+		if research_def.parent_research.id not in unlocked_research_ids:
+			if DEBUG_MODE: print("GameManager: Cannot buy with fossils - Parent locked")
+			return false
+
+	if try_spend_fossils(research_def.fossil_cost):
+		unlocked_research_ids.append(research_def.id)
+		emit_signal("research_unlocked", research_def.id)
+		
+		if research_def.unlock_species != null:
+			trigger_dino_spawn(research_def.unlock_species)
+		return true
+	return false
 
 func is_all_research_unlocked() -> bool:
 	# There are 17 total research nodes (based on files)
@@ -197,8 +237,21 @@ func trigger_dino_spawn(species_data: DinosaurSpecies):
 	emit_signal("dinosaur_spawned", species_data)
 
 func trigger_extinction():
+	# Only trigger if not already triggered (optional check, but good for safety)
 	emit_signal("extinction_triggered")
-	
+	if DEBUG_MODE: print("GameManager: EXTINCTION EVENT STARTED!")
+
+func is_win_condition_met() -> bool:
+	return is_all_research_unlocked() and QuestManager.are_all_quests_completed()
+
+func _check_win_condition(_ignored_arg = null):
+	# Just emit a signal if we want UI to react immediately, 
+	# but the UI will likely poll or update when opened.
+	if is_win_condition_met():
+		if DEBUG_MODE: print("GameManager: Win condition met! Waiting for player to trigger Extinction.")
+		# We could emit a signal here if we want a notification, e.g. "Extinction Ready!"
+
+
 	# --- BIOME HELPERS ---
 func get_current_biome_phase() -> int:
 	# Phase 1: Desert (0-30%)
@@ -216,21 +269,20 @@ func get_nearest_herbivore(hunter_position: Vector2) -> Node2D:
 	var shortest_dist = 99999.0
 	var nearest_prey = null
 	
-	# We need to access the container where dinos live.
-	# Ideally, MainGame should register itself, or we search the group "dinosaurs".
-	# Let's assume all dinos are in a Group named "dinos".
-	var all_dinos = get_tree().get_nodes_in_group("dinos")
-	
-	for dino in all_dinos:
-		# 1. Skip if dead or is the hunter itself
-		if dino.is_dead or dino.global_position == hunter_position: continue
+	# OPTIMIZATION: Use cached list instead of getting group every frame
+	# Note: The list effectively filters out dead dinos since cache is rebuilt on death/spawn
+	for dino in _cached_herbivores:
+		# Check validity (Double safety, though cache rebuild should handle it)
+		if not is_instance_valid(dino) or dino.is_dead: continue
 		
-		# 2. Check if it's a Herbivore (Diet 0)
-		if dino.species_data.diet == 0: # 0 = Herbivore
-			var dist = hunter_position.distance_to(dino.global_position)
-			if dist < shortest_dist:
-				shortest_dist = dist
-				nearest_prey = dino
+		# Skip if too far (simple optimization)? No, we want nearest.
+		# Skip if it's the hunter itself? (Unlikely since hunters are carnivores, but safety first)
+		if dino.global_position == hunter_position: continue
+		
+		var dist = hunter_position.distance_to(dino.global_position)
+		if dist < shortest_dist:
+			shortest_dist = dist
+			nearest_prey = dino
 				
 	return nearest_prey
 
@@ -256,7 +308,11 @@ func reset_game_state():
 	QuestManager.reset_quests()
 	tutorial_completed = false
 	
-	# 5. Update UI
+	# 5. Reset Year (User Request)
+	current_year = 0
+	emit_signal("year_advanced", current_year)
+	
+	# 6. Update UI
 	emit_signal("dna_changed", current_dna)
 	emit_signal("fossils_changed", fossils)
 	emit_signal("habitat_updated", vegetation_density, critter_density)
@@ -282,15 +338,15 @@ func get_save_dictionary() -> Dictionary:
 		"dinos": []
 	}
 	
-	# 2. Serialize Dinosaurs
+	# 2. Serialize Dinosaurs with Optimization
 	var dino_nodes = get_tree().get_nodes_in_group("dinos")
 	for dino in dino_nodes:
-		if not dino.is_dead:
+		if is_instance_valid(dino) and not dino.is_dead:
 			var d_data = {
-				"species_id": dino.species_data.species_name, # or a unique ID if you have one
-				"age": dino.current_age,
-				"pos_x": dino.position.x,
-				"pos_y": dino.position.y
+				"species_id": dino.species_data.species_name,
+				"age": snapped(dino.current_age, 0.1), # Optimize: 1 decimal
+				"pos_x": int(dino.position.x), # Optimize: Integer
+				"pos_y": int(dino.position.y) # Optimize: Integer
 			}
 			save_dict["dinos"].append(d_data)
 			
@@ -443,44 +499,82 @@ func _spawn_dino_from_save(d_data):
 
 func notify_dino_spawned(dino_node: Node):
 	emit_signal("dino_spawned", dino_node)
+	
+	# Connect to death/removal to keep cache fresh
+	if not dino_node.is_connected("tree_exited", _recalculate_cache):
+		dino_node.tree_exited.connect(_recalculate_cache)
+		
+	# Update immediately for the new spawn
+	_recalculate_cache()
+
+func _recalculate_cache():
+	# SAFETY CHECK: If the tree is gone (quit/change), stop immediately.
+	if not is_inside_tree(): return
+	var tree = get_tree()
+	if not tree: return
+
+	var total_dps = 0
+	var total_bonus = 0
+	var counts = {}
+	
+	# Clear lists
+	_cached_herbivores.clear()
+	_cached_carnivores.clear()
+	
+	var dinos = get_tree().get_nodes_in_group("dinos")
+	
+	for dino in dinos:
+		# Check validity
+		if not is_instance_valid(dino) or dino.is_queued_for_deletion():
+			continue
+			
+		if "is_dead" in dino and dino.is_dead:
+			continue
+			
+		if not dino.species_data:
+			continue
+			
+		# 1. DPS
+		total_dps += dino.species_data.passive_dna_yield
+		
+		# 2. Click Bonus
+		if "global_click_bonus" in dino.species_data:
+			total_bonus += dino.species_data.global_click_bonus
+		else:
+			total_bonus += 1
+			
+	# 3. Counts
+		var s_name = dino.species_data.species_name
+		if s_name in counts:
+			counts[s_name] += 1
+		else:
+			counts[s_name] = 1
+			
+		# 4. Cache Lists for Optimization
+		if dino.species_data.diet == 0: # Herbivore
+			_cached_herbivores.append(dino)
+		else:
+			_cached_carnivores.append(dino)
+			
+	_cached_dna_per_sec = total_dps
+	_cached_click_bonus = total_bonus
+	_cached_dino_counts = counts
+	
+	if DEBUG_MODE:
+		print("GameManager: Cache updated. Herbivores: ", _cached_herbivores.size(), ", Carnivores: ", _cached_carnivores.size())
 
 # --- INCOME HELPER ---
 func get_total_dna_per_second() -> int:
-	var total = 0
-	var dinos = get_tree().get_nodes_in_group("dinos")
-	
-	for dino in dinos:
-		if not dino.is_dead and dino.species_data:
-			# Check if they are starving? 
-			# For simplicity, we assume they would have found food.
-			# Or you can check: if dino.hunger < 10:
-			total += dino.species_data.passive_dna_yield
-			
-	return total
+	return _cached_dna_per_sec
 
 func get_global_click_bonus() -> int:
-	var total_bonus = 0
-	var dinos = get_tree().get_nodes_in_group("dinos")
-	
-	for dino in dinos:
-		if not dino.is_dead and dino.species_data:
-			# Check if the property exists to be safe (though it should with the resource update)
-			if "global_click_bonus" in dino.species_data:
-				total_bonus += dino.species_data.global_click_bonus
-			else:
-				# Fallback if property missing (e.g. old resource in memory?)
-				total_bonus += 1
-				
-	return total_bonus
+	if _cached_click_bonus == 0:
+		return 1 # Fallback
+	return _cached_click_bonus
 
 # --- DYNAMIC PRICING ---
 func get_dino_count(species_name: String) -> int:
-	var count = 0
-	var dinos = get_tree().get_nodes_in_group("dinos")
-	for d in dinos:
-		if not d.is_dead and d.species_data and d.species_data.species_name == species_name:
-			count += 1
-	return count
+	return _cached_dino_counts.get(species_name, 0)
 
 func get_dino_cost(species_data: DinosaurSpecies) -> int:
 	if not species_data: return 0
@@ -491,6 +585,17 @@ func get_dino_cost(species_data: DinosaurSpecies) -> int:
 	# Formula: Base * (1.15 ^ Count)
 	var multiplier = pow(1.15, count)
 	return int(base * multiplier)
+
+func get_dino_fossil_cost(species_data: DinosaurSpecies) -> int:
+	if not species_data: return 0
+	# Premium Cost is FIXED (No Inflation) to encourage using it
+	var base = species_data.base_fossil_cost
+	if "base_fossil_cost" in species_data:
+		base = species_data.base_fossil_cost
+	else:
+		base = 5 # Default fallback
+		
+	return base
 
 func get_habitat_cost(product_res: Resource) -> int:
 	if not product_res: return 0

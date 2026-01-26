@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_pwtho")
 species_name = "Herrerasaurus"
-visual_scale = 2.1
+visual_scale = 2.0
 animations = ExtResource("1_a6pxh")
 diet = 1
 base_dna_cost = 1200
@@ -20,4 +20,5 @@ ideal_biome_phase = 2
 base_lifespan = 150.0
 scientific_name = "Herrerasaurus ischigualastensis"
 length = "1.5m × 4m"
+time_period = "231-228 Million Years Ago"
 description = "An agile hunter with a sliding jaw joint designed to grapple and hold onto struggling prey."

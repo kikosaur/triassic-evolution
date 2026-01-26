@@ -47,6 +47,10 @@ func _ready():
 	tab_container.current_tab = 0
 	
 	visibility_changed.connect(_on_visibility_changed)
+	
+	# OPTIMIZATION: Load resources ONCE at startup, not every open.
+	_load_dynamic_resources()
+	
 	_on_visibility_changed()
 	
 	# Setup drag for all three scroll containers
@@ -89,13 +93,10 @@ func _on_visibility_changed():
 	if visible:
 		var tab_container = $TabContainer
 		tab_container.current_tab = 0
+		refresh_gallery() # Refresh UI when opened
 	
-	# 3. Listen for visibility to refresh only when open
-	visibility_changed.connect(func(): if visible: refresh_gallery())
-	
-	# Fill data but dont instantiate UI yet
-	_load_dynamic_resources()
-	# refresh_gallery() # Defer to visibility
+	# BUG FIX: Removed recursive signal connection here.
+	# We are already inside _on_visibility_changed, so we just call refresh_gallery above.
 
 func _load_dynamic_resources():
 	all_traits.clear()
@@ -133,29 +134,40 @@ func refresh_gallery():
 	# 3. Populate Habitats (Future proofing)
 	fill_grid(habitat_grid, all_habitats, "habitat_")
 
-# A Helper function to fill ANY grid
+# A Helper function to fill ANY grid (OPTIMIZED)
 func fill_grid(grid_node, data_array, _prefix):
-	# Clear old items
+	# OPTIMIZATION: If grid is already full, just refresh
+	if grid_node.get_child_count() == data_array.size():
+		var i = 0
+		for child in grid_node.get_children():
+			var item = data_array[i]
+			var is_unlocked = _check_unlock_status(item)
+			if child.has_method("setup"):
+				child.setup(item, is_unlocked)
+			i += 1
+		return
+
+	# Clear old items (Only if count mismatch or force reset)
 	for child in grid_node.get_children():
 		child.queue_free()
 		
 	for item in data_array:
-		var is_unlocked = false
-		
-		# Check Unlock Logic
-		# Check Unlock Logic
-		if "species_name" in item and item.species_name == "Archosaur":
-			is_unlocked = true # Starter
-		elif "required_research_id" in item:
-			# Universal Check: Does the user have the research?
-			if item.required_research_id in GameManager.unlocked_research_ids:
-				is_unlocked = true
+		var is_unlocked = _check_unlock_status(item)
 				
 		# Create Slot
 		var slot = slot_scene.instantiate()
 		grid_node.add_child(slot)
 		slot.setup(item, is_unlocked)
 		slot.slot_clicked.connect(_on_slot_clicked)
+
+func _check_unlock_status(item) -> bool:
+	if "species_name" in item and item.species_name == "Archosaur":
+		return true # Starter
+	elif "required_research_id" in item:
+		# Universal Check: Does the user have the research?
+		if item.required_research_id in GameManager.unlocked_research_ids:
+			return true
+	return false
 
 func _on_slot_clicked(data):
 	# Show Details

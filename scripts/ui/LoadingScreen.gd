@@ -22,7 +22,13 @@ func _process(delta):
 	time_elapsed += delta
 	_check_transition()
 
-func _on_data_loaded(_success):
+func _on_data_loaded(success):
+	if not success:
+		# Session Expired or Load Failed -> Go back to Login
+		print("LoadingScreen: Load failed (Session Expired). Returning to Start.")
+		get_tree().call_deferred("change_scene_to_file", "res://scenes/ui/StartScreen.tscn")
+		return
+		
 	data_loaded = true
 	_check_transition()
 

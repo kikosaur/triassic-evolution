@@ -4,17 +4,15 @@ extends Control
 @export var parent_node: Control
 
 # --- NODE PATHS ---
-# Update these to match your exact Scene Tree!
-# Based on your screenshots, these seem to be direct children, not in a VBox.
-@onready var btn_node = $VBoxContainer/BtnNode
+@onready var click_btn = $ClickButton
 @onready var name_label = $VBoxContainer/NameLabel
 @onready var cost_label = $VBoxContainer/CostLabel
 @onready var line = $LinkLine
-@onready var icon_rect = $IconRect # Ensure this node exists!
+@onready var icon_rect = $VBoxContainer/IconRect
 
 func _ready():
 	# Connect the click
-	btn_node.pressed.connect(_on_click)
+	click_btn.pressed.connect(_on_click)
 	
 	# Draw line to parent
 	if parent_node:
@@ -26,6 +24,15 @@ func _ready():
 
 	# Initial Visual Update
 	_update_visuals()
+
+func _on_click():
+	# Find the menu and open popup
+	var menu = find_parent("ResearchMenu")
+	if menu and menu.has_method("open_research_popup"):
+		menu.open_research_popup(my_data)
+	else:
+		# Fallback/Debug
+		print("ResearchNode: Could not find ResearchMenu!")
 
 func _process(_delta):
 	# Keep checking visuals (useful if unlocked status changes)
@@ -51,16 +58,22 @@ func _update_visuals():
 		icon_rect.modulate = Color(1, 1, 1) # Normal Icon
 		cost_label.text = "OWNED"
 		name_label.text = my_data.display_name
-		btn_node.disabled = false # Allow clicking (maybe to view details?)
+		click_btn.disabled = false
+		# Let's keep it clickable so they can see description/lore!
 		
 	elif parent_unlocked:
 		# --- AVAILABLE STATE ---
 		modulate = Color(1, 1, 1) # Normal brightness
 		icon_rect.modulate = Color(0, 0, 0, 0.8) # Silhouetted Icon (Mystery)
 		
-		cost_label.text = GameManager.format_number(my_data.dna_cost) + " DNA"
-		name_label.text = my_data.display_name # Show name so they know what to buy
-		btn_node.disabled = false
+		# Show Costs
+		var cost_d = my_data.dna_cost
+		var cost_f = my_data.fossil_cost if "fossil_cost" in my_data else 5
+		
+		cost_label.text = "%s / %s F" % [GameManager.format_number(cost_d), str(cost_f)]
+		name_label.text = my_data.display_name
+		
+		click_btn.disabled = false
 		
 	else:
 		# --- LOCKED STATE ---
@@ -69,7 +82,4 @@ func _update_visuals():
 		
 		cost_label.text = "LOCKED"
 		name_label.text = "???"
-		btn_node.disabled = true
-
-func _on_click():
-	GameManager.try_unlock_research(my_data)
+		click_btn.disabled = true

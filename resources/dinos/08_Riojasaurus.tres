@@ -19,4 +19,5 @@ ideal_biome_phase = 3
 base_lifespan = 600.0
 scientific_name = "Riojasaurus incertus"
 length = "3m × 10m"
+time_period = "228–208 Million Years Ago"
 description = "A massive, four-legged tank. This true giant is the ancestor to the massive Sauropods like Brachiosaurus."

@@ -1,14 +1,17 @@
-[gd_resource type="Resource" script_class="ResearchDef" load_steps=4 format=3 uid="uid://cnip6u6ff77pd"]
+[gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://cnip6u6ff77pd"]
 
 [ext_resource type="Texture2D" uid="uid://cm6lrj8k0j3xd" path="res://assets/habitat_traits/H05_Conifer_Forest.png" id="1_7w8km"]
 [ext_resource type="Resource" uid="uid://c38wg5mjivw52" path="res://resources/research/Res_Riojasaurus.tres" id="2_swfmg"]
 [ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_7qw0f"]
+[ext_resource type="Resource" path="res://resources/habitats/Habitat_Forest.tres" id="4_habitat"]
 
 [resource]
 script = ExtResource("3_7qw0f")
 id = "node_forest"
 display_name = "Conifer Forests"
 icon = ExtResource("1_7w8km")
+description = "Vast evergreen forests that dominate the landscape, offering abundant resources."
 type = 2
 dna_cost = 15000
 parent_research = ExtResource("2_swfmg")
+unlock_habitat = ExtResource("4_habitat")

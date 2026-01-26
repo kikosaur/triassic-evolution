@@ -4,7 +4,6 @@ extends Node2D
 # --- LOGGING (Set to false for production) ---
 const DEBUG_MODE: bool = false
 
-@onready var click_zone = $ClickZone
 @onready var dino_container = $DinoContainer
 # Labels moved to TopPanel internal logic
 # @onready var dna_label = ... 
@@ -47,7 +46,9 @@ func _ready() -> void:
 	if DEBUG_MODE:
 		print("MainGame: Scene started")
 	AudioManager.play_music()
-	click_zone.pressed.connect(_on_background_clicked)
+	AudioManager.play_music()
+	# click_zone.pressed.connect(_on_background_clicked) # REMOVED: Replaced by _unhandled_input for multi-touch
+	
 	# Listen for Habitat Changes
 	
 	btn_research.pressed.connect(func():
@@ -61,6 +62,15 @@ func _ready() -> void:
 	GameManager.connect("research_unlocked", _on_research_unlocked)
 	# Trigger visual update when habitat changes
 	GameManager.connect("habitat_updated", func(_v, _c): _update_biome_visuals())
+
+func _unhandled_input(event):
+	# MULTITOUCH SUPPORT: Detect individual touches
+	if event is InputEventScreenTouch and event.pressed:
+		_on_background_clicked(event.position)
+		
+	# PC FALLBACK (Testing): Mouse Click
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_on_background_clicked(event.position)
 	
 
 	_update_biome_visuals()
@@ -164,7 +174,7 @@ func _show_click_feedback(pos: Vector2, amount: int):
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8)
 	tween.tween_callback(label.queue_free)
 
-func _on_background_clicked():
+func _on_background_clicked(tap_position: Vector2):
 	# 1. Base Click Value
 	var amount = 1
 	
@@ -173,7 +183,7 @@ func _on_background_clicked():
 		amount += GameManager.get_global_click_bonus()
 		
 	GameManager.add_dna(amount)
-	_show_click_feedback(get_viewport().get_mouse_position(), amount)
+	_show_click_feedback(tap_position, amount)
 	
 	# --- RARE FOSSIL: 0.1% chance (1/1000) to find a fossil when clicking dirt ---
 	if randf() < 0.001: # 0.1% chance

@@ -12,9 +12,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = -200.0
+offset_top = -250.0
 offset_right = 250.0
-offset_bottom = 200.0
+offset_bottom = 250.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_cjf3c")
@@ -88,6 +88,13 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Time Warp (10 Fossils)"
 
+[node name="BtnExtinction" type="Button" parent="MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+text = "TRIGGER EXTINCTION"
+
 [node name="BtnLogout" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -97,6 +104,11 @@ text = "Log Out"
 layout_mode = 2
 size_flags_vertical = 3
 text = "Close"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Triassic-Evolution-v2.1.0"
+horizontal_alignment = 1
 
 [node name="InfoPanel" parent="." instance=ExtResource("3_idotu")]
 visible = false
