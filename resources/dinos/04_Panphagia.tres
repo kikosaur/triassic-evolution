@@ -18,4 +18,5 @@ consumption_rate = 5.0
 ideal_biome_phase = 2
 base_lifespan = 180.0
 scientific_name = "Panphagia protos"
+length = "0.7m × 1.5m"
 description = "It looks like a meat-eater, but its stomach is evolving to digest plants. A transitionary species."

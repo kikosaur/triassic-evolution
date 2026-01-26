@@ -19,4 +19,5 @@ consumption_rate = 6.0
 ideal_biome_phase = 3
 base_lifespan = 240.0
 scientific_name = "Coelophysis bauri"
+length = "1m × 3m"
 description = "Fast, slender hunters that rely on speed rather than strength. Their hollow bones make them incredibly light."

@@ -25,5 +25,6 @@ enum Diet {HERBIVORE, CARNIVORE}
 
 @export_group("Museum Entry")
 @export var scientific_name: String = "Latin Name"
+@export var length: String = "3 meters" # Size/length of the dinosaur
 @export var time_period: String = "230 Million Years Ago"
 @export_multiline var description: String = "A brief description of this dinosaur."

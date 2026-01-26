@@ -13,4 +13,5 @@ icon = ExtResource("1_iro2c")
 consumption_rate = 1.0
 tolerance = 0.8
 scientific_name = "Archosauria"
+length = "0.5m × 1m"
 description = "The 'great-grandfather' of dinosaurs and crocodiles. A rugged survivor of the arid scrublands."

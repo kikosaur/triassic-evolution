@@ -18,4 +18,5 @@ consumption_rate = 7.0
 ideal_biome_phase = 3
 base_lifespan = 360.0
 scientific_name = "Plateosaurus engelhardti"
+length = "3m × 8m"
 description = "A heavy, barrel-chested giant. It is capable of walking on two legs or dropping to all four to feed."

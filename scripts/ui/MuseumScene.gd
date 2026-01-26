@@ -18,10 +18,11 @@ extends Control
 
 # Detail UI
 @onready var d_img = $DetailPanel/MarginContainer/HBoxContainer/LargeImage
-@onready var d_name = $DetailPanel/MarginContainer/HBoxContainer/VBoxContainer/NameLbl
-@onready var d_sci = $DetailPanel/MarginContainer/HBoxContainer/VBoxContainer/SciNameLbl
-@onready var d_year = $DetailPanel/MarginContainer/HBoxContainer/VBoxContainer/YearLbl
-@onready var d_desc = $DetailPanel/MarginContainer/HBoxContainer/VBoxContainer/DescLbl
+@onready var d_name = $DetailPanel/MarginContainer/HBoxContainer/InfoContainer/NameLbl
+@onready var d_sci = $DetailPanel/MarginContainer/HBoxContainer/InfoContainer/SciNameLbl
+@onready var d_size = $DetailPanel/MarginContainer/HBoxContainer/InfoContainer/SizeLabel
+@onready var d_diet = $DetailPanel/MarginContainer/HBoxContainer/InfoContainer/DietLabel
+@onready var d_desc = $DetailPanel/MarginContainer/HBoxContainer/InfoContainer/DescLbl
 
 var slot_scene = preload("res://scenes/ui/MuseumSlot.tscn")
 
@@ -40,6 +41,10 @@ func _ready():
 	btn_close_popup.pressed.connect(func():
 		detail_panel.visible = false
 	)
+	
+	# Set default tab to Dinosaurs (index 0)
+	var tab_container = $TabContainer
+	tab_container.current_tab = 0
 	
 	visibility_changed.connect(_on_visibility_changed)
 	_on_visibility_changed()
@@ -79,6 +84,11 @@ func _on_visibility_changed():
 		else:
 			s.visible = false
 			s.process_mode = PROCESS_MODE_DISABLED
+	
+	# Set to Dinosaurs tab when opening museum
+	if visible:
+		var tab_container = $TabContainer
+		tab_container.current_tab = 0
 	
 	# 3. Listen for visibility to refresh only when open
 	visibility_changed.connect(func(): if visible: refresh_gallery())
@@ -149,17 +159,26 @@ func fill_grid(grid_node, data_array, _prefix):
 
 func _on_slot_clicked(data):
 	# Show Details
-	# Details
 	if "icon" in data: d_img.texture = data.icon
 	if "species_name" in data: d_name.text = data.species_name
 	elif "display_name" in data: d_name.text = data.display_name
 	if "description" in data: d_desc.text = data.description
 	
-	# Fix: Populate Scientific Name and Year
-	if "scientific_name" in data: d_sci.text = data.scientific_name
+	# Populate Scientific Name
+	if "scientific_name" in data: d_sci.text = "[i]" + data.scientific_name + "[/i]"
 	else: d_sci.text = ""
-		
-	if "time_period" in data: d_year.text = data.time_period
-	else: d_year.text = ""
+	
+	# Populate Size
+	if "length" in data: d_size.text = "Size: " + data.length
+	else: d_size.text = ""
+	
+	# Populate Diet
+	if "diet" in data:
+		if data.diet == DinosaurSpecies.Diet.CARNIVORE:
+			d_diet.text = "Diet: Carnivore"
+		else:
+			d_diet.text = "Diet: Herbivore"
+	else:
+		d_diet.text = ""
 	
 	detail_panel.visible = true

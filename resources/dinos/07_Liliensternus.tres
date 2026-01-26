@@ -19,4 +19,5 @@ consumption_rate = 8.0
 ideal_biome_phase = 3
 base_lifespan = 450.0
 scientific_name = "Liliensternus liliensterni"
+length = "1.5m × 5m"
 description = "The largest predator of the Triassic. Recognizable by the distinct crests on its skull used for display."

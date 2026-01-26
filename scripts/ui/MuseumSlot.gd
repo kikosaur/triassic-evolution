@@ -3,7 +3,7 @@ extends Button
 var my_data: Resource
 signal slot_clicked(data)
 
-# Get the nodes we just added
+# Get the nodes
 @onready var icon_rect = $VBoxContainer/TextureRect
 @onready var name_label = $VBoxContainer/Label
 

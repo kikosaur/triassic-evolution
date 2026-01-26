@@ -17,4 +17,5 @@ required_research_id = "node_lagosuchus"
 consumption_rate = 2.0
 base_lifespan = 90.0
 scientific_name = "Lagosuchus"
+length = "0.3m × 0.5m"
 description = "A small, hopping reptile. Not a dinosaur yet, but very close. Known as 'The Rabbit Reptile'."

@@ -19,4 +19,5 @@ consumption_rate = 4.0
 ideal_biome_phase = 2
 base_lifespan = 150.0
 scientific_name = "Herrerasaurus ischigualastensis"
+length = "1.5m × 4m"
 description = "An agile hunter with a sliding jaw joint designed to grapple and hold onto struggling prey."
