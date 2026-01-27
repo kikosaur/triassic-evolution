@@ -41,6 +41,9 @@ const DEBUG_MODE: bool = false
 @onready var btn_tasks = $UI_Layer/BtnTasks
 @onready var quest_panel = $UI_Layer/QuestPanel
 
+# Safety Watchdog
+var _ui_watchdog_timer: float = 0.0
+
 func _ready() -> void:
 	print("MainGame: _ready() called!")
 	if DEBUG_MODE:
@@ -144,19 +147,16 @@ func _unhandled_input(event):
 	
 	# Connect panel visibility changes to toggle buttons
 	shop_panel.visibility_changed.connect(func():
-		print("[UI] ShopPanel visible changed. Is visible? ", shop_panel.visible)
 		if not shop_panel.visible:
 			_toggle_ui_buttons(false)
 	)
 	
 	research_menu.visibility_changed.connect(func():
-		print("[UI] ResearchMenu visible changed. Is visible? ", research_menu.visible)
 		if not research_menu.visible:
 			_toggle_ui_buttons(false)
 	)
 	
 	museum.visibility_changed.connect(func():
-		print("[UI] MuseumScene visible changed. Is visible? ", museum.visible)
 		if not museum.visible:
 			_toggle_ui_buttons(false)
 	)
@@ -258,8 +258,28 @@ func _show_extinction():
 	extinction_panel.visible = true
 	# Optional: Play a sound or shake screen here
 
-func _process(_delta):
-	pass
+func _process(delta):
+	# --- UI WATCHDOG ---
+	# SAFETY: Handle Hot-Reload where variable might be uninitialized (Nil)
+	if _ui_watchdog_timer == null:
+		_ui_watchdog_timer = 0.0
+		
+	# Occasionally check if UI state is inconsistent (Panels closed but buttons hidden)
+	# This fixes the issue where closing the Research Menu sometimes leaves buttons hidden via race condition.
+	_ui_watchdog_timer += delta
+	if _ui_watchdog_timer > 0.5:
+		_ui_watchdog_timer = 0.0
+		_check_ui_consistency()
+
+func _check_ui_consistency():
+	# If ALL fullscreen panels are closed...
+	if not shop_panel.visible and not research_menu.visible and not museum.visible and not extinction_panel.visible:
+		# ...and the main buttons are hidden...
+		if not btn_shop.visible:
+			# ...Force them to show!
+			if DEBUG_MODE:
+				print("[MainGame] Watchdog: UI Buttons were hidden but panels are closed. Restoring.")
+			_toggle_ui_buttons(false) # False = Show Buttons
 
 func _update_fossils_ui(_new_amount):
 	pass
