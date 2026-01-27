@@ -16,6 +16,7 @@ offset_left = -400.0
 offset_top = -150.0
 grow_horizontal = 0
 grow_vertical = 0
+mouse_filter = 2
 theme = ExtResource("1_khjsv")
 script = ExtResource("1_noai0")
 

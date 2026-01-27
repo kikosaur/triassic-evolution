@@ -63,39 +63,73 @@ func _ready() -> void:
 	# Trigger visual update when habitat changes
 	GameManager.connect("habitat_updated", func(_v, _c): _update_biome_visuals())
 
+	# Safe to start tutorial now that scene is ready
+	# Add a small delay so it doesn't pop up instantly
+	var tween = create_tween()
+	
+	# --- OPTIMIZATION: GPU WARMUP ---
+	# Force heavy UI to render one frame (invisible) to upload textures to GPU
+	# This prevents the "Freeze" when clicking the button for the first time.
+	_warmup_ui()
+	
+	tween.tween_interval(1.0)
+	tween.tween_callback(TutorialManager.check_start)
+	
+func _warmup_ui():
+	# 1. Turn them on but "almost" invisible (0.01 to prevent culling)
+	shop_panel.modulate.a = 0.01
+	museum.modulate.a = 0.01
+	shop_panel.visible = true
+	museum.visible = true
+	
+	# 2. Force a draw frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	# 3. Hide and Reset Opacity
+	shop_panel.visible = false
+	museum.visible = false
+	shop_panel.modulate.a = 1.0
+	museum.modulate.a = 1.0
+	print("[MainGame] UI Warmup Complete (Forced GPU Upload)")
+
 func _unhandled_input(event):
+	# MULTITOUCH SUPPORT: Detect individual touches
 	# MULTITOUCH SUPPORT: Detect individual touches
 	if event is InputEventScreenTouch and event.pressed:
 		_on_background_clicked(event.position)
+		get_viewport().set_input_as_handled()
 		
 	# PC FALLBACK (Testing): Mouse Click
 	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_on_background_clicked(event.position)
+		get_viewport().set_input_as_handled()
 	
 
-	_update_biome_visuals()
+	# _update_biome_visuals() # OPTIMIZATION: Removed. Only update on signal change.
 	
-	# Safe to start tutorial now that scene is ready
-	# Add a small delay so it doesn't pop up instantly
-	var tween = create_tween()
-	tween.tween_interval(1.0)
-	tween.tween_callback(TutorialManager.check_start)
 	
 	# --- TOGGLE LOGIC ---
 	# Open/Close the Shop
+	# --- TOGGLE LOGIC ---
+	# Open/Close the Shop
 	btn_shop.pressed.connect(func():
+		print("[FlowCheck] Shop Button Pressed. Current visibility: ", shop_panel.visible)
 		shop_panel.visible = !shop_panel.visible
 		_toggle_ui_buttons(shop_panel.visible)
 		# Close other panels if opening Shop
 		if shop_panel.visible:
+			print("[FlowCheck] Opening Shop Panel...")
 			research_menu.visible = false
 			museum.visible = false
 		)
 		
 	btn_museum.pressed.connect(func():
+		print("[FlowCheck] Museum Button Pressed. Current visibility: ", museum.visible)
 		museum.visible = !museum.visible
 		if museum.visible:
-			museum.refresh_gallery() # Ensure it updates if we just unlocked something!
+			print("[FlowCheck] Opening Museum Panel...")
+			# OPTIMIZATION: Removed redundant refresh_gallery(). Use pre-loaded state.
 			_toggle_ui_buttons(true)
 			# Close other panels
 			research_menu.visible = false
@@ -110,16 +144,19 @@ func _unhandled_input(event):
 	
 	# Connect panel visibility changes to toggle buttons
 	shop_panel.visibility_changed.connect(func():
+		print("[UI] ShopPanel visible changed. Is visible? ", shop_panel.visible)
 		if not shop_panel.visible:
 			_toggle_ui_buttons(false)
 	)
 	
 	research_menu.visibility_changed.connect(func():
+		print("[UI] ResearchMenu visible changed. Is visible? ", research_menu.visible)
 		if not research_menu.visible:
 			_toggle_ui_buttons(false)
 	)
 	
 	museum.visibility_changed.connect(func():
+		print("[UI] MuseumScene visible changed. Is visible? ", museum.visible)
 		if not museum.visible:
 			_toggle_ui_buttons(false)
 	)
@@ -171,12 +208,12 @@ func _show_click_feedback(pos: Vector2, amount: int):
 	
 	# OPTIMIZATION: Safety cap for click effects (Anti-Freeze)
 	if $UI_Layer.get_child_count() > 100:
-		# Delete oldest child (which is likely a label at index 0 or close to it)
-		# We target the first child that is a Label and likely ours. 
-		# Safe bet: Just remove the 0th child if it is a Label.
-		var old = $UI_Layer.get_child(0)
-		if old is Label and old != label:
-			old.queue_free()
+		# Loop through children to find a Label to remove, skipping the permanent UI buttons
+		for i in range(20): # Only check the first 20 to be fast
+			var child = $UI_Layer.get_child(i)
+			if child is Label:
+				child.queue_free()
+				break
 	
 	var tween = create_tween()
 	tween.tween_property(label, "position:y", pos.y - 80, 0.8).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)

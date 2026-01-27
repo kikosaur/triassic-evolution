@@ -70,5 +70,5 @@ func _on_reset() -> void:
 	# 5. Play success sound
 	AudioManager.play_sfx("success")
 	
-	# 6. Reload Scene
-	get_tree().reload_current_scene()
+	# 6. Reload Scene via LoadingScreen to ensure clean state
+	get_tree().change_scene_to_file("res://scenes/ui/LoadingScreen.tscn")

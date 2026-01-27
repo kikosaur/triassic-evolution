@@ -316,7 +316,14 @@ func reset_game_state():
 	emit_signal("dna_changed", current_dna)
 	emit_signal("fossils_changed", fossils)
 	emit_signal("habitat_updated", vegetation_density, critter_density)
-	# Trigger research update if easy, or just let UI refresh naturally
+	
+	# 7. CRITICAL FIX: Save the empty state immediately!
+	# Otherwise, reloading the game will load the OLD save file.
+	var empty_state = get_save_dictionary()
+	AuthManager.save_game_to_cloud(empty_state)
+	
+	if DEBUG_MODE:
+		print("GameManager: Reset state saved to cloud.")
 
 
 func get_save_dictionary() -> Dictionary:

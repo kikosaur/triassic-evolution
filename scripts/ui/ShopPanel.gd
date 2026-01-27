@@ -14,6 +14,7 @@ var _is_dragging: bool = false
 var _active_scroll: ScrollContainer = null
 
 func _ready():
+	print("[FlowCheck] ShopPanel _ready called")
 	# OPTIMIZATION: Pre-load items instantly!
 	_populate_shop()
 	
@@ -69,10 +70,12 @@ func _populate_shop():
 	
 	# 2. FILL DINO TAB
 	for dino in dino_products:
+		if not dino: continue # Skip empty slots
 		_create_card(dino, null, dino_grid)
 		
 	# 3. FILL HABITAT TAB
 	for hab in habitat_products:
+		if not hab: continue # Skip empty slots
 		_create_card(null, hab, hab_grid)
 
 func _refresh_items():
@@ -102,8 +105,11 @@ func _create_card(dino_data, hab_data, target_grid):
 
 func _refresh_locks(_id):
 	# Refresh both grids
-	for card in dino_grid.get_children(): card._process(0)
-	for card in hab_grid.get_children(): card._process(0)
+	# Refresh both grids
+	for card in dino_grid.get_children():
+		if card.has_method("_check_lock_status"): card._check_lock_status()
+	for card in hab_grid.get_children():
+		if card.has_method("_check_lock_status"): card._check_lock_status()
 
 func _add_item_to_grid(dino_data, hab_data, target_grid):
 	var card = ITEM_SCENE.instantiate()
@@ -128,7 +134,8 @@ func _add_item_to_grid(dino_data, hab_data, target_grid):
 	
 	# 4. RE-RUN VISIBILITY CHECK IMMEDIATELY
 	# 4. RE-RUN VISIBILITY CHECK IMMEDIATELY
-	card._process(0)
+	if card.has_method("_check_lock_status"):
+		card._check_lock_status()
 
 func open_shop_popup(item_data):
 	var popup = $ShopPopup

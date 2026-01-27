@@ -31,6 +31,7 @@ var _is_dragging: bool = false
 var _active_scroll: ScrollContainer = null
 
 func _ready():
+	print("[FlowCheck] MuseumScene _ready called")
 # Hide popup at start
 	detail_panel.visible = false
 	

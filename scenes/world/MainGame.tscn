@@ -53,37 +53,6 @@ y_sort_enabled = true
 
 [node name="UI_Layer" type="CanvasLayer" parent="."]
 
-[node name="TopPanel" parent="UI_Layer" instance=ExtResource("2_70oxy")]
-
-[node name="HabitatPanel" parent="UI_Layer" instance=ExtResource("8_kyv22")]
-
-[node name="ResearchMenu" parent="UI_Layer" instance=ExtResource("9_740hf")]
-visible = false
-
-[node name="ExtinctionPanel" parent="UI_Layer" instance=ExtResource("10_ue8bh")]
-visible = false
-
-[node name="ShopPanel" parent="UI_Layer" instance=ExtResource("12_emtlf")]
-visible = false
-
-[node name="MuseumScene" parent="UI_Layer" instance=ExtResource("13_lnpaj")]
-visible = false
-
-[node name="WelcomePanel" parent="UI_Layer" instance=ExtResource("21_3sbe1")]
-visible = false
-
-[node name="QuestPanel" parent="UI_Layer" instance=ExtResource("23_jp2mt")]
-visible = false
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -500.0
-offset_right = 0.0
-grow_horizontal = 0
-
-[node name="SettingsPanel" parent="UI_Layer" instance=ExtResource("22_b5gth")]
-visible = false
-
 [node name="BtnTasks" type="TextureButton" parent="UI_Layer"]
 anchors_preset = 6
 anchor_left = 1.0
@@ -135,3 +104,34 @@ grow_vertical = 0
 texture_normal = ExtResource("14_3sbe1")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="TopPanel" parent="UI_Layer" instance=ExtResource("2_70oxy")]
+
+[node name="HabitatPanel" parent="UI_Layer" instance=ExtResource("8_kyv22")]
+
+[node name="ResearchMenu" parent="UI_Layer" instance=ExtResource("9_740hf")]
+visible = false
+
+[node name="ExtinctionPanel" parent="UI_Layer" instance=ExtResource("10_ue8bh")]
+visible = false
+
+[node name="ShopPanel" parent="UI_Layer" instance=ExtResource("12_emtlf")]
+visible = false
+
+[node name="MuseumScene" parent="UI_Layer" instance=ExtResource("13_lnpaj")]
+visible = false
+
+[node name="WelcomePanel" parent="UI_Layer" instance=ExtResource("21_3sbe1")]
+visible = false
+
+[node name="SettingsPanel" parent="UI_Layer" instance=ExtResource("22_b5gth")]
+visible = false
+
+[node name="QuestPanel" parent="UI_Layer" instance=ExtResource("23_jp2mt")]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -500.0
+offset_right = 0.0
+grow_horizontal = 0
