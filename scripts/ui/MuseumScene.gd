@@ -53,7 +53,8 @@ func _ready():
 	_load_dynamic_resources()
 	refresh_gallery() # Build UI immediately (Pre-load)
 	
-	_on_visibility_changed()
+	# Start hidden (simple visibility)
+	visible = false
 	
 	# Setup drag for all three scroll containers
 	var dino_scroll = $TabContainer/Dinosaurs
@@ -82,23 +83,15 @@ func _on_scroll_input(event, scroll_container):
 		_active_scroll.scroll_vertical -= event.relative.y
 
 func _on_visibility_changed():
+	# Process mode control
 	var scrolls = [$TabContainer/Dinosaurs, $TabContainer/Traits, $TabContainer/Habitats]
 	for s in scrolls:
 		if visible:
-			s.visible = true
 			s.process_mode = PROCESS_MODE_INHERIT
+			# Reset to Dinosaurs tab when opening
+			$TabContainer.current_tab = 0
 		else:
-			s.visible = false
 			s.process_mode = PROCESS_MODE_DISABLED
-	
-	# Set to Dinosaurs tab when opening museum
-	if visible:
-		var tab_container = $TabContainer
-		tab_container.current_tab = 0
-		# refresh_gallery() # OPTIMIZATION: Removed. Done in _ready.
-	
-	# BUG FIX: Removed recursive signal connection here.
-	# We are already inside _on_visibility_changed, so we just call refresh_gallery above.
 
 func _load_dynamic_resources():
 	all_traits.clear()

@@ -22,7 +22,9 @@ func _ready():
 		GameManager.connect("research_unlocked", _refresh_locks)
 	
 	visibility_changed.connect(_on_visibility_changed)
-	_on_visibility_changed()
+	
+	# Start hidden (simple visibility)
+	visible = false
 	
 	# Setup drag for both scroll containers
 	var dino_scroll = $TabContainer/Dinosaurs
@@ -48,14 +50,12 @@ func _on_scroll_input(event, scroll_container):
 		_active_scroll.scroll_vertical -= event.relative.y
 
 func _on_visibility_changed():
-	# Handle both scroll containers!
+	# Process mode control
 	var scrolls = [$TabContainer/Dinosaurs, $TabContainer/Habitats]
 	for s in scrolls:
 		if visible:
-			s.visible = true
 			s.process_mode = PROCESS_MODE_INHERIT
 		else:
-			s.visible = false
 			s.process_mode = PROCESS_MODE_DISABLED
 
 func _populate_shop():
@@ -97,8 +97,13 @@ func _create_card(dino_data, hab_data, target_grid):
 	card.species_data = dino_data
 	card.habitat_data = hab_data
 	
+	# Copy research requirements for dinosaurs
 	if dino_data and "required_research_id" in dino_data:
 		card.required_research_id = dino_data.required_research_id
+	
+	# Copy research requirements for habitat items
+	if hab_data and "required_research_id" in hab_data:
+		card.required_research_id = hab_data.required_research_id
 	
 	if card.has_method("_update_display"):
 		card._update_display()

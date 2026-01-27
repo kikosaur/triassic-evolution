@@ -53,6 +53,13 @@ y_sort_enabled = true
 
 [node name="UI_Layer" type="CanvasLayer" parent="."]
 
+[node name="FeedbackContainer" type="Control" parent="UI_Layer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
 [node name="BtnTasks" type="TextureButton" parent="UI_Layer"]
 anchors_preset = 6
 anchor_left = 1.0

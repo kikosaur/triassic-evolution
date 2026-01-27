@@ -10,3 +10,4 @@ type = 1
 dna_cost = 150
 density_gain = 8.0
 icon = ExtResource("1_6hqpm")
+required_research_id = "node_river"

@@ -277,6 +277,9 @@ func _on_load_completed(_res: int, code: int, _head: PackedStringArray, body: Pa
 		# Ensure we start fresh (clear any old data in memory)
 		GameManager.reset_game_state()
 		
+		# SUCCESS: New user loaded (empty state)
+		emit_signal("save_data_loaded", true)
+		
 # --- LOCAL SAVE (BACKUP / EXTERNAL) ---
 
 const LOCAL_SAVE_FILE: String = "user://offline_save.json"

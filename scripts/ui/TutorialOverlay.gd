@@ -16,6 +16,12 @@ func _ready():
 	if TutorialManager.current_step >= 0:
 		_on_step_changed(TutorialManager.current_step, TutorialManager.steps[TutorialManager.current_step])
 
+	# SAFETY: Force Dimmer to ignore mouse clicks
+	# The dimmer might be defaulting to STOP, blocking buttons underneath
+	$Dimmer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	$HighlightRect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	self.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 func _on_step_changed(_index, data):
 	label.text = data["text"]
 	

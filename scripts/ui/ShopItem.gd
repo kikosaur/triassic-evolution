@@ -40,11 +40,11 @@ func _on_research_unlocked(_id):
 	
 func _check_lock_status():
 	var is_locked = false
+	
+	# Check if this item requires research and if that research is unlocked
 	if required_research_id != "":
-		if not GameManager.is_research_unlocked(null): # Helper hack or check list directly
-			# We can check list directly since we are in UI
-			if required_research_id not in GameManager.unlocked_research_ids:
-				is_locked = true
+		if required_research_id not in GameManager.unlocked_research_ids:
+			is_locked = true
 			
 	if is_locked:
 		modulate = Color(0.5, 0.5, 0.5) # Dimmed

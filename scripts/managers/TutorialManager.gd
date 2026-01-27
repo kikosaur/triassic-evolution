@@ -26,12 +26,12 @@ var steps = [
 		"alignment": "bottom_left"
 	},
 	{
-		"text": "The Tree of Life tracks your progress. This is where you unlock new Dinosaurs, Traits, and Habitats!",
+		"text": "The Research Menu tracks your progress. This is where you unlock new Dinosaurs, Traits, and Habitats!",
 		"highlight": "research_btn",
 		"alignment": "center"
 	},
 	{
-		"text": "Now open the Shop. Press Hatch to hatch dinosaurs and go to Habitat at the top left after the Dinosaurs Tab to buy foods for your Dinosaurs!",
+		"text": "Now open the Shop. Press a dinosaur and buy using DNA or FOSSIL! Next is go to Habitat at the top left after the Dinosaurs Tab to buy foods for your Dinosaurs!",
 		"highlight": "shop_btn",
 		"alignment": "bottom_left"
 	},
@@ -51,7 +51,12 @@ var steps = [
 		"alignment": "bottom_left"
 	},
 	{
-		"text": "Fossils are found when Dinosaurs die, or rarely in the dirt. Collect them for upgrades!",
+		"text": "As you unlock Habitat research, the world transforms! Keep vegetation and critter densities high to evolve your landscape from barren desert to lush forest.",
+		"highlight": "habitat_bars",
+		"alignment": "center"
+	},
+	{
+		"text": "Fossils are found when Dinosaurs die, or rarely in the dirt. Collect them!",
 		"highlight": "museum_btn", # Visual anchor
 		"alignment": "center"
 	}
