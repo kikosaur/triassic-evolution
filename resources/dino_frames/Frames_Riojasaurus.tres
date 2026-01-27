@@ -5,22 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://g5i7vccvmonl" path="res://assets/dinosaurs/eat/09.png" id="2_pbeym"]
 [ext_resource type="Texture2D" uid="uid://cumugjjgtghqi" path="res://assets/dinosaurs/08-2.png" id="2_s4j6h"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bsbwl"]
-atlas = ExtResource("1_s4j6h")
-region = Rect2(0, 0, 1408, 752)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xvdxq"]
-atlas = ExtResource("1_s4j6h")
-region = Rect2(1408, 0, 1408, 752)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0dg4n"]
-atlas = ExtResource("1_s4j6h")
-region = Rect2(0, 752, 1408, 752)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ns48l"]
-atlas = ExtResource("1_s4j6h")
-region = Rect2(1408, 752, 1408, 752)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_j13w2"]
 atlas = ExtResource("2_pbeym")
 region = Rect2(0, 0, 1408, 752)
@@ -35,6 +19,22 @@ region = Rect2(0, 752, 1408, 752)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hwqf7"]
 atlas = ExtResource("2_pbeym")
+region = Rect2(1408, 752, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bsbwl"]
+atlas = ExtResource("1_s4j6h")
+region = Rect2(0, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xvdxq"]
+atlas = ExtResource("1_s4j6h")
+region = Rect2(1408, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0dg4n"]
+atlas = ExtResource("1_s4j6h")
+region = Rect2(0, 752, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ns48l"]
+atlas = ExtResource("1_s4j6h")
 region = Rect2(1408, 752, 1408, 752)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g18ms"]
@@ -59,6 +59,23 @@ region = Rect2(1408, 752, 1408, 752)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j13w2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b6ma2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6n8ob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hwqf7")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 8.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bsbwl")

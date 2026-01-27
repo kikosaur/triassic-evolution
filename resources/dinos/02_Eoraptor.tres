@@ -13,6 +13,7 @@ diet = 1
 base_dna_cost = 500
 passive_dna_yield = 20
 click_yield = 8
+global_click_bonus = 4
 icon = ExtResource("2_phpln")
 required_research_id = "node_eoraptor"
 consumption_rate = 3.0

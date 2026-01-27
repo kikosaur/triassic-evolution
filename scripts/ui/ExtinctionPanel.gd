@@ -49,26 +49,26 @@ func _calculate_fossil_reward() -> int:
 	return 5 + research_bonus + dps_bonus + habitat_bonus
 
 func _on_reset() -> void:
-	# 1. Calculate and grant Fossil Reward BEFORE reset
+	# 1. Calculate Rewards & Prestige
 	var fossil_reward = _calculate_fossil_reward()
-	GameManager.add_fossils(fossil_reward)
-	if DEBUG_MODE:
-		print("ExtinctionPanel: Granted ", fossil_reward, " fossils")
-	
-	# 2. Calculate Prestige (10% bonus per run)
 	GameManager.prestige_multiplier += 0.1
 	
-	# 3. Reset Game Data (but keep fossils!)
-	var saved_fossils = GameManager.fossils # Preserve fossils
-	GameManager.current_dna = 0
-	GameManager.vegetation_density = 0
-	GameManager.critter_density = 0
-	GameManager.unlocked_research_ids = ["node_archosaur"] # Reset tree
-	GameManager.owned_dinosaurs.clear()
-	GameManager.fossils = saved_fossils # Restore fossils
+	# 2. Capture Total Fossils to Preserve (Current + Reward)
+	# We don't add them yet because reset_game_state() would wipe them.
+	var final_fossils = GameManager.fossils + fossil_reward
 	
-	# 4. Play success sound
+	if DEBUG_MODE:
+		print("ExtinctionPanel: Resetting. Preserving ", final_fossils, " fossils.")
+	
+	# 3. RESET GAME STATE (Logic in GameManager handles Tasks, Year, DNA, etc.)
+	GameManager.reset_game_state()
+	
+	# 4. Restore Fossils
+	GameManager.fossils = final_fossils
+	GameManager.emit_signal("fossils_changed", final_fossils)
+	
+	# 5. Play success sound
 	AudioManager.play_sfx("success")
 	
-	# 5. Reload Scene
+	# 6. Reload Scene
 	get_tree().reload_current_scene()

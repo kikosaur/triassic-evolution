@@ -13,6 +13,7 @@ diet = 1
 base_dna_cost = 1200
 passive_dna_yield = 35
 click_yield = 15
+global_click_bonus = 5
 icon = ExtResource("2_04bue")
 required_research_id = "node_herrera"
 consumption_rate = 4.0

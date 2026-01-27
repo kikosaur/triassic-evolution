@@ -568,8 +568,10 @@ func get_total_dna_per_second() -> int:
 	return _cached_dna_per_sec
 
 func get_global_click_bonus() -> int:
+	# FIX: Default should be 0, not 1. 
+	# Base click (1) is added in MainGame.gd, this is ONLY the bonus.
 	if _cached_click_bonus == 0:
-		return 1 # Fallback
+		return 0
 	return _cached_click_bonus
 
 # --- DYNAMIC PRICING ---

@@ -12,6 +12,7 @@ animations = ExtResource("1_4ammk")
 base_dna_cost = 3000
 passive_dna_yield = 53
 click_yield = 25
+global_click_bonus = 6
 icon = ExtResource("2_uk15t")
 required_research_id = "node_panphagia"
 consumption_rate = 5.0

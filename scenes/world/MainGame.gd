@@ -169,6 +169,15 @@ func _show_click_feedback(pos: Vector2, amount: int):
 	
 	$UI_Layer.add_child(label)
 	
+	# OPTIMIZATION: Safety cap for click effects (Anti-Freeze)
+	if $UI_Layer.get_child_count() > 100:
+		# Delete oldest child (which is likely a label at index 0 or close to it)
+		# We target the first child that is a Label and likely ours. 
+		# Safe bet: Just remove the 0th child if it is a Label.
+		var old = $UI_Layer.get_child(0)
+		if old is Label and old != label:
+			old.queue_free()
+	
 	var tween = create_tween()
 	tween.tween_property(label, "position:y", pos.y - 80, 0.8).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8)

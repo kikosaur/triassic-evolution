@@ -12,6 +12,7 @@ animations = ExtResource("1_6rvq4")
 base_dna_cost = 15000
 passive_dna_yield = 230
 click_yield = 50
+global_click_bonus = 8
 icon = ExtResource("2_216op")
 required_research_id = "node_plateo"
 consumption_rate = 7.0

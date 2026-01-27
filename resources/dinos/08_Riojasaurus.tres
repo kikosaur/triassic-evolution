@@ -12,6 +12,7 @@ animations = ExtResource("1_i374f")
 base_dna_cost = 100000
 passive_dna_yield = 3000
 click_yield = 250
+global_click_bonus = 10
 icon = ExtResource("2_vw1ga")
 required_research_id = "node_riojasaurus"
 consumption_rate = 10.0

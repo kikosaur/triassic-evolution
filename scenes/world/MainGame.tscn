@@ -60,33 +60,8 @@ y_sort_enabled = true
 [node name="ResearchMenu" parent="UI_Layer" instance=ExtResource("9_740hf")]
 visible = false
 
-[node name="BtnToggleResearch" type="TextureButton" parent="UI_Layer"]
-custom_minimum_size = Vector2(100, 90)
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 106.0
-offset_top = -90.0
-offset_right = 206.0
-grow_vertical = 0
-texture_normal = ExtResource("14_3sbe1")
-ignore_texture_size = true
-stretch_mode = 0
-
 [node name="ExtinctionPanel" parent="UI_Layer" instance=ExtResource("10_ue8bh")]
 visible = false
-
-[node name="BtnToggleShop" type="TextureButton" parent="UI_Layer"]
-custom_minimum_size = Vector2(80, 90)
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -90.0
-offset_right = 104.0
-grow_vertical = 0
-texture_normal = ExtResource("16_3sbe1")
-ignore_texture_size = true
-stretch_mode = 0
 
 [node name="ShopPanel" parent="UI_Layer" instance=ExtResource("12_emtlf")]
 visible = false
@@ -94,35 +69,8 @@ visible = false
 [node name="MuseumScene" parent="UI_Layer" instance=ExtResource("13_lnpaj")]
 visible = false
 
-[node name="BtnMuseum" type="TextureButton" parent="UI_Layer"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 208.0
-offset_top = -90.0
-offset_right = 308.0
-grow_vertical = 0
-texture_normal = ExtResource("19_b5gth")
-ignore_texture_size = true
-stretch_mode = 0
-
 [node name="WelcomePanel" parent="UI_Layer" instance=ExtResource("21_3sbe1")]
 visible = false
-
-[node name="BtnTasks" type="TextureButton" parent="UI_Layer"]
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = -45.0
-offset_bottom = 45.0
-grow_horizontal = 0
-grow_vertical = 2
-texture_normal = ExtResource("21_21u4d")
-ignore_texture_size = true
-stretch_mode = 5
 
 [node name="QuestPanel" parent="UI_Layer" instance=ExtResource("23_jp2mt")]
 visible = false
@@ -135,3 +83,55 @@ grow_horizontal = 0
 
 [node name="SettingsPanel" parent="UI_Layer" instance=ExtResource("22_b5gth")]
 visible = false
+
+[node name="BtnTasks" type="TextureButton" parent="UI_Layer"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -70.0
+offset_bottom = 70.0
+grow_horizontal = 0
+grow_vertical = 2
+texture_normal = ExtResource("21_21u4d")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BtnMuseum" type="TextureButton" parent="UI_Layer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 306.0
+offset_top = -140.0
+offset_right = 456.0
+grow_vertical = 0
+texture_normal = ExtResource("19_b5gth")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="BtnToggleShop" type="TextureButton" parent="UI_Layer"]
+custom_minimum_size = Vector2(80, 90)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -140.0
+offset_right = 150.0
+grow_vertical = 0
+texture_normal = ExtResource("16_3sbe1")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="BtnToggleResearch" type="TextureButton" parent="UI_Layer"]
+custom_minimum_size = Vector2(150, 140)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 151.0
+offset_top = -140.0
+offset_right = 301.0
+grow_vertical = 0
+texture_normal = ExtResource("14_3sbe1")
+ignore_texture_size = true
+stretch_mode = 0

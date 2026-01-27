@@ -257,6 +257,13 @@ func die():
 	if passive_timer: passive_timer.stop()
 	
 	# IMPROVED DEATH LOGIC
+	# OPTIMIZATION: Remove from group immediately so logic loops skip this corpse
+	if is_in_group("dinos"):
+		remove_from_group("dinos")
+		# Also trigger cache update since we "left" the logic pool
+		if GameManager.has_method("_recalculate_cache"):
+			GameManager._recalculate_cache()
+
 	# 1. Try to play death animation
 	if anim.sprite_frames.has_animation("die"):
 		_play_scaled_anim("die")

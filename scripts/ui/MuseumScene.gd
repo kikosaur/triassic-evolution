@@ -50,6 +50,7 @@ func _ready():
 	
 	# OPTIMIZATION: Load resources ONCE at startup, not every open.
 	_load_dynamic_resources()
+	refresh_gallery() # Build UI immediately (Pre-load)
 	
 	_on_visibility_changed()
 	
@@ -93,7 +94,7 @@ func _on_visibility_changed():
 	if visible:
 		var tab_container = $TabContainer
 		tab_container.current_tab = 0
-		refresh_gallery() # Refresh UI when opened
+		# refresh_gallery() # OPTIMIZATION: Removed. Done in _ready.
 	
 	# BUG FIX: Removed recursive signal connection here.
 	# We are already inside _on_visibility_changed, so we just call refresh_gallery above.

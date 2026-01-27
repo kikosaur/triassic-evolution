@@ -10,6 +10,7 @@ species_name = "Archosaur"
 visual_scale = 1.5
 animations = ExtResource("1_i6s0k")
 base_dna_cost = 25
+global_click_bonus = 2
 icon = ExtResource("1_iro2c")
 consumption_rate = 1.0
 tolerance = 0.8

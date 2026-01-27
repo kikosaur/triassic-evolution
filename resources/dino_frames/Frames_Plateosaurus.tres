@@ -5,22 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://8yudgmgjx5e3" path="res://assets/dinosaurs/06-1.png" id="2_8uwwm"]
 [ext_resource type="Texture2D" uid="uid://knwi6bpdrjaw" path="res://assets/dinosaurs/eat/07.png" id="2_po4n6"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xyukn"]
-atlas = ExtResource("1_8uwwm")
-region = Rect2(0, 0, 1408, 752)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d3nnk"]
-atlas = ExtResource("1_8uwwm")
-region = Rect2(1408, 0, 1408, 752)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ibtix"]
-atlas = ExtResource("1_8uwwm")
-region = Rect2(0, 752, 1408, 752)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ultm0"]
-atlas = ExtResource("1_8uwwm")
-region = Rect2(1408, 752, 1408, 752)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_ljnwa"]
 atlas = ExtResource("2_po4n6")
 region = Rect2(0, 0, 1408, 752)
@@ -35,6 +19,22 @@ region = Rect2(0, 752, 1408, 752)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sx8df"]
 atlas = ExtResource("2_po4n6")
+region = Rect2(1408, 752, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xyukn"]
+atlas = ExtResource("1_8uwwm")
+region = Rect2(0, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3nnk"]
+atlas = ExtResource("1_8uwwm")
+region = Rect2(1408, 0, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ibtix"]
+atlas = ExtResource("1_8uwwm")
+region = Rect2(0, 752, 1408, 752)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ultm0"]
+atlas = ExtResource("1_8uwwm")
 region = Rect2(1408, 752, 1408, 752)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5hgfy"]
@@ -59,6 +59,23 @@ region = Rect2(1408, 752, 1408, 752)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ljnwa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_545ve")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ktcy7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sx8df")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 8.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xyukn")

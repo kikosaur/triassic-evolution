@@ -14,8 +14,9 @@ var _is_dragging: bool = false
 var _active_scroll: ScrollContainer = null
 
 func _ready():
-	visibility_changed.connect(func(): if visible: _populate_shop())
-	# _populate_shop() # Defer to visibility to fix viewport errors
+	# OPTIMIZATION: Pre-load items instantly!
+	_populate_shop()
+	
 	if GameManager.has_signal("research_unlocked"):
 		GameManager.connect("research_unlocked", _refresh_locks)
 	
