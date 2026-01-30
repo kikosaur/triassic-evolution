@@ -6,7 +6,7 @@
 script = ExtResource("1_guji5")
 id = "task_05"
 title = "The Rabbit Swarm"
-description = "Their best defense against the elements is overwhelming numbers."
+description = "Their best defense against the elements is overwhelming numbers. Hatch 25 Lagosuchus (Reward: 15000 DNA)"
 target_amount = 25
 target_id = "Lagosuchus"
-reward_dna = 4
+reward_dna = 15000

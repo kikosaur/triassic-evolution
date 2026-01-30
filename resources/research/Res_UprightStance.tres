@@ -11,6 +11,6 @@ id = "node_upright"
 display_name = "Upright Stance"
 icon = ExtResource("1_tavsg")
 type = 1
-dna_cost = 50
+dna_cost = 200
 parent_research = ExtResource("2_2t36v")
 unlock_trait = ExtResource("4_trait")

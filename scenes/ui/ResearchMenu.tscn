@@ -60,6 +60,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 
 [node name="Panel" type="Panel" parent="ScrollContainer/Content"]
+z_index = -10
 custom_minimum_size = Vector2(2500, 800)
 layout_mode = 1
 anchors_preset = 15
@@ -241,7 +242,7 @@ offset_top = 500.0
 offset_right = 950.0
 offset_bottom = 500.0
 my_data = ExtResource("18_i47bq")
-parent_node = NodePath("../Node_Leaf")
+parent_node = NodePath("../Node_Ferns")
 
 [node name="Node_Panphagia" parent="ScrollContainer/Content/TreeContainer" node_paths=PackedStringArray("parent_node") instance=ExtResource("1_227w5")]
 layout_mode = 0

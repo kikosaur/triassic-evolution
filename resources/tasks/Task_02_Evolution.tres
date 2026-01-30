@@ -6,7 +6,7 @@
 script = ExtResource("1_yx8f2")
 id = "task_02"
 title = "Evolutionary Leap"
-description = "To evolve beyond simple reptiles, legs must move under the body. (Research Upright Stance)"
+description = "To evolve beyond simple reptiles, legs must move under the body. Research \"Upright Stance\". (Reward: 1k DNA)"
 goal_type = "research"
 target_amount = 1
 target_id = "node_upright"

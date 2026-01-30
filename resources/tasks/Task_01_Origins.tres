@@ -6,7 +6,7 @@
 script = ExtResource("1_4ygqd")
 id = "task_01"
 title = "Origins"
-description = "Life begins in the arid scrublands. Breed 5 Archosaurs."
+description = "Life begins in the arid scrublands. Breed 5 Archosaurs. (Reward: 300 DNA)"
 target_amount = 5
 target_id = "Archosaur"
 reward_dna = 300

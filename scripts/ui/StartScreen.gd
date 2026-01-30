@@ -31,6 +31,11 @@ func _ready():
 	var click_zone = find_child("ClickZone")
 	if click_zone:
 		click_zone.pressed.connect(_transition_to_auth)
+		
+	# 6. Disable "How to Play" in Start Screen (Tutorial requires Main Game)
+	if settings_panel and settings_panel.how_to_play_btn:
+		settings_panel.how_to_play_btn.disabled = true
+		settings_panel.how_to_play_btn.text = "How to Play (In-Game Only)"
 
 func _input(event):
 	# Detect "Press Anywhere" (Keys only, mouse is handled by ClickZone)

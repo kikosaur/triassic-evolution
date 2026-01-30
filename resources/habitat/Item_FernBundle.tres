@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("1_326am")
 name = "Fern Bundle"
-dna_cost = 25
+dna_cost = 65
 density_gain = 3.0
 icon = ExtResource("1_i21tg")

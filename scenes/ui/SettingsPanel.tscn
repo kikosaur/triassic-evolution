@@ -83,11 +83,6 @@ size_flags_vertical = 3
 text = "Terms & Conditions
 "
 
-[node name="TimeWarpBtn" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "Time Warp (10 Fossils)"
-
 [node name="BtnExtinction" type="Button" parent="MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -107,7 +102,7 @@ text = "Close"
 
 [node name="Label2" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Triassic-Evolution-v2.1.0"
+text = "Triassic-Evolution-v2.1.1"
 horizontal_alignment = 1
 
 [node name="InfoPanel" parent="." instance=ExtResource("3_idotu")]

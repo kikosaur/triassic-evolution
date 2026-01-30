@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="TaskData" load_steps=2 format=3 uid="uid://bofu8huenytq8"]
 
-[ext_resource type="Script" path="res://scripts/resources/TaskData.gd" id="1_a3mni"]
+[ext_resource type="Script" uid="uid://qqhl0h0ymco2" path="res://scripts/resources/TaskData.gd" id="1_a3mni"]
 
 [resource]
 script = ExtResource("1_a3mni")
 id = "task_04"
 title = "Survival of the Fittest"
-description = "The initial colony is stable. We need a larger gene pool to ensure survival."
+description = "The initial colony is stable. We need a larger gene pool to ensure survival. Hatch 15 Archosaur (Reward: 5k DNA)"
 target_amount = 15
 target_id = "Archosaur"
-reward_dna = 1500
+reward_dna = 5000

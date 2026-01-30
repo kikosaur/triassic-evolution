@@ -40,6 +40,8 @@ const DEBUG_MODE: bool = false
 
 @onready var btn_tasks = $UI_Layer/BtnTasks
 @onready var quest_panel = $UI_Layer/QuestPanel
+@onready var habitat_panel = $UI_Layer/HabitatPanel
+@onready var top_panel = $UI_Layer/TopPanel
 
 # Safety Watchdog
 var _ui_watchdog_timer: float = 0.0
@@ -115,11 +117,16 @@ func _ready() -> void:
 	tween.tween_interval(1.0)
 	tween.tween_callback(TutorialManager.check_start)
 	
+	# LISTEN FOR GLOBAL FLOATING TEXT
+	if GameManager.has_signal("spawn_floating_text"):
+		GameManager.spawn_floating_text.connect(_spawn_floating_text)
+	
 func _warmup_ui():
 	# GPU Warmup is no longer needed with alpha-based visibility
 	# Panels are already visible=true with alpha=0 by default
 	# They will warm up naturally when first toggled
-	print("[MainGame] UI Warmup Skipped (Alpha-based system active)")
+	pass
+	# print("[MainGame] UI Warmup Skipped (Alpha-based system active)")
 
 func _unhandled_input(event):
 	# CRITICAL: Don't collect DNA if any panel is open
@@ -176,10 +183,11 @@ func _update_biome_visuals():
 		if background_sprite.has_method("apply_cover_scale"):
 			background_sprite.apply_cover_scale()
 
-func _show_click_feedback(pos: Vector2, amount: int):
+# Generic Floating Text Helper
+func _spawn_floating_text(pos: Vector2, text: String, color: Color):
 	var label = Label.new()
-	label.text = "+" + str(amount)
-	label.modulate = Color(0.7, 1.0, 0.7) # Light Green
+	label.text = text
+	label.modulate = color
 	label.position = pos
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
@@ -191,17 +199,25 @@ func _show_click_feedback(pos: Vector2, amount: int):
 	
 	# Add to FeedbackContainer (first child of UI_Layer, draws BEHIND buttons)
 	var feedback_container = $UI_Layer/FeedbackContainer
-	feedback_container.add_child(label)
-	
-	# OPTIMIZATION: Safety cap for click effects (Anti-Freeze)
-	if feedback_container.get_child_count() > 100:
-		var oldest = feedback_container.get_child(0)
-		oldest.queue_free()
+	if feedback_container:
+		feedback_container.add_child(label)
+		
+		# OPTIMIZATION: Safety cap for click effects (Anti-Freeze)
+		if feedback_container.get_child_count() > 100:
+			var oldest = feedback_container.get_child(0)
+			oldest.queue_free()
+	else:
+		# Fallback if container missing
+		add_child(label)
 	
 	var tween = create_tween()
 	tween.tween_property(label, "position:y", pos.y - 80, 0.8).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8)
 	tween.tween_callback(label.queue_free)
+
+func _show_click_feedback(pos: Vector2, amount: int):
+	# Wrapper for standard click
+	_spawn_floating_text(pos, "+" + str(amount), Color(0.7, 1.0, 0.7))
 
 func _on_background_clicked(tap_position: Vector2):
 	# 1. Base Click Value
@@ -294,7 +310,8 @@ func _on_timer_timeout(): # Or wherever you calculated it
 	
 	# FIX: Use the variable to update the UI!
 	# FIX: Use the variable to update the UI!
-	$UI_Layer/TopPanel.update_dps_label(total_dps)
+	if top_panel:
+		top_panel.update_dps_label(total_dps)
 
 # Helper function to hide/show UI buttons when full-screen panels are active
 func _toggle_ui_buttons(should_hide: bool):
@@ -304,9 +321,13 @@ func _toggle_ui_buttons(should_hide: bool):
 		btn_research.visible = false
 		btn_museum.visible = false
 		btn_tasks.visible = false
+		if habitat_panel: habitat_panel.visible = false # HIDE HABITAT PANEL
+		if top_panel: top_panel.visible = false # HIDE TOP PANEL
 	else:
 		# Show all UI buttons when panels are closed
 		btn_shop.visible = true
 		btn_research.visible = true
 		btn_museum.visible = true
 		btn_tasks.visible = true
+		if habitat_panel: habitat_panel.visible = true # SHOW HABITAT PANEL
+		if top_panel: top_panel.visible = true # SHOW TOP PANEL

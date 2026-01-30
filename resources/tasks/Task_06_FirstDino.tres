@@ -1,13 +1,13 @@
 [gd_resource type="Resource" script_class="TaskData" load_steps=2 format=3 uid="uid://dqq2nmxyp6nt3"]
 
-[ext_resource type="Script" path="res://scripts/resources/TaskData.gd" id="1_5mnje"]
+[ext_resource type="Script" uid="uid://qqhl0h0ymco2" path="res://scripts/resources/TaskData.gd" id="1_5mnje"]
 
 [resource]
 script = ExtResource("1_5mnje")
 id = "task_06"
 title = "Oasis Colonization"
-description = "The Eoraptor thrives near water sources. Establish a foothold in the Oasis."
+description = "The Eoraptor thrives near water sources. Establish a foothold in the Oasis. Research \"Perforate Acetabulm or Open Hip Socket\". (Reward: 25k DNA)"
 goal_type = "research"
 target_amount = 1
 target_id = "node_perforate"
-reward_dna = 10000
+reward_dna = 25000

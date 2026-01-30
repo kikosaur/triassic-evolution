@@ -6,8 +6,8 @@
 script = ExtResource("1_t6ryx")
 id = "task_15"
 title = "The Earth Shaker"
-description = "This body mass is too great for two legs. We must shift the center of gravity. (Research Quad)"
+description = "This body mass is too great for two legs. We must shift the center of gravity. Research \"Quadrupedalism\". (Reward: 50m DNA)"
 goal_type = "research"
 target_amount = 1
 target_id = "node_quadruped"
-reward_dna = 250000
+reward_dna = 50000000

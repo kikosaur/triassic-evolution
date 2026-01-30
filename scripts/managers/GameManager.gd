@@ -14,6 +14,7 @@ signal extinction_triggered
 signal research_unlocked(research_id: String)
 signal offline_earnings_calculated(amount: int, time_seconds: int)
 signal dino_spawned(dino_node: Node)
+signal spawn_floating_text(pos: Vector2, text: String, color: Color)
 
 # --- ECONOMY VARIABLES ---
 var current_dna: int = 0
@@ -26,6 +27,7 @@ var prestige_multiplier: float = 1.0
 var unlocked_research_ids: Array = []
 var owned_dinosaurs: Dictionary = {}
 var tutorial_completed: bool = false
+var lifetime_purchases: Dictionary = {} # Tracks total buys for persistent pricing
 
 # --- CACHED STATS (Optimization) ---
 var _cached_dna_per_sec: int = 0
@@ -73,6 +75,10 @@ func _ready():
 	
 	# Time System
 	_setup_year_timer()
+
+# Helper to trigger floating text (encapsulates signal)
+func trigger_floating_text(pos: Vector2, text: String, color: Color = Color.WHITE):
+	emit_signal("spawn_floating_text", pos, text, color)
 
 var year_timer: Timer
 var current_year: int = 0
@@ -234,6 +240,13 @@ func is_all_research_unlocked() -> bool:
 	return unlocked_research_ids.size() >= 17
 
 func trigger_dino_spawn(species_data: DinosaurSpecies):
+	# Increment Lifetime Count (Economy consistency)
+	var s_name = species_data.species_name
+	if s_name in lifetime_purchases:
+		lifetime_purchases[s_name] += 1
+	else:
+		lifetime_purchases[s_name] = 1
+		
 	emit_signal("dinosaur_spawned", species_data)
 
 func trigger_extinction():
@@ -295,6 +308,7 @@ func reset_game_state():
 	fossils = 0
 	vegetation_density = 0.0
 	critter_density = 0.0
+	lifetime_purchases.clear()
 	
 	# 2. Reset Research (Keep Starter Logic)
 	unlocked_research_ids.clear()
@@ -340,6 +354,8 @@ func get_save_dictionary() -> Dictionary:
 		"timestamp": Time.get_unix_time_from_system(),
 		"current_year": current_year,
 		"quests": QuestManager.get_save_data(),
+		"lifetime_purchases": lifetime_purchases,
+		"prestige_multiplier": prestige_multiplier,
 		# ---------------------
 		
 		"dinos": []
@@ -383,6 +399,14 @@ func load_save_dictionary(data: Dictionary):
 
 	if "quests" in data:
 		QuestManager.load_save_data(data["quests"])
+
+	if "lifetime_purchases" in data:
+		lifetime_purchases = data["lifetime_purchases"]
+		
+	if "prestige_multiplier" in data:
+		prestige_multiplier = data["prestige_multiplier"]
+	else:
+		prestige_multiplier = 1.0
 		
 	if "current_year" in data:
 		current_year = str(data["current_year"]).to_int()
@@ -589,7 +613,8 @@ func get_dino_cost(species_data: DinosaurSpecies) -> int:
 	if not species_data: return 0
 	
 	var base = species_data.base_dna_cost
-	var count = get_dino_count(species_data.species_name)
+	# var count = get_dino_count(species_data.species_name) <--- OLD
+	var count = lifetime_purchases.get(species_data.species_name, 0)
 	
 	# Formula: Base * (1.15 ^ Count)
 	var multiplier = pow(1.15, count)
@@ -611,21 +636,22 @@ func get_habitat_cost(product_res: Resource) -> int:
 	
 	# Assuming Product Script has 'dna_cost', 'type' (0=Veg, 1=Critter)
 	var base = product_res.dna_cost
-	var density_val = 0.0
 	
-	# Check type safely
-	if "type" in product_res:
-		if product_res.type == 0: # VEGETATION
-			density_val = vegetation_density
-		else: # CRITTER (1)
-			density_val = critter_density
-			
-	# Formula: Base * (1.1 ^ (Density / 10))
-	# Every 10% density adds ~10% cost
-	var steps = int(density_val / 10.0)
-	var multiplier = pow(1.1, steps)
+	# Formula: Base * (1.1 ^ PurchaseCount)
+	# Was based on density, now based on consistent purchase history
+	var count = lifetime_purchases.get(product_res.name, 0)
+	var multiplier = pow(1.1, count)
 	
 	return int(base * multiplier)
+
+func record_habitat_purchase(product_res: Resource):
+	if not product_res: return
+	
+	var h_name = product_res.name
+	if h_name in lifetime_purchases:
+		lifetime_purchases[h_name] += 1
+	else:
+		lifetime_purchases[h_name] = 1
 
 # --- UTILITIES ---
 

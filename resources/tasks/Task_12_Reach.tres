@@ -6,8 +6,8 @@
 script = ExtResource("1_3yb0p")
 id = "task_12"
 title = "Reaching New Heights"
-description = "The food is too high for current herbivores. We need a biological adaptation. (Research Elongated Neck)"
+description = "The food is too high for current herbivores. We need a biological adaptation. Research \"Elongated Neck\". (Reward: 500k DNA)"
 goal_type = "research"
 target_amount = 1
 target_id = "node_longneck"
-reward_dna = 50000
+reward_dna = 500000

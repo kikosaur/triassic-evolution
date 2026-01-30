@@ -7,7 +7,7 @@
 script = ExtResource("1_8h6la")
 name = "Dragonfly Swarm"
 type = 1
-dna_cost = 150
+dna_cost = 375
 density_gain = 8.0
 icon = ExtResource("1_6hqpm")
 required_research_id = "node_river"

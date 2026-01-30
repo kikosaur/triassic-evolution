@@ -1,3 +1,26 @@
+# Triassic Evolution v2.1.1 - The Polish Update ✨
+
+This update focuses on refining the user experience, enhancing mobile usability, and squashing bugs.
+
+## 🌟 What's New
+
+### 📱 Mobile & UI Improvements
+- **Responsive Popups**: All information panels (Research, Shop, Critters) now scale perfectly on mobile screens with larger, touch-friendly buttons.
+- **Visual Feedback**: Added floating text (e.g., "+50 DNA") when tapping dinosaurs to clearly show your earnings.
+- **Terms & Conditions**: Updated legal text for clarity and professionalism.
+
+### 🎮 Gameplay Enhancements
+- **Click Yields**: Tapping dinosaurs now grants instant DNA and boosts your global click power.
+- **Shop Sync**: Shop prices now update in real-time when costs increase.
+- **Tutorial Overhaul**: Completely rewritten onboarding experience with clearer instructions on Tapping, Colors, and Survival mechanics.
+
+### 🐛 Bug Fixes & Adjustments
+- **Research Logic**: "Buy" buttons now correctly disable and show "UNLOCKED" after purchase.
+- **Removed Time Warp**: Simplify settings by removing the experimental Time Warp feature.
+- **Tutorial Fixes**: Fixed text formatting issues in the tutorial overlay.
+
+---
+
 # Triassic Evolution v2.1.0 - The Extinction Update ☄️🦕
 
 **Triassic Evolution v2.1.0** is the definitive release of the Triassic Era simulation. This update brings major gameplay depth, system stability, and the long-awaited conclusion to the era: The Extinction Event.

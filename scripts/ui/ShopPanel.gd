@@ -21,6 +21,13 @@ func _ready():
 	if GameManager.has_signal("research_unlocked"):
 		GameManager.connect("research_unlocked", _refresh_locks)
 	
+	# NEW: Refresh costs when purchases happen!
+	if GameManager.has_signal("dinosaur_spawned"):
+		GameManager.dinosaur_spawned.connect(func(_d): _refresh_items())
+	
+	if GameManager.has_signal("habitat_updated"):
+		GameManager.habitat_updated.connect(func(_v, _c): _refresh_items())
+	
 	visibility_changed.connect(_on_visibility_changed)
 	
 	# Start hidden (simple visibility)

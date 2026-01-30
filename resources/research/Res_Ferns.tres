@@ -12,5 +12,7 @@ display_name = "Fern Plains"
 icon = ExtResource("1_a8we3")
 description = "Low-lying plants that thrive in humid environments. Ideal for grazing herbivores."
 type = 2
+dna_cost = 75000
+fossil_cost = 180
 parent_research = ExtResource("2_23fqb")
 unlock_habitat = ExtResource("4_habitat")

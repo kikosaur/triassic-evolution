@@ -6,6 +6,6 @@
 script = ExtResource("1_twe4j")
 id = "task_03"
 title = "Safety in Numbers"
-description = "Small reptiles are vulnerable. They need a pack to survive."
+description = "Small reptiles are vulnerable. They need a pack to survive. Hatch 10 Lagosuchus. (Reward: 2k DNA)"
 target_id = "Lagosuchus"
-reward_dna = 1500
+reward_dna = 2000

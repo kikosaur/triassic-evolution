@@ -6,7 +6,7 @@
 script = ExtResource("1_p71r6")
 id = "task_16"
 title = "Clash of Titans"
-description = "Prove the environment can support a family of true giants before the end comes."
+description = "Prove the environment can support a family of true giants before the end comes. Hatch 3 Riojasaurus. (Reward: 900m DNA)"
 target_amount = 3
 target_id = "Riojasaurus"
-reward_dna = 600000
+reward_dna = 900000000

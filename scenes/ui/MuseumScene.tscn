@@ -133,15 +133,13 @@ text = "  X  "
 [node name="DetailPanel" type="Panel" parent="."]
 visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -200.0
-offset_right = 400.0
-offset_bottom = 200.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = 50.0
+offset_right = -100.0
+offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -161,62 +159,64 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 30
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
 
 [node name="HBoxContainer" type="HBoxContainer" parent="DetailPanel/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 40
 
 [node name="LargeImage" type="TextureRect" parent="DetailPanel/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(250, 250)
+custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
+size_flags_vertical = 4
 expand_mode = 1
 stretch_mode = 5
 
 [node name="InfoContainer" type="VBoxContainer" parent="DetailPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 15
 
 [node name="NameLbl" type="Label" parent="DetailPanel/MarginContainer/HBoxContainer/InfoContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 56
 
 [node name="SciNameLbl" type="RichTextLabel" parent="DetailPanel/MarginContainer/HBoxContainer/InfoContainer"]
-custom_minimum_size = Vector2(0, 25)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/italics_font_size = 28
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
 [node name="SizeLabel" type="Label" parent="DetailPanel/MarginContainer/HBoxContainer/InfoContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 24
 
 [node name="DietLabel" type="Label" parent="DetailPanel/MarginContainer/HBoxContainer/InfoContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 24
 
 [node name="DescLbl" type="Label" parent="DetailPanel/MarginContainer/HBoxContainer/InfoContainer"]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 28
 autowrap_mode = 3
 
 [node name="BtnClosePopup" type="Button" parent="DetailPanel"]
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(80, 80)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -58.0
-offset_top = 5.0
-offset_right = -10.0
-offset_bottom = 53.0
+offset_left = -80.0
+offset_bottom = 80.0
 grow_horizontal = 0
-theme_override_font_sizes/font_size = 18
-text = "  X  "
+theme_override_font_sizes/font_size = 40
+text = "X"

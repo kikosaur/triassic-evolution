@@ -53,6 +53,10 @@ func _ready():
 	_load_dynamic_resources()
 	refresh_gallery() # Build UI immediately (Pre-load)
 	
+	# Listen for Research Unlocks to update Museum dynamically
+	if GameManager.has_signal("research_unlocked"):
+		GameManager.connect("research_unlocked", func(_id): refresh_gallery())
+	
 	# Start hidden (simple visibility)
 	visible = false
 	

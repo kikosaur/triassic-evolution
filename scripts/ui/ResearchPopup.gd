@@ -51,6 +51,15 @@ func setup(research_def: ResearchDef):
 func _update_buttons():
 	if not current_research: return
 	
+	# NEW: Check if already owned
+	if GameManager.is_research_unlocked(current_research):
+		btn_dna.text = "UNLOCKED"
+		btn_dna.disabled = true
+		btn_fossil.visible = false
+		return
+	else:
+		btn_fossil.visible = true
+	
 	var cost_d = current_research.dna_cost
 	var cost_f = current_research.fossil_cost
 	

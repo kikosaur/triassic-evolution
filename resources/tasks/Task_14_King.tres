@@ -6,8 +6,8 @@
 script = ExtResource("1_votk1")
 id = "task_14"
 title = "King of the Triassic"
-description = "To support a larger predator frame, we need stronger limb stability. (Research Fused Ankles)"
+description = "To support a larger predator frame, we need stronger limb stability. Research \"Fused Ankles\". (Reward: 800k DNA)"
 goal_type = "research"
 target_amount = 1
 target_id = "node_fused"
-reward_dna = 100000
+reward_dna = 800000

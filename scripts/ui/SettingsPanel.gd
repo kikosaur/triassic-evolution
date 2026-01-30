@@ -10,7 +10,7 @@ extends Panel
 @onready var how_to_play_btn = $MarginContainer/VBoxContainer/HowToPlayBtn
 @onready var terms_btn = $MarginContainer/VBoxContainer/TermsBtn
 @onready var info_panel = $InfoPanel
-var time_warp_btn: Button
+
 var logout_btn: Button
 var extinction_btn: Button
 
@@ -31,19 +31,27 @@ Buy habitat decorations to boost the efficiency of your dinosaurs.
 """
 
 const TERMS_TEXT = """
-[b]Triassic Evolution Terms[/b]
+[b]TRIASSIC EVOLUTION - TERMS OF USE[/b]
 
-1. This game is a personal project created for educational purposes.
-2. No personal data is collected or stored on external servers.
-3. Dinosaur logic is simulated and does not represent real biological timeframes.
-4. By playing, you agree to have fun and evolve responsibly!
+[b]1. Introduction[/b]
+Welcome to Triassic Evolution. By playing this game, you join a community of dinosaur enthusiasts!
 
-[i]Version 1.0.0[/i]
+[b]2. Privacy Policy[/b]
+This application is a student project and does NOT collect, store, or share any personal identifiable information (PII). All game data is stored locally on your device.
+
+[b]3. Fair Play[/b]
+Cheating, hacking, or exploiting bugs to gain unfair advantages (e.g., infinite DNA glitches) removes the fun of evolution. Play fair!
+
+[b]4. Intellectual Property[/b]
+All assets, including pixel art, music, and code, are original works or licensed for use. You may share screenshots and videos of your gameplay!
+
+[b]5. Disclaimer[/b]
+While we strive for accuracy, this is a simulation game. Evolutionary timelines and biological traits are stylized for gameplay purposes and may not reflect 100% scientific accuracy.
+
+[i]Version 2.1.0 - The Evolution Update[/i]
 """
 
 func _ready():
-	time_warp_btn = get_node_or_null("MarginContainer/VBoxContainer/TimeWarpBtn")
-	
 	# 1. CONNECT SLIDERS
 	music_slider.value_changed.connect(_on_music_changed)
 	sfx_slider.value_changed.connect(_on_sfx_changed)
@@ -70,10 +78,7 @@ func _ready():
 		info_panel.setup_popup("Terms", TERMS_TEXT)
 	)
 	
-	# 4. CONNECT TIME WARP BUTTON (Premium Feature)
-	if time_warp_btn:
-		time_warp_btn.pressed.connect(_on_time_warp_pressed)
-		
+
 	# 5. CONNECT LOGOUT BUTTON
 	logout_btn = get_node_or_null("MarginContainer/VBoxContainer/BtnLogout")
 	if logout_btn:
@@ -111,14 +116,6 @@ func _on_logout_pressed():
 	# Return to Start Screen
 	get_tree().change_scene_to_file("res://scenes/ui/StartScreen.tscn")
 
-func _on_time_warp_pressed():
-	if GameManager.use_time_warp():
-		AudioManager.play_sfx("success")
-		# Show success feedback
-		info_panel.setup_popup("Time Warp!", "[color=green]You skipped 1 hour![/color]\n\nEarned: " + GameManager.format_number(GameManager.get_total_dna_per_second() * 3600) + " DNA")
-	else:
-		AudioManager.play_sfx("click")
-		info_panel.setup_popup("Not Enough Fossils", "You need [color=yellow]10 Fossils[/color] to use Time Warp.\n\nCurrent: " + GameManager.format_number(GameManager.fossils) + " Fossils")
 
 func _on_music_changed(value):
 	# Send the new value directly to AudioManager

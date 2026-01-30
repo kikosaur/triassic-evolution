@@ -23,7 +23,8 @@ func _ready():
 	self.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _on_step_changed(_index, data):
-	label.text = data["text"]
+	# Add center tags for RichTextLabel styling
+	label.text = "[center]" + data["text"] + "[/center]"
 	
 	# Move Highlight
 	var highlight_id = data["highlight"]

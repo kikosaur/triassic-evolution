@@ -16,14 +16,37 @@ func _ready():
 	
 	# Draw line to parent
 	if parent_node:
-		line.clear_points()
-		line.add_point(size / 2) # My Center
-		# Calculate Parent Center (Relative to me)
-		var target = parent_node.position - position + (parent_node.size / 2)
-		line.add_point(target)
+		_draw_stepped_line()
 
 	# Initial Visual Update
 	_update_visuals()
+
+func _draw_stepped_line():
+	line.clear_points()
+	
+	# TARGETING FIX:
+	# Use IconRect center (40, 40) instead of Control center (40, 70).
+	# This ensures the line comes out of the "Image" part of the node.
+	var icon_center = Vector2(size.x / 2, 40) # Hardcoded 80x80 icon / 2 = 40
+	# Or dynamically: 
+	# var icon_center = icon_rect.position + (icon_rect.size / 2)
+	
+	# Start at My Icon Center
+	var start = icon_center
+	
+	# End at Parent Icon Center (Relative)
+	# parent_node.position - position gets us to Parent Top-Left (Relative to me).
+	# Then add parent's icon offset (40, 40).
+	var relative_parent_pos = parent_node.position - position
+	var end = relative_parent_pos + icon_center
+	
+	# Calculate Midpoint for "Dogleg" / "Manhattan" connection
+	var mid_x = (start.x + end.x) / 2
+	
+	line.add_point(start)
+	line.add_point(Vector2(mid_x, start.y))
+	line.add_point(Vector2(mid_x, end.y))
+	line.add_point(end)
 
 func _on_click():
 	# Find the menu and open popup
@@ -59,7 +82,10 @@ func _update_visuals():
 		cost_label.text = "OWNED"
 		name_label.text = my_data.display_name
 		click_btn.disabled = false
-		# Let's keep it clickable so they can see description/lore!
+		
+		# Design: Gold Line for established connection
+		line.default_color = Color(1, 0.8, 0, 1) # Gold
+		line.width = 6.0
 		
 	elif parent_unlocked:
 		# --- AVAILABLE STATE ---
@@ -67,13 +93,14 @@ func _update_visuals():
 		icon_rect.modulate = Color(0, 0, 0, 0.8) # Silhouetted Icon (Mystery)
 		
 		# Show Costs
-		var cost_d = my_data.dna_cost
-		var cost_f = my_data.fossil_cost if "fossil_cost" in my_data else 5
-		
-		cost_label.text = "%s / %s F" % [GameManager.format_number(cost_d), str(cost_f)]
+		cost_label.text = "UNLOCK"
 		name_label.text = my_data.display_name
 		
 		click_btn.disabled = false
+		
+		# Design: White Pulse? Just White for now
+		line.default_color = Color(1, 1, 1, 0.5)
+		line.width = 4.0
 		
 	else:
 		# --- LOCKED STATE ---
@@ -83,3 +110,7 @@ func _update_visuals():
 		cost_label.text = "LOCKED"
 		name_label.text = "???"
 		click_btn.disabled = true
+		
+		# Design: Dim Line
+		line.default_color = Color(0.3, 0.3, 0.3, 0.5)
+		line.width = 3.0

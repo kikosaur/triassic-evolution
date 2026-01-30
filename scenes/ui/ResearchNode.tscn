@@ -12,8 +12,9 @@ size_flags_horizontal = 4
 script = ExtResource("1_03efp")
 
 [node name="LinkLine" type="Line2D" parent="."]
+z_index = -1
 width = 4.0
-default_color = Color(0.50534403, 0.5053441, 0.50534403, 1)
+default_color = Color(0.505344, 0.505344, 0.505344, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0

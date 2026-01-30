@@ -314,6 +314,9 @@ func _unhandled_input(event):
 			else:
 				# Living dino: Give click yield DNA bonus
 				_on_dino_clicked()
+			
+			# CRITICAL FIX: Stop event from bubbling to other dinos or MainGame
+			get_viewport().set_input_as_handled()
 
 func _on_dino_clicked():
 	if not species_data: return
@@ -325,6 +328,10 @@ func _on_dino_clicked():
 		
 	GameManager.add_dna(total_yield)
 	AudioManager.play_sfx("click")
+
+	# Visual Feedback text
+	if GameManager.has_method("trigger_floating_text"):
+		GameManager.trigger_floating_text(global_position, "+" + str(int(total_yield)), Color.GREEN)
 	
 	# Optional: Visual feedback (small bounce)
 	# Use base_scale to prevent "infinite growth" bug on spam click
@@ -333,9 +340,21 @@ func _on_dino_clicked():
 	tween.tween_property(anim, "scale", base_scale, 0.1)
 
 func _harvest_fossil():
-	if GameManager.has_method("add_fossils"):
-		GameManager.add_fossils(1)
-		AudioManager.play_sfx("success")
+	# 30% Chance to spawn a fossil
+	if randf() <= 0.3:
+		if GameManager.has_method("add_fossils"):
+			GameManager.add_fossils(1)
+			AudioManager.play_sfx("success")
+			
+			if GameManager.has_method("trigger_floating_text"):
+				GameManager.trigger_floating_text(global_position, "+1 Fossil!", Color.YELLOW)
+	else:
+		# Failure
+		# Optional: Play a "dust" sound if available
+		# AudioManager.play_sfx("dust") 
+		if GameManager.has_method("trigger_floating_text"):
+			GameManager.trigger_floating_text(global_position, "Dust...", Color.GRAY)
+			
 	queue_free()
 
 func _setup_passive_timer():

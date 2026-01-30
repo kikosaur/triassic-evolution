@@ -6,7 +6,7 @@
 script = ExtResource("1_xll1f")
 id = "task_07"
 title = "The Eoraptor Colony"
-description = "Eoraptors are social creatures. Build a sustainable population."
+description = "Eoraptors are social creatures. Build a sustainable population. Hatch 5 Eoraptor (Reward: 100k DNA)"
 target_amount = 5
 target_id = "Eoraptor"
-reward_dna = 5000
+reward_dna = 100000

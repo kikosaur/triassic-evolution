@@ -11,4 +11,5 @@ display_name = "Archosaur"
 icon = ExtResource("1_6y145")
 description = "The 'great-grandfather' of dinosaurs and crocodiles. A rugged survivor of the arid scrublands."
 dna_cost = 0
+fossil_cost = 0
 unlock_species = ExtResource("3_dino")

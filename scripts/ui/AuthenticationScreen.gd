@@ -55,15 +55,21 @@ func _on_register_pressed():
 	var password = sign_pass.text.strip_edges()
 	
 	if full_name == "" or dob == "" or username == "" or email == "" or password == "":
-		# TODO: better validation? (e.g. check DOB format)
-		_show_message("All fields are required.", false) # Might happen if popup obscure
-		# Ideally show error on popup itself? 
-		# For this implementation, let's just use print/debug or a label inside popup if needed.
-		# But since message_lbl is on LoginPanel (which is behind), let's just ensure we see it 
-		# OR add a message label to popup.
-		# For now, I'll print.
-		print("Signup Error: Missing fields")
+		_show_message("All fields are required.", false)
 		return
+
+	# Validate Date Format (YYYY-MM-DD)
+	var date_regex = RegEx.new()
+	date_regex.compile("^\\d{4}-\\d{2}-\\d{2}$")
+	if not date_regex.search(dob):
+		_show_message("Invalid Date! Use YYYY-MM-DD", false)
+		return
+		
+	# Basic Email Validation
+	if "@" not in email or "." not in email:
+		_show_message("Invalid Email Address.", false)
+		return
+
 
 	# Call AuthManager
 	_show_message("Creating Account...", true)

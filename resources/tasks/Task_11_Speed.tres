@@ -6,8 +6,8 @@
 script = ExtResource("1_3x4am")
 id = "task_11"
 title = "Reaching New Heights"
-description = "Speed is survival. To move faster, we must reduce skeletal weight. (Research Hollow Bones)"
+description = "Speed is survival. To move faster, we must reduce skeletal weight. Research \"Hollow Bones\". (Reward: 400k DNA)"
 goal_type = "research"
 target_amount = 1
 target_id = "node_hollow"
-reward_dna = 25000
+reward_dna = 400000

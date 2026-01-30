@@ -140,4 +140,8 @@ func _apply_habitat_effect():
 	if GameManager.vegetation_density > 100: GameManager.vegetation_density = 100
 	if GameManager.critter_density > 100: GameManager.critter_density = 100
 	
+	# NEW: Record purchase for price scaling consistency
+	if GameManager.has_method("record_habitat_purchase"):
+		GameManager.record_habitat_purchase(current_habitat)
+	
 	GameManager.emit_signal("habitat_updated", GameManager.vegetation_density, GameManager.critter_density)

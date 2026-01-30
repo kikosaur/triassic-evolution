@@ -21,43 +21,48 @@ var overlay_node: Control = null
 # 3: Highlight Buy Button (Generic area or specific if possible)
 var steps = [
 	{
-		"text": "Welcome! Let's start by finding new life. Open the Research Menu.",
+		"text": "Welcome to Triassic Evolution! Let's start with the basics.\n\n[b]Tap Anywhere[/b] on the ground to earn DNA! Try it now!",
+		"highlight": "center", # No specific button, just center
+		"alignment": "center"
+	},
+	{
+		"text": "Great! You can also [b]Tap Dinosaurs[/b] directly to harvest their [b]Click Yield[/b].\n\nThis gives instant DNA ([color=green]Green Numbers[/color]) based on the species stats!",
+		"highlight": "center",
+		"alignment": "center"
+	},
+	{
+		"text": "Open the [b]Research Menu[/b] to unlock new species. This is how you advance through the Triassic era.",
 		"highlight": "research_btn",
 		"alignment": "bottom_left"
 	},
 	{
-		"text": "The Research Menu tracks your progress. This is where you unlock new Dinosaurs, Traits, and Habitats!",
-		"highlight": "research_btn",
-		"alignment": "center"
-	},
-	{
-		"text": "Now open the Shop. Press a dinosaur and buy using DNA or FOSSIL! Next is go to Habitat at the top left after the Dinosaurs Tab to buy foods for your Dinosaurs!",
+		"text": "Once unlocked, buy Dinosaurs in the [b]Shop[/b] using DNA or FOSSILS.\n\nDon't forget the [b]Habitat Tab[/b] to buy food!",
 		"highlight": "shop_btn",
 		"alignment": "bottom_left"
 	},
 	{
-		"text": "Your dinosaurs need food! Plants feed Herbivores, and Critters feed Carnivores. You might not want to lose the Critter bar, the Carnivores will eat your Herbivors!",
+		"text": "Your dinosaurs need food! Plants feed Herbivores, and Critters feed Carnivores.\n\n[color=red]Warning:[/color] If Critters run out, Carnivores will eat your Herbivores!",
 		"highlight": "habitat_bars",
 		"alignment": "center"
 	},
 	{
-		"text": "Check the Task Log often! Completing goals earns you DNA to evolve further.",
+		"text": "Check the [b]Task Log[/b] often! Completing goals earns you huge DNA rewards to evolve faster.",
 		"highlight": "quest_btn",
 		"alignment": "top_right"
 	},
 	{
-		"text": "The Museum is your Hall of Fame. View your collection and unlocked achievements here.",
-		"highlight": "museum_btn",
-		"alignment": "bottom_left"
-	},
-	{
-		"text": "As you unlock Habitat research, the world transforms! Keep vegetation and critter densities high to evolve your landscape from barren desert to lush forest.",
+		"text": "As you buy Habitat items, the world transforms! Evolve your landscape from a barren desert to a lush forest.",
 		"highlight": "habitat_bars",
 		"alignment": "center"
 	},
 	{
-		"text": "Fossils are found when Dinosaurs die, or rarely in the dirt. Collect them!",
-		"highlight": "museum_btn", # Visual anchor
+		"text": "The [b]Museum[/b] tracks your collection.\n\nKeep an eye out for Fossils ([color=yellow]+1[/color]) when dinos die—they are rare and valuable!",
+		"highlight": "museum_btn",
+		"alignment": "bottom_left"
+	},
+	{
+		"text": "That's all for now. Good luck on your journey to evolve the ultimate Triassic ecosystem!",
+		"highlight": "center",
 		"alignment": "center"
 	}
 ]

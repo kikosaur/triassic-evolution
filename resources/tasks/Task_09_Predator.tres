@@ -6,8 +6,8 @@
 script = ExtResource("1_ntfos")
 id = "task_09"
 title = "The Ambush Hunter"
-description = "The ecosystem needs a dedicated carnivore. (Research Serrated Teeth)"
+description = "The ecosystem needs a dedicated carnivore. Research \"Serrated Teeth\". (Reward: 20k DNA)"
 goal_type = "research"
 target_amount = 1
 target_id = "node_serrated"
-reward_dna = 15000
+reward_dna = 20000
