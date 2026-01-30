@@ -16,6 +16,7 @@ global_click_bonus = 2
 icon = ExtResource("1_iro2c")
 consumption_rate = 1.0
 tolerance = 0.8
+base_lifespan = 300.0
 scientific_name = "Archosauria"
 length = "0.5m × 1m"
 time_period = "252 Million Years Ago"

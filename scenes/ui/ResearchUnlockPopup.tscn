@@ -1,0 +1,101 @@
+[gd_scene load_steps=4 format=3 uid="uid://vs5ww7jfy8he"]
+
+[ext_resource type="Script" uid="uid://culksv5b7gjsd" path="res://scripts/ui/ResearchUnlockPopup.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://djqfj60k8kq6r" path="res://resources/TriassicTheme.tres" id="3_theme"]
+[ext_resource type="SpriteFrames" uid="uid://dljg8dxrc2y8e" path="res://resources/effects/LightRayFrames.tres" id="4_frames"]
+
+[node name="ResearchUnlockPopup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Dimmer" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.15686275)
+
+[node name="CenterContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LightRayHolder" type="Control" parent="CenterContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -310.5
+offset_top = -283.0
+offset_right = 310.5
+offset_bottom = 283.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(310.5, 283)
+
+[node name="LightRayAnim" type="AnimatedSprite2D" parent="CenterContainer/LightRayHolder"]
+position = Vector2(310.5, 283)
+scale = Vector2(0.4, 0.4)
+sprite_frames = ExtResource("4_frames")
+autoplay = "default"
+
+[node name="Icon" type="TextureRect" parent="CenterContainer"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -95.0
+offset_top = -98.0
+offset_right = 33.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = 100.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "RESEARCH UNLOCKED"
+horizontal_alignment = 1
+
+[node name="DescLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 18
+text = "Check the Museum to see your new discovery!
+(Tap anywhere to continue)"
+horizontal_alignment = 1

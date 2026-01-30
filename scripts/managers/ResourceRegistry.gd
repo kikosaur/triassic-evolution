@@ -46,3 +46,33 @@ const HABITAT_FILES = [
 	preload("res://resources/habitats/Habitat_Pools.tres"),
 	preload("res://resources/habitats/Habitat_River.tres")
 ]
+
+# RESEARCH
+const RESEARCH_FILES = [
+	preload("res://resources/research/Res_Archosaur.tres"),
+	preload("res://resources/research/Res_Coelophysis.tres"),
+	preload("res://resources/research/Res_CranialCrest.tres"),
+	preload("res://resources/research/Res_Cycads.tres"),
+	preload("res://resources/research/Res_ElongatedNeck.tres"),
+	preload("res://resources/research/Res_Eoraptor.tres"),
+	preload("res://resources/research/Res_Ferns.tres"),
+	preload("res://resources/research/Res_Forest.tres"),
+	preload("res://resources/research/Res_FusedAnkles.tres"),
+	preload("res://resources/research/Res_Gastroliths.tres"),
+	preload("res://resources/research/Res_Gigantism.tres"),
+	preload("res://resources/research/Res_Herrerasaurus.tres"),
+	preload("res://resources/research/Res_HollowBones.tres"),
+	preload("res://resources/research/Res_Intramandibular.tres"),
+	preload("res://resources/research/Res_Lagosuchus.tres"),
+	preload("res://resources/research/Res_LeafShapedTeeth.tres"),
+	preload("res://resources/research/Res_Liliensternus.tres"),
+	preload("res://resources/research/Res_Panphagia.tres"),
+	preload("res://resources/research/Res_PerforateAcetabulum.tres"),
+	preload("res://resources/research/Res_Plateosaurus.tres"),
+	preload("res://resources/research/Res_Pools.tres"),
+	preload("res://resources/research/Res_Quadrupedalism.tres"),
+	preload("res://resources/research/Res_Riojasaurus.tres"),
+	preload("res://resources/research/Res_River.tres"),
+	preload("res://resources/research/Res_SerratedTeeth.tres"),
+	preload("res://resources/research/Res_UprightStance.tres")
+]

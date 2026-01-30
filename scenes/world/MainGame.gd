@@ -152,8 +152,24 @@ func _unhandled_input(event):
 		_on_background_clicked(event.position)
 		get_viewport().set_input_as_handled()
 
-func _on_research_unlocked(_id):
+const ResearchUnlockPopup = preload("res://scenes/ui/ResearchUnlockPopup.tscn")
+
+func _on_research_unlocked(id):
+	# Update visuals first
 	_update_biome_visuals()
+	
+	# Close the Research Menu (and any others) so we see the world
+	if research_menu:
+		research_menu.visible = false
+		_toggle_ui_buttons(false) # Updates the HUD buttons state (Show them, or keep hidden?)
+		# Actually, if we show the popup, we probably want the HUD visible or dimmed?
+		# The popup has a 10% dimmer. The user wants to see the "Achievement Scene".
+		# Closing the menu reveals the world.
+		
+	# Show Unlock Popup
+	var popup = ResearchUnlockPopup.instantiate()
+	$UI_Layer.add_child(popup)
+	popup.setup(id)
 
 func _update_biome_visuals():
 	var veg = GameManager.vegetation_density
