@@ -7,7 +7,8 @@ extends Panel
 @onready var btn_fossil = %BtnFossil
 @onready var lbl_diet = %DietLabel
 @onready var lbl_life = %LifespanLabel
-@onready var lbl_traits = %TraitsLabel
+@onready var lbl_bio = %BiosphereLabel
+@onready var lbl_income = %IncomeLabel
 
 var current_species: DinosaurSpecies
 var current_habitat: HabitatProduct
@@ -33,23 +34,28 @@ func setup_dinosaur(species: DinosaurSpecies):
 	# 2. LIFESPAN
 	lbl_life.text = "Lifespan: %s Seconds (Years in Game)" % str(species.base_lifespan)
 	
-	# 3. TRAITS
-	# Assuming 'traits' is an Array[DinoTrait]
-	# If property doesn't exist, handle safely
-	var trait_list = []
-	if "traits" in species and species.traits:
-		for t in species.traits:
-			if "display_name" in t: trait_list.append(t.display_name)
+	# 3. BIOSPHERE INFO (Replaces Traits)
+	# "Biome: Desert | Eat: 1.0/s"
+	var biome_name = "Desert"
+	if species.ideal_biome_phase == 2: biome_name = "Oasis"
+	elif species.ideal_biome_phase == 3: biome_name = "Forest"
 	
-	if trait_list.is_empty():
-		lbl_traits.text = "Traits: None"
-	else:
-		lbl_traits.text = "Traits: " + ", ".join(trait_list)
+	var rate = species.consumption_rate
+	lbl_bio.text = "Biome: %s | Eat: %s/s" % [biome_name, str(rate)]
 		
+	# 4. INCOME STATS (User Request)
+	# Format: "Stats: 10/s | Click: +10 (+2 Global)"
+	var passive = str(species.passive_dna_yield)
+	var click = str(species.click_yield)
+	var global = str(species.global_click_bonus)
+	
+	lbl_income.text = "Stats: %s DNA/s | Click: +%s (+%s Global)" % [passive, click, global]
+	
 	# Show all stats
 	lbl_diet.visible = true
 	lbl_life.visible = true
-	lbl_traits.visible = true
+	lbl_bio.visible = true
+	lbl_income.visible = true
 	
 	if species.icon:
 		icon_rect.texture = species.icon
@@ -76,8 +82,9 @@ func setup_habitat(habitat: HabitatProduct):
 	# 2. DENSITY (Lifespan Label)
 	lbl_life.text = "Gain: +%s Density" % str(habitat.density_gain)
 	
-	# 3. HIDE TRAITS
-	lbl_traits.visible = false
+	# 3. HIDE TRAITS & INCOME
+	lbl_bio.visible = false
+	lbl_income.visible = false
 	
 	if habitat.icon:
 		icon_rect.texture = habitat.icon
@@ -108,6 +115,9 @@ func _update_buttons():
 
 func _on_buy_dna():
 	if current_species:
+		# Check limit BEFORE spending
+		if not GameManager.can_spawn_dino(): return
+		
 		var cost = GameManager.get_dino_cost(current_species)
 		if GameManager.try_spend_dna(cost):
 			GameManager.trigger_dino_spawn(current_species)
@@ -120,6 +130,9 @@ func _on_buy_dna():
 
 func _on_buy_fossil():
 	if current_species:
+		# Check limit BEFORE spending
+		if not GameManager.can_spawn_dino(): return
+		
 		var cost = GameManager.get_dino_fossil_cost(current_species)
 		if GameManager.try_spend_fossils(cost):
 			GameManager.trigger_dino_spawn(current_species)

@@ -42,6 +42,7 @@ const DEBUG_MODE: bool = false
 @onready var quest_panel = $UI_Layer/QuestPanel
 @onready var habitat_panel = $UI_Layer/HabitatPanel
 @onready var top_panel = $UI_Layer/TopPanel
+var warning_sys_node: Control = null
 
 # Safety Watchdog
 var _ui_watchdog_timer: float = 0.0
@@ -121,6 +122,20 @@ func _ready() -> void:
 	if GameManager.has_signal("spawn_floating_text"):
 		GameManager.spawn_floating_text.connect(_spawn_floating_text)
 	
+	if GameManager.has_signal("toast_notification"):
+		GameManager.toast_notification.connect(_show_toast)
+
+	# INSTANTIATE WARNING SYSTEM
+	warning_sys_node = WarningSystem.instantiate()
+	$UI_Layer.add_child(warning_sys_node)
+	
+	# INSTANTIATE WELCOME BACK PANEL
+	var welcome_back = WelcomeBackPanel.instantiate()
+	$UI_Layer.add_child(welcome_back)
+	
+	# PROCESS ANY PENDING DINO SPAWNS (Fixes Loading Screen Race Condition)
+	GameManager.process_pending_dinos()
+	
 func _warmup_ui():
 	# GPU Warmup is no longer needed with alpha-based visibility
 	# Panels are already visible=true with alpha=0 by default
@@ -153,8 +168,11 @@ func _unhandled_input(event):
 		get_viewport().set_input_as_handled()
 
 const ResearchUnlockPopup = preload("res://scenes/ui/ResearchUnlockPopup.tscn")
+const WarningSystem = preload("res://scenes/ui/WarningSystem.tscn")
+const WelcomeBackPanel = preload("res://scenes/ui/WelcomeBackPanel.tscn")
 
 func _on_research_unlocked(id):
+# ...
 	# Update visuals first
 	_update_biome_visuals()
 	
@@ -182,7 +200,8 @@ func _update_biome_visuals():
 		target_texture = bg_06_forest
 	elif veg >= 50.0 and crit >= 40.0 and "node_cycads" in unlocked:
 		target_texture = bg_05_cycads
-	elif veg >= 30.0 and crit >= 30.0 and "node_river" in unlocked:
+	# RIVERS: Trigger at 31% to match Oasis Phase
+	elif int(veg) > 30 and crit >= 30.0 and "node_river" in unlocked:
 		target_texture = bg_04_rivers
 	elif veg >= 20.0 and "node_ferns" in unlocked:
 		target_texture = bg_03_ferns
@@ -229,6 +248,41 @@ func _spawn_floating_text(pos: Vector2, text: String, color: Color):
 	var tween = create_tween()
 	tween.tween_property(label, "position:y", pos.y - 80, 0.8).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.8)
+	tween.tween_callback(label.queue_free)
+
+func _show_toast(text: String, color: Color):
+	# Create a Toast Label that is ALWAYS ON TOP
+	var label = Label.new()
+	label.text = text
+	label.modulate = color
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	# STYLE
+	label.add_theme_font_size_override("font_size", 48) # 1.5x larger than floating text
+	var font = load("res://assets/fonts/PressStart2P-Regular.ttf")
+	if font:
+		label.add_theme_font_override("font", font)
+	
+	# Add directly to UI_Layer (Parent of panels)
+	$UI_Layer.add_child(label)
+	# CRITICAL: Move to Front to render OVER ShopPopup
+	label.move_to_front()
+	
+	# Position: Center Screen
+	var vp_size = get_viewport_rect().size
+	label.position = Vector2(vp_size.x / 2 - 200, vp_size.y / 2 - 50) # Approx centering
+	
+	# Animation: Pop in and Fade out
+	label.modulate.a = 0.0
+	label.scale = Vector2(0.5, 0.5)
+	label.pivot_offset = Vector2(label.size.x / 2, label.size.y / 2) # Pivot center? Hard to guess size before draw
+	
+	var tween = create_tween()
+	tween.tween_property(label, "modulate:a", 1.0, 0.2)
+	tween.parallel().tween_property(label, "scale", Vector2(1.2, 1.2), 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(label, "scale", Vector2(1.0, 1.0), 0.1)
+	tween.tween_interval(1.5) # Hold
+	tween.tween_property(label, "modulate:a", 0.0, 0.5)
 	tween.tween_callback(label.queue_free)
 
 func _show_click_feedback(pos: Vector2, amount: int):
@@ -285,6 +339,7 @@ func _process(delta):
 	if _ui_watchdog_timer > 0.5:
 		_ui_watchdog_timer = 0.0
 		_check_ui_consistency()
+		_update_dps_ui()
 
 func _check_ui_consistency():
 	# If ALL fullscreen panels are closed...
@@ -321,11 +376,9 @@ func _notification(what: int) -> void:
 
 # Inside MainGame.gd (around line 133)
 
-func _on_timer_timeout(): # Or wherever you calculated it
+func _update_dps_ui():
 	var total_dps = GameManager.get_total_dna_per_second()
 	
-	# FIX: Use the variable to update the UI!
-	# FIX: Use the variable to update the UI!
 	if top_panel:
 		top_panel.update_dps_label(total_dps)
 
@@ -339,6 +392,7 @@ func _toggle_ui_buttons(should_hide: bool):
 		btn_tasks.visible = false
 		if habitat_panel: habitat_panel.visible = false # HIDE HABITAT PANEL
 		if top_panel: top_panel.visible = false # HIDE TOP PANEL
+		if warning_sys_node: warning_sys_node.suppressed = true # HIDE WARNING SYSTEM
 	else:
 		# Show all UI buttons when panels are closed
 		btn_shop.visible = true
@@ -347,3 +401,4 @@ func _toggle_ui_buttons(should_hide: bool):
 		btn_tasks.visible = true
 		if habitat_panel: habitat_panel.visible = true # SHOW HABITAT PANEL
 		if top_panel: top_panel.visible = true # SHOW TOP PANEL
+		if warning_sys_node: warning_sys_node.suppressed = false # SHOW WARNING SYSTEM

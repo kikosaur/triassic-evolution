@@ -10,6 +10,13 @@ func _ready():
 	
 	# Listen for the signal from GameManager
 	GameManager.connect("offline_earnings_calculated", _on_earnings)
+	
+	# CHECK PENDING (Fixes race condition)
+	if GameManager.pending_offline_earnings > 0:
+		_on_earnings(GameManager.pending_offline_earnings, GameManager.pending_offline_time)
+		# Clear after showing
+		GameManager.pending_offline_earnings = 0
+		GameManager.pending_offline_time = 0
 
 func _on_earnings(amount, seconds):
 	# FIX: Use 60.0 to force float math, then convert to int

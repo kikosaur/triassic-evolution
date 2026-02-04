@@ -7,5 +7,7 @@
 script = ExtResource("1_2w2w0")
 name = "Cycad Crate"
 dna_cost = 250
+fossil_cost = 2
+density_gain = 23.0
 icon = ExtResource("1_qvpkv")
 required_research_id = "node_cycads"

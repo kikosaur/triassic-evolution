@@ -31,6 +31,11 @@ var target_prey: Node2D = null
 @onready var anim = $AnimatedSprite # CHANGED: Now references AnimatedSprite2D
 var passive_timer: Timer
 
+# Income
+var income_accumulator: float = 0.0
+var eating_bonus_timer: float = 0.0
+const EATING_BONUS_DURATION: float = 5.0
+
 # Helper to play animation AND match scale to consistent visual size
 func _play_scaled_anim(anim_name: String):
 	if is_dead and anim_name != "die": return
@@ -63,9 +68,17 @@ func _update_scale_for_current_anim():
 			base_scale = anim.scale # Update base for tweening effects
 
 func _ready():
-	add_to_group("dinos")
+	# CRITICAL: Ensure we are in the 'dinos' group for Global Managers
+	if not is_in_group("dinos"):
+		add_to_group("dinos")
 	
-	if species_data:
+	# Fallback if species_data missing
+	if not species_data:
+		queue_free()
+		return
+		
+	# Setup Sprite
+	if anim:
 		# Check if animations exist
 		if species_data.animations:
 			anim.sprite_frames = species_data.animations
@@ -126,10 +139,45 @@ func _process(delta):
 	if is_dead: return
 	
 	_handle_aging(delta)
+	_handle_income(delta) # NEW: Continuous Income
 	
 	# Only move if not busy eating
 	if not is_eating:
 		_handle_movement(delta)
+
+func _handle_income(delta):
+	if not species_data: return
+	
+	# 1. Check Food Availability
+	var has_food = false
+	if species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
+		has_food = GameManager.vegetation_density > 0
+	else:
+		has_food = GameManager.critter_density > 0
+		
+	# 2. Determine Multiplier
+	var multiplier = 1.0
+	if eating_bonus_timer > 0:
+		eating_bonus_timer -= delta
+		multiplier = 2.0
+		
+	# 3. Accumulate Income
+	if has_food:
+		var base_dps = species_data.passive_dna_yield
+		
+		# TOLERANCE PENALTY: Divide by age_multiplier
+		# If age_multiplier is 1.0 (Ideal), no penalty.
+		# If age_multiplier is > 1.0 (Stressed), income reduces.
+		if age_multiplier > 0:
+			base_dps /= age_multiplier
+			
+		income_accumulator += base_dps * multiplier * delta
+		
+		# Payout whole numbers
+		if income_accumulator >= 1.0:
+			var payout = int(income_accumulator)
+			GameManager.add_dna(payout)
+			income_accumulator -= payout
 
 func _handle_movement(delta):
 	var dest = target_position
@@ -188,9 +236,8 @@ func _on_tick():
 			# Only play eat animation if we actually ate something real
 			if ate_food:
 				_play_eat_animation()
-				# Generate DNA
-				var income = species_data.passive_dna_yield * passive_timer.wait_time
-				GameManager.add_dna(income)
+				# Trigger Bonus (No direct income here anymore)
+				eating_bonus_timer = EATING_BONUS_DURATION
 		else:
 			# Vegetation is 0%. Stop eating, just walk/idle.
 			ate_food = false
@@ -201,9 +248,8 @@ func _on_tick():
 		if GameManager.critter_density > 0:
 			ate_food = GameManager.consume_critters(rate)
 			if ate_food:
-				# Generate DNA
-				var income = species_data.passive_dna_yield * passive_timer.wait_time
-				GameManager.add_dna(income)
+				# Trigger Bonus (No direct income here anymore)
+				eating_bonus_timer = EATING_BONUS_DURATION
 				target_prey = null # Satisfied, stop hunting
 		else:
 			# Critters are 0%. Trigger HUNT MODE.
@@ -260,8 +306,11 @@ func die():
 	# OPTIMIZATION: Remove from group immediately so logic loops skip this corpse
 	if is_in_group("dinos"):
 		remove_from_group("dinos")
-		# Also trigger cache update since we "left" the logic pool
-		if GameManager.has_method("_recalculate_cache"):
+		# Notify Manager (Signals UI and Stats)
+		if GameManager.has_method("notify_dino_died"):
+			GameManager.notify_dino_died(self)
+		# Fallback: Just trigger cache if old system
+		elif GameManager.has_method("_recalculate_cache"):
 			GameManager._recalculate_cache()
 
 	# 1. Try to play death animation

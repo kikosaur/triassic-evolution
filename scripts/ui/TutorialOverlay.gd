@@ -29,6 +29,28 @@ func _on_step_changed(_index, data):
 	# Move Highlight
 	var highlight_id = data["highlight"]
 	_move_highlight(highlight_id)
+	
+	# Move Panel (Avoid obscuring highlight)
+	var align_mode = data.get("alignment", "center")
+	_align_panel(align_mode)
+
+func _align_panel(mode: String):
+	# Simple presets for Panel position using Anchors
+	var panel = $Panel
+	
+	if mode == "top_center":
+		panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE, Control.PRESET_MODE_KEEP_WIDTH)
+		panel.position.y = 150 # Below Top Bar
+	elif mode == "bottom_left":
+		panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_KEEP_WIDTH)
+		panel.position.y = get_viewport_rect().size.y - 300
+		panel.position.x = 50
+	elif mode == "top_right":
+		panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_KEEP_WIDTH)
+		panel.position.y = 150
+		panel.position.x = get_viewport_rect().size.x - panel.size.x - 50
+	else: # Center
+		panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
 
 func _move_highlight(id: String):
 	# Default: Center screen if not found

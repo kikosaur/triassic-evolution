@@ -1,0 +1,95 @@
+extends Control
+
+# UI References
+@onready var icon = $Icon
+@onready var popup = $PopupPanel
+@onready var details_label = $PopupPanel/MarginContainer/Content/Details
+@onready var title_label = $PopupPanel/MarginContainer/Content/Title
+
+var issues: Array = []
+var recent_deaths: int = 0
+var death_timer: float = 0.0
+var suppressed: bool = false
+
+func _ready():
+	# Default state
+	visible = false
+	popup.visible = false
+	
+	# Connect Button for hover/click
+	# Connect Button for click only (Mobile friendly & User Request)
+	var btn = $Button
+	# btn.mouse_entered.connect(_on_hover_start) # Removed for Click-Only
+	# btn.mouse_exited.connect(_on_hover_end) # Removed for Click-Only
+	btn.pressed.connect(_on_click)
+
+	# Listen for deaths
+	if GameManager.has_signal("dinosaur_died"):
+		GameManager.dinosaur_died.connect(_on_dino_died)
+
+func _process(delta):
+	issues.clear()
+	
+	# 1. Check Food Shortage
+	if GameManager.vegetation_density <= 0:
+		issues.append("[color=red]CRITICAL:[/color] Vegetation Depleted! (0%)")
+		
+	if GameManager.critter_density <= 0:
+		issues.append("[color=red]CRITICAL:[/color] Critters Depleted! (0%)")
+		
+	# 2. Check Biome Stress
+	var stressed_dinos = []
+	var all_dinos = get_tree().get_nodes_in_group("dinos")
+	for dino in all_dinos:
+		if is_instance_valid(dino) and not dino.is_dead and dino.species_data:
+			# Check age multiplier (tolerance proxy)
+			# We need to access the variable safely
+			if "age_multiplier" in dino and dino.age_multiplier > 1.1: # 1.1 buffer
+				var s_name = dino.species_data.species_name
+				if not s_name in stressed_dinos:
+					stressed_dinos.append(s_name)
+	
+	if stressed_dinos.size() > 0:
+		var list_str = ", ".join(stressed_dinos)
+		issues.append("[color=orange]STRESS:[/color] Biome Mismatch:\n" + list_str)
+
+	# 3. Recent Deaths
+	if recent_deaths > 0:
+		# Decay death warning over time
+		death_timer -= delta
+		if death_timer <= 0:
+			recent_deaths = 0
+		else:
+			issues.append("[color=gray]DEATHS:[/color] " + str(recent_deaths) + " recent casualties.")
+
+	# --- VISIBILITY ---
+	if suppressed:
+		visible = false
+		return
+		
+	if issues.size() > 0:
+		visible = true
+		_update_popup_text()
+	else:
+		visible = false
+		popup.visible = false
+
+func _update_popup_text():
+	var full_text = ""
+	for issue in issues:
+		full_text += issue + "\n\n"
+	details_label.text = full_text
+
+func _on_dino_died(_dino):
+	recent_deaths += 1
+	death_timer = 10.0 # Warning stays for 10 seconds after a death
+
+func _on_hover_start():
+	popup.visible = true
+	
+func _on_hover_end():
+	popup.visible = false
+
+func _on_click():
+	# Allow clicking to toggle the info popup
+	popup.visible = not popup.visible

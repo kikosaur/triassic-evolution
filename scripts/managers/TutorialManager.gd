@@ -26,7 +26,7 @@ var steps = [
 		"alignment": "center"
 	},
 	{
-		"text": "Great! You can also [b]Tap Dinosaurs[/b] directly to harvest their [b]Click Yield[/b].\n\nThis gives instant DNA ([color=green]Green Numbers[/color]) based on the species stats!",
+		"text": "Great! Dinosaurs generate [b]Passive DNA[/b] every second as long as they are fed.\n\nYou can also [b]Tap Them[/b] for an instant bonus!",
 		"highlight": "center",
 		"alignment": "center"
 	},
@@ -36,14 +36,19 @@ var steps = [
 		"alignment": "bottom_left"
 	},
 	{
-		"text": "Once unlocked, buy Dinosaurs in the [b]Shop[/b] using DNA or FOSSILS.\n\nDon't forget the [b]Habitat Tab[/b] to buy food!",
+		"text": "Once unlocked, buy Dinosaurs in the [b]Shop[/b].\n\nCheck their **Stats** (Income & Consumption) in the info popup before buying!",
 		"highlight": "shop_btn",
 		"alignment": "bottom_left"
 	},
 	{
-		"text": "Your dinosaurs need food! Plants feed Herbivores, and Critters feed Carnivores.\n\n[color=red]Warning:[/color] If Critters run out, Carnivores will eat your Herbivores!",
+		"text": "Your dinosaurs need food to survive! If [b]Food Runs Out[/b], their DNA income stops.\n\nDon't forget the [b]Habitat Tab[/b] to buy vegetation!",
 		"highlight": "habitat_bars",
 		"alignment": "center"
+	},
+	{
+		"text": "Monitor your park at the top! The [b]Active Counter[/b] shows your population (Max 25).\n\nThe [b]Biome Label[/b] shows if you are in a Desert, Oasis, or Forest.",
+		"highlight": "center",
+		"alignment": "top_center"
 	},
 	{
 		"text": "Check the [b]Task Log[/b] often! Completing goals earns you huge DNA rewards to evolve faster.",
@@ -51,8 +56,18 @@ var steps = [
 		"alignment": "top_right"
 	},
 	{
-		"text": "As you buy Habitat items, the world transforms! Evolve your landscape from a barren desert to a lush forest.",
+		"text": "As you buy Habitat items, the world transforms!\n\n**Tip:** You must unlock [b]River[/b] and [b]Forest[/b] research nodes to advance beyond the Desert phase.",
 		"highlight": "habitat_bars",
+		"alignment": "center"
+	},
+	{
+		"text": "Each species has a preferred Biome Phase (1, 2, or 3).\n\n[color=red]Warning:[/color] In the wrong biome, dinosaurs become [b]Stressed[/b]. They die younger and produce less DNA!",
+		"highlight": "habitat_bars",
+		"alignment": "center"
+	},
+	{
+		"text": "If critical issues arise (like Starvation or Stress), a [b]Warning Icon[/b] will appear.\n\n[b]Tap It[/b] to see exactly what needs fixing!",
+		"highlight": "center",
 		"alignment": "center"
 	},
 	{

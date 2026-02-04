@@ -15,6 +15,8 @@ signal research_unlocked(research_id: String)
 signal offline_earnings_calculated(amount: int, time_seconds: int)
 signal dino_spawned(dino_node: Node)
 signal spawn_floating_text(pos: Vector2, text: String, color: Color)
+signal toast_notification(text: String, color: Color)
+signal dinosaur_died(dino_node: Node)
 
 # --- ECONOMY VARIABLES ---
 var current_dna: int = 0
@@ -23,6 +25,9 @@ var vegetation_density: float = 0.0
 var critter_density: float = 0.0
 var prestige_multiplier: float = 1.0
 
+# --- LIMITS ---
+const MAX_DINO_COUNT: int = 25
+
 # --- DATA TRACKING ---
 var unlocked_research_ids: Array = []
 var owned_dinosaurs: Dictionary = {}
@@ -30,7 +35,8 @@ var tutorial_completed: bool = false
 var lifetime_purchases: Dictionary = {} # Tracks total buys for persistent pricing
 
 # --- CACHED STATS (Optimization) ---
-var _cached_dna_per_sec: int = 0
+var _cached_herbivore_dps: int = 0
+var _cached_carnivore_dps: int = 0
 var _cached_click_bonus: int = 0
 var _cached_dino_counts: Dictionary = {}
 var _cached_herbivores: Array = [] # New: Fast access for hunting
@@ -39,6 +45,9 @@ var _cached_carnivores: Array = [] # New: Fast access (future proof)
 # --- DINO LIBRARY ---
 # Variable to hold the Dino Scene
 var dino_scene = preload("res://scenes/units/DinoUnit.tscn")
+var pending_dino_load_data: Array = [] # Buffer for dinos if scene isn't ready
+var pending_offline_earnings: int = 0
+var pending_offline_time: int = 0
 
 # Dictionary to map Names to Files
 var dino_library = {
@@ -239,15 +248,31 @@ func is_all_research_unlocked() -> bool:
 	# A robust way is to check the resource registry or just hardcode the target
 	return unlocked_research_ids.size() >= 17
 
+func can_spawn_dino() -> bool:
+	var count = get_tree().get_nodes_in_group("dinos").size()
+	# Check pending buffer too for strictness
+	if count + pending_dino_load_data.size() >= MAX_DINO_COUNT:
+		# Use TOAST instead of floating text (Always Visible)
+		# Also show debug count to help user understand "24/25" confusion
+		emit_signal("toast_notification", "HABITAT FULL! (%d/%d)" % [count, MAX_DINO_COUNT], Color.RED)
+		return false
+	return true
+	
 func trigger_dino_spawn(species_data: DinosaurSpecies):
+	if not can_spawn_dino():
+		return
+
 	# Increment Lifetime Count (Economy consistency)
+	record_dino_purchase(species_data)
+		
+	emit_signal("dinosaur_spawned", species_data)
+
+func record_dino_purchase(species_data: DinosaurSpecies):
 	var s_name = species_data.species_name
 	if s_name in lifetime_purchases:
 		lifetime_purchases[s_name] += 1
 	else:
 		lifetime_purchases[s_name] = 1
-		
-	emit_signal("dinosaur_spawned", species_data)
 
 func trigger_extinction():
 	# Only trigger if not already triggered (optional check, but good for safety)
@@ -267,15 +292,28 @@ func _check_win_condition(_ignored_arg = null):
 
 	# --- BIOME HELPERS ---
 func get_current_biome_phase() -> int:
-	# Phase 1: Desert (0-30%)
-	if vegetation_density <= 30.0:
-		return 1
-	# Phase 2: Oasis (31-60%)
-	elif vegetation_density <= 60.0:
-		return 2
-	# Phase 3: Jungle (61%+)
-	else:
-		return 3
+	# PHASE 1: DESERT (Default)
+	# Requirement: None (Always starts here)
+	var phase = 1
+	
+	# PHASE 2: OASIS
+	# Requirement: Density > 30% AND 'node_river' researched
+	if int(vegetation_density) > 30:
+		if "node_river" in unlocked_research_ids:
+			phase = 2
+		else:
+			return 1 # Cap at Phase 1 if River not unlocked
+			
+	# PHASE 3: JUNGLE
+	# Requirement: Density > 60% AND 'node_forest' researched (AND must have passed Phase 2)
+	if int(vegetation_density) > 60:
+		# We assume if they hit 60 they probably have river, but let's be strict
+		if "node_forest" in unlocked_research_ids and phase == 2:
+			phase = 3
+		elif phase == 2:
+			return 2 # Cap at Phase 2 if Forest not unlocked
+			
+	return phase
 		
 # --- PREDATION HELPERS ---
 func get_nearest_herbivore(hunter_position: Vector2) -> Node2D:
@@ -363,8 +401,16 @@ func get_save_dictionary() -> Dictionary:
 	
 	# 2. Serialize Dinosaurs with Optimization
 	var dino_nodes = get_tree().get_nodes_in_group("dinos")
+	if DEBUG_MODE:
+		print("GameManager: Found ", dino_nodes.size(), " dinos in group 'dinos' to save.")
+		
 	for dino in dino_nodes:
 		if is_instance_valid(dino) and not dino.is_dead:
+			# Verify data validity
+			if not dino.species_data:
+				if DEBUG_MODE: print("GameManager: WARNING - Dino skipped, species_data is null!")
+				continue
+				
 			var d_data = {
 				"species_id": dino.species_data.species_name,
 				"age": snapped(dino.current_age, 0.1), # Optimize: 1 decimal
@@ -372,6 +418,11 @@ func get_save_dictionary() -> Dictionary:
 				"pos_y": int(dino.position.y) # Optimize: Integer
 			}
 			save_dict["dinos"].append(d_data)
+		else:
+			if DEBUG_MODE: print("GameManager: Skipped invalid or dead dino.")
+
+	if DEBUG_MODE:
+		print("GameManager: Saved ", save_dict["dinos"].size(), " valid dinos.")
 			
 	return save_dict
 
@@ -420,7 +471,11 @@ func load_save_dictionary(data: Dictionary):
 	get_tree().call_group("dinos", "queue_free")
 	
 	if "dinos" in data:
-		for d_data in data["dinos"]:
+		var saved_dinos = data["dinos"]
+		if DEBUG_MODE:
+			print("GameManager: Found ", saved_dinos.size(), " dinos in save file to load.")
+		
+		for d_data in saved_dinos:
 			_spawn_dino_from_save(d_data)
 	if "timestamp" in data:
 		var saved_time = data["timestamp"]
@@ -447,10 +502,25 @@ func _calculate_offline_earnings(seconds_passed: float):
 		if not dino.is_dead and dino.species_data:
 			if dino.species_data.diet == 0: # Herbivore
 				herb_dps += dino.species_data.passive_dna_yield
-				herb_consumption += 0.002 # Reduced from 0.05 to match 25s interval
+				herb_consumption += 0.002
 			else: # Carnivore
 				carn_dps += dino.species_data.passive_dna_yield
-				carn_consumption += 0.002 # Reduced from 0.05 to match 25s interval
+				carn_consumption += 0.002
+				
+	# 3. ALSO CHECK BUFFERED DINOS (Critical for loading screen)
+	for d_data in pending_dino_load_data:
+		var id = d_data["species_id"]
+		if id in dino_library:
+			var path = dino_library[id]
+			# Load resource just for stats (Cached by Godot usually)
+			var species_res = load(path)
+			if species_res:
+				if species_res.diet == 0: # Herbivore
+					herb_dps += species_res.passive_dna_yield
+					herb_consumption += 0.002
+				else: # Carnivore
+					carn_dps += species_res.passive_dna_yield
+					carn_consumption += 0.002
 	
 	# 3. Calculate Valid Time (Starvation limit)
 	var time_herb = seconds_passed
@@ -481,7 +551,9 @@ func _calculate_offline_earnings(seconds_passed: float):
 		add_dna(earnings)
 		emit_signal("habitat_updated", vegetation_density, critter_density)
 		
-		# Show Popup
+		# Show Popup (Store for UI when it's ready)
+		pending_offline_earnings = earnings
+		pending_offline_time = int(seconds_passed)
 		emit_signal("offline_earnings_calculated", earnings, int(seconds_passed))
 		
 		if DEBUG_MODE:
@@ -494,39 +566,65 @@ func _spawn_dino_from_save(d_data):
 		var path = dino_library[id]
 		var stats = load(path)
 		
+		# 1. Attempt to find Container
+		var main_game = get_tree().root.get_node_or_null("MainGame")
+		# Fallback: Check current scene if named MainGame
+		if not main_game and get_tree().current_scene.name == "MainGame":
+			main_game = get_tree().current_scene
+			
+		var container = null
+		if main_game:
+			container = main_game.get_node_or_null("DinoContainer")
+			
+		# 2. If Container NOT found, BUFFER IT (Fixes Loading Screen Race Condition)
+		if not container:
+			if DEBUG_MODE:
+				print("GameManager: Container not found. Buffering dino spawn: ", id)
+			pending_dino_load_data.append(d_data)
+			return
+
 		if stats:
 			var new_dino = dino_scene.instantiate()
 			
-			# 1. Assign Data FIRST (Prevents crash)
+			# 3. Assign Data FIRST (Prevents crash)
 			new_dino.species_data = stats
 			new_dino.position = Vector2(d_data["pos_x"], d_data["pos_y"])
 			new_dino.current_age = d_data["age"]
 			
-			# 2. Add to Scene LAST (Triggers _ready)
-			var main_game = get_tree().root.get_node_or_null("MainGame")
-			if main_game:
-				var container = main_game.get_node_or_null("DinoContainer")
-				if container:
-					container.add_child(new_dino)
+			# 4. Add to Scene
+			container.add_child(new_dino)
+			
+			# 3. EXTRA SAFETY: Check if animations exist before playing
+			if new_dino.has_node("AnimatedSprite"):
+				var anim = new_dino.get_node("AnimatedSprite")
+				
+				# Ensure frames are loaded
+				if stats.animations:
+					anim.sprite_frames = stats.animations
 					
-					# 3. EXTRA SAFETY: Check if animations exist before playing
-					if new_dino.has_node("AnimatedSprite"):
-						var anim = new_dino.get_node("AnimatedSprite")
-						
-						# Ensure frames are loaded
-						if stats.animations:
-							anim.sprite_frames = stats.animations
-							
-							# Only play if the animation name actually exists
-							if anim.sprite_frames.has_animation("idle"):
-								anim.play("idle")
+					# Only play if the animation name actually exists
+					if anim.sprite_frames.has_animation("idle"):
+						anim.play("idle")
 
-					# 4. QUEST SYSTEM SIGNAL (Crucial for tracking!)
-					notify_dino_spawned(new_dino)
+			# 4. QUEST SYSTEM SIGNAL (Crucial for tracking!)
+			notify_dino_spawned(new_dino)
 
 	else:
 		if DEBUG_MODE:
-			print("GameManager: Warning - Unknown dino species: ", id)
+			print("GameManager: Warning - Unknown dino species ID in save: ", id)
+			# print("Available keys: ", dino_library.keys())
+
+func process_pending_dinos():
+	if pending_dino_load_data.is_empty(): return
+	
+	if DEBUG_MODE:
+		print("GameManager: Processing ", pending_dino_load_data.size(), " buffered dinos...")
+		
+	var buffer = pending_dino_load_data.duplicate()
+	pending_dino_load_data.clear()
+	
+	for d_data in buffer:
+		_spawn_dino_from_save(d_data)
 
 func notify_dino_spawned(dino_node: Node):
 	emit_signal("dino_spawned", dino_node)
@@ -538,13 +636,18 @@ func notify_dino_spawned(dino_node: Node):
 	# Update immediately for the new spawn
 	_recalculate_cache()
 
+func notify_dino_died(dino_node: Node):
+	emit_signal("dinosaur_died", dino_node)
+	_recalculate_cache()
+
 func _recalculate_cache():
 	# SAFETY CHECK: If the tree is gone (quit/change), stop immediately.
 	if not is_inside_tree(): return
 	var tree = get_tree()
 	if not tree: return
 
-	var total_dps = 0
+	var herb_dps = 0
+	var carn_dps = 0
 	var total_bonus = 0
 	var counts = {}
 	
@@ -565,8 +668,13 @@ func _recalculate_cache():
 		if not dino.species_data:
 			continue
 			
-		# 1. DPS
-		total_dps += dino.species_data.passive_dna_yield
+		# 1. DPS (Split by diet)
+		if dino.species_data.diet == 0: # Herbivore
+			herb_dps += dino.species_data.passive_dna_yield
+			_cached_herbivores.append(dino)
+		else: # Carnivore
+			carn_dps += dino.species_data.passive_dna_yield
+			_cached_carnivores.append(dino)
 		
 		# 2. Click Bonus
 		if "global_click_bonus" in dino.species_data:
@@ -581,22 +689,24 @@ func _recalculate_cache():
 		else:
 			counts[s_name] = 1
 			
-		# 4. Cache Lists for Optimization
-		if dino.species_data.diet == 0: # Herbivore
-			_cached_herbivores.append(dino)
-		else:
-			_cached_carnivores.append(dino)
+		# 4. Cache Lists (Handled in loop now)
 			
-	_cached_dna_per_sec = total_dps
+	_cached_herbivore_dps = herb_dps
+	_cached_carnivore_dps = carn_dps
 	_cached_click_bonus = total_bonus
 	_cached_dino_counts = counts
 	
 	if DEBUG_MODE:
-		print("GameManager: Cache updated. Herbivores: ", _cached_herbivores.size(), ", Carnivores: ", _cached_carnivores.size())
+		print("GameManager: Cache updated. H_DPS: ", herb_dps, " C_DPS: ", carn_dps)
 
 # --- INCOME HELPER ---
 func get_total_dna_per_second() -> int:
-	return _cached_dna_per_sec
+	var total = 0
+	if vegetation_density > 0:
+		total += _cached_herbivore_dps
+	if critter_density > 0:
+		total += _cached_carnivore_dps
+	return total
 
 func get_global_click_bonus() -> int:
 	# FIX: Default should be 0, not 1. 
@@ -637,10 +747,10 @@ func get_habitat_cost(product_res: Resource) -> int:
 	# Assuming Product Script has 'dna_cost', 'type' (0=Veg, 1=Critter)
 	var base = product_res.dna_cost
 	
-	# Formula: Base * (1.1 ^ PurchaseCount)
+	# Formula: Base * (1.08 ^ PurchaseCount)
 	# Was based on density, now based on consistent purchase history
 	var count = lifetime_purchases.get(product_res.name, 0)
-	var multiplier = pow(1.1, count)
+	var multiplier = pow(1.08, count)
 	
 	return int(base * multiplier)
 
