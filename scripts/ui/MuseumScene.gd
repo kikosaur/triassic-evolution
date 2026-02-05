@@ -176,8 +176,36 @@ func _on_slot_clicked(data):
 	if "description" in data: d_desc.text = data.description
 	
 	# Populate Scientific Name
-	if "scientific_name" in data: d_sci.text = "[i]" + data.scientific_name + "[/i]"
-	else: d_sci.text = ""
+	if "scientific_name" in data:
+		var sci_text = "[i]" + data.scientific_name + "[/i]"
+		
+		# CHECK FOR TRAIT ATTRIBUTION (Reverse lookup)
+		# We want to know what traits this dino provided
+		var dino_name = data.species_name if "species_name" in data else data.display_name
+		var my_traits = []
+		
+		for t_name in trait_source_map:
+			if trait_source_map[t_name] == dino_name:
+				my_traits.append(t_name)
+		
+		if not my_traits.is_empty():
+			var trait_str = ", ".join(my_traits)
+			sci_text += "\n[color=#ffcc88]Traits: " + trait_str + "[/color]"
+			
+		d_sci.text = sci_text
+		
+	elif "display_name" in data and data.display_name in trait_source_map:
+		# SHOW TRAIT SOURCE
+		var source_dino = trait_source_map[data.display_name]
+		d_sci.text = "[color=#88ff88]Trait from: " + source_dino + "[/color]"
+		
+	elif "display_name" in data and data.display_name in habitat_inhabitants_map:
+		# SHOW HABITAT INHABITANTS
+		var inhabitants = habitat_inhabitants_map[data.display_name]
+		d_sci.text = "[color=#88ff88]Attracted Species:\n" + inhabitants + "[/color]"
+		
+	else:
+		d_sci.text = ""
 	
 	# Populate Size
 	if "length" in data: d_size.text = "Size: " + data.length
@@ -193,3 +221,28 @@ func _on_slot_clicked(data):
 		d_diet.text = ""
 	
 	detail_panel.visible = true
+
+# HARDCODED MAPPING: Trait Name -> Source Dinosaur
+var trait_source_map = {
+	"Upright Stance": "Lagosuchus",
+	"Perforate Acetabulum": "Eoraptor",
+	"Serrated Teeth": "Herrerasaurus",
+	"Intramandibular Joint": "Herrerasaurus",
+	"Hollow Bones": "Coelophysis",
+	"Leaf-Shaped Teeth": "Panphagia",
+	"Fused Ankles": "Liliensternus",
+	"Cranial Crest": "Liliensternus",
+	"Elongated Neck": "Plateosaurus",
+	"Gastroliths": "Plateosaurus",
+	"Quadrupedalism": "Riojasaurus",
+	"Gigantism": "Riojasaurus"
+}
+
+# HABITAT MAPPING: Habitat Name -> List of Dinosaurs that live there
+var habitat_inhabitants_map = {
+	"Ephemeral Pools": "Archosaur, Lagosuchus, Eoraptor",
+	"Fern Plains": "Archosaur, Lagosuchus, Eoraptor",
+	"Cycad Grove": "Herrerasaurus, Panphagia, Coelophysis",
+	"River Delta": "Herrerasaurus, Panphagia, Coelophysis",
+	"Conifer Forest": "Liliensternus, Plateosaurus, Riojasaurus"
+}

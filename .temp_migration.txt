@@ -1,0 +1,11 @@
+﻿# MIGRATION: Recalculate limit based on unlocked habitats for old saves
+var habitat_ids = ["node_pools", "node_ferns", "node_river", "node_cycads", "node_forest"]
+var unlocked_habitat_count = 0
+for habitat_id in habitat_ids:
+if habitat_id in unlocked_research_ids:
+unlocked_habitat_count += 1
+var expected_limit = 25 + (unlocked_habitat_count * 10)
+if max_dino_count < expected_limit:
+max_dino_count = expected_limit
+if DEBUG_MODE:
+print("GameManager: Migrated habitat limit to ", max_dino_count, " (", unlocked_habitat_count, " habitats)")

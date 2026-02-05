@@ -25,11 +25,18 @@ func setup(research_def: ResearchDef):
 	# IMPROVEMENT: Use the description from the linked resource if available
 	# This ensures the details match the actual item (Dino, Trait, Habitat)
 	var final_desc = research_def.description
+	var unlock_info = ""
 	
 	if research_def.unlock_species and "description" in research_def.unlock_species:
 		final_desc = research_def.unlock_species.description
+		# Add unlock info for dinosaurs
+		var dino_name = research_def.unlock_species.species_name if "species_name" in research_def.unlock_species else research_def.display_name
+		unlock_info = "\n\n[color=#88ff88]Unlock: %s[/color]" % dino_name
 	elif "unlock_trait" in research_def and research_def.unlock_trait and "description" in research_def.unlock_trait:
 		final_desc = research_def.unlock_trait.description
+		# Add unlock info for traits
+		var trait_name = research_def.unlock_trait.display_name if "display_name" in research_def.unlock_trait else research_def.display_name
+		unlock_info = "\n\n[color=#88ff88]Unlock: %s (Museum Info & Next Evolution Stage)[/color]" % trait_name
 	elif "unlock_habitat" in research_def and research_def.unlock_habitat:
 		# HabitatDefs use 'display_name', but verify just in case
 		var hab = research_def.unlock_habitat
@@ -39,8 +46,10 @@ func setup(research_def: ResearchDef):
 			final_desc = "Unlocks: " + hab.display_name
 		elif "name" in hab:
 			final_desc = "Unlocks: " + hab.name
-			
-	desc_label.text = final_desc
+		# Add unlock info for habitats
+		unlock_info = "\n\n[color=#88ff88]Unlock: +10 Dinosaur Population Limit[/color]"
+		
+	desc_label.text = final_desc + unlock_info
 	
 	if research_def.icon:
 		icon_rect.texture = research_def.icon

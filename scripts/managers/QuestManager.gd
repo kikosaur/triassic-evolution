@@ -130,6 +130,22 @@ func _recalculate_all():
 				q.current = GameManager.current_dna
 				something_changed = true
 				_check_complete(q)
+		
+		# 4. TOTAL SPAWNS (NEW)
+		elif q.data.goal_type == "total_spawned":
+			var new_count = GameManager.total_dinos_spawned
+			if q.current != new_count:
+				q.current = new_count
+				something_changed = true
+				_check_complete(q)
+		
+		# 5. TOTAL DEATHS (NEW)
+		elif q.data.goal_type == "total_died":
+			var new_count = GameManager.total_dinos_died
+			if q.current != new_count:
+				q.current = new_count
+				something_changed = true
+				_check_complete(q)
 
 	# 3. TELL THE UI TO REFRESH
 	if something_changed:

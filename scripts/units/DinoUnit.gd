@@ -153,7 +153,12 @@ func _handle_income(delta):
 	if species_data.diet == DinosaurSpecies.Diet.HERBIVORE:
 		has_food = GameManager.vegetation_density > 0
 	else:
-		has_food = GameManager.critter_density > 0
+		# Carnivores have food if critters exist OR if they can hunt herbivores
+		var prey_avail = false
+		if "_cached_herbivores" in GameManager:
+			prey_avail = GameManager._cached_herbivores.size() > 0
+			
+		has_food = GameManager.critter_density > 0 or prey_avail
 		
 	# 2. Determine Multiplier
 	var multiplier = 1.0
@@ -328,6 +333,28 @@ func die():
 		anim.modulate = Color(0.5, 0.5, 0.5) # Gray corpse
 	
 	# FIX: Auto-delete after 60 seconds to prevent lag
+	var rot_timer = get_tree().create_timer(60.0)
+	rot_timer.timeout.connect(queue_free)
+
+# NEW: Spawn as corpse for offline-dead dinosaurs
+# Called when dino died while game was closed - can still harvest fossils!
+func spawn_as_corpse():
+	is_dead = true
+	
+	# Remove from active dino group (not counted as alive)
+	if is_in_group("dinos"):
+		remove_from_group("dinos")
+	
+	# Stop passive timer if it exists
+	if passive_timer:
+		passive_timer.stop()
+	
+	# Apply death visuals immediately
+	if anim:
+		anim.stop()
+		anim.modulate = Color(0.5, 0.5, 0.5) # Gray corpse
+	
+	# Auto-delete after 60 seconds (same as normal death)
 	var rot_timer = get_tree().create_timer(60.0)
 	rot_timer.timeout.connect(queue_free)
 

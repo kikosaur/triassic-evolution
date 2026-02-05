@@ -16,20 +16,20 @@
 * [cite_start]**Source (Active):** Clicking the environment or dinosaurs[cite: 11].
 * [cite_start]**Source (Passive):** Generated every second by living dinosaurs[cite: 13].
 * **Usage:**
-    * [cite_start]**Spawning:** Buying new dinosaur units from the Lineage Tab[cite: 14].
-    * [cite_start]**Research:** Unlocking new nodes in the Phylogenetic Tree[cite: 14].
-    * [cite_start]**Habitat:** Increasing Vegetation and Critter density[cite: 15].
+	* [cite_start]**Spawning:** Buying new dinosaur units from the Lineage Tab[cite: 14].
+	* [cite_start]**Research:** Unlocking new nodes in the Phylogenetic Tree[cite: 14].
+	* [cite_start]**Habitat:** Increasing Vegetation and Critter density[cite: 15].
 
 ### [cite_start]B. Fossils (VIP / Premium Currency) [cite: 16]
 * [cite_start]**Role:** The "Hard Currency" representing rare scientific discovery[cite: 18].
 * **Source:**
-    * [cite_start]**Harvesting:** Clicking a dinosaur skeleton after death (+1 Fossil)[cite: 19].
-    * [cite_start]**Extinction:** Resetting the game grants a huge payout based on progress[cite: 20].
-    * [cite_start]**Rare Events:** Small chance to find a fossil when clicking dirt[cite: 21].
+	* [cite_start]**Harvesting:** Clicking a dinosaur skeleton after death (+1 Fossil)[cite: 19].
+	* [cite_start]**Extinction:** Resetting the game grants a huge payout based on progress[cite: 20].
+	* [cite_start]**Rare Events:** Small chance to find a fossil when clicking dirt[cite: 21].
 * **Usage:**
-    * [cite_start]**Time Warps:** Instantly skip 1 hour of game time[cite: 24].
-    * [cite_start]**Golden Eggs:** Instantly spawn a high-tier dinosaur without DNA[cite: 25].
-    * [cite_start]**Permanent Upgrades:** Buy "Global Multipliers" that persist across resets[cite: 26].
+	* [cite_start]**Time Warps:** Instantly skip 1 hour of game time[cite: 24].
+	* [cite_start]**Golden Eggs:** Instantly spawn a high-tier dinosaur without DNA[cite: 25].
+	* [cite_start]**Permanent Upgrades:** Buy "Global Multipliers" that persist across resets[cite: 26].
 
 ---
 
@@ -39,7 +39,7 @@
 2.  [cite_start]**Research:** Spend DNA to unlock traits and new species in the Tree[cite: 29].
 3.  [cite_start]**Expand:** Terraform the land (Vegetation/Critters) to support new life[cite: 30].
 4.  [cite_start]**Cycle:** Dinosaurs live, eat, and die[cite: 31].
-    * [cite_start]*Harvest:* Collect bones for Fossils[cite: 33].
+	* [cite_start]*Harvest:* Collect bones for Fossils[cite: 33].
 5.  [cite_start]**Spend VIP:** Use Fossils to skip waiting times or buy boosts[cite: 34].
 6.  [cite_start]**Extinction:** Trigger the meteor to reset the map and gain a massive Fossil reward[cite: 35].
 
@@ -62,7 +62,7 @@
 * **Diet:** Herbivores eat Vegetation. [cite_start]Carnivores eat Critters[cite: 44].
 * [cite_start]**The Desperation Rule:** If a Carnivore is hungry and Critter Density is 0%, it will hunt and kill a Herbivore unit[cite: 45].
 * [cite_start]**Environmental Mortality:** Dinosaurs have an Ideal Biome Phase[cite: 46].
-    * [cite_start]*Note:* If they live in the wrong phase (e.g., Jungle Dino in Desert), they age 3x faster and die quickly[cite: 46].
+	* [cite_start]*Note:* If they live in the wrong phase (e.g., Jungle Dino in Desert), they age 3x faster and die quickly[cite: 46].
 
 ---
 

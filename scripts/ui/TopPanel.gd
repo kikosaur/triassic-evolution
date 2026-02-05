@@ -76,9 +76,9 @@ func _update_dino_count():
 	# Optional: Include pending buffer? For UI, let's keep it simple or match strict logic
 	# matching can_spawn_dino logic:
 	var total = count + GameManager.pending_dino_load_data.size()
-	active_dino_label.text = "Active: %d/%d" % [total, GameManager.MAX_DINO_COUNT]
+	active_dino_label.text = "Active: %d/%d" % [total, GameManager.max_dino_count]
 	
-	if total >= GameManager.MAX_DINO_COUNT:
+	if total >= GameManager.max_dino_count:
 		active_dino_label.add_theme_color_override("font_color", Color.RED)
 	else:
 		active_dino_label.add_theme_color_override("font_color", Color.WHITE)

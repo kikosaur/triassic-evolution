@@ -36,7 +36,7 @@ var steps = [
 		"alignment": "bottom_left"
 	},
 	{
-		"text": "Once unlocked, buy Dinosaurs in the [b]Shop[/b].\n\nCheck their **Stats** (Income & Consumption) in the info popup before buying!",
+		"text": "Once unlocked, buy Dinosaurs in the [b]Shop[/b].\n\nCheck their [b]Stats[/b] (Income & Consumption) in the info popup before buying!",
 		"highlight": "shop_btn",
 		"alignment": "bottom_left"
 	},
@@ -56,7 +56,7 @@ var steps = [
 		"alignment": "top_right"
 	},
 	{
-		"text": "As you buy Habitat items, the world transforms!\n\n**Tip:** You must unlock [b]River[/b] and [b]Forest[/b] research nodes to advance beyond the Desert phase.",
+		"text": "As you buy Habitat items, the world transforms!\n\n[b]Tip:[/b] You must unlock [b]River[/b] and [b]Forest[/b] research nodes to advance beyond the Desert phase.",
 		"highlight": "habitat_bars",
 		"alignment": "center"
 	},

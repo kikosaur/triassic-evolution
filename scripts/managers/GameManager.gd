@@ -26,13 +26,19 @@ var critter_density: float = 0.0
 var prestige_multiplier: float = 1.0
 
 # --- LIMITS ---
-const MAX_DINO_COUNT: int = 25
+var max_dino_count: int = 25 # Dynamic: Increases when habitat research is unlocked
 
 # --- DATA TRACKING ---
 var unlocked_research_ids: Array = []
 var owned_dinosaurs: Dictionary = {}
 var tutorial_completed: bool = false
 var lifetime_purchases: Dictionary = {} # Tracks total buys for persistent pricing
+
+# --- LIFECYCLE TRACKING (For Quests) ---
+var total_dinos_spawned: int = 0 # Lifetime spawns
+var total_dinos_died: int = 0 # Lifetime deaths
+var dino_spawn_history: Array = [] # [{species: "Archosaur", timestamp: 123}]
+var dino_death_history: Array = [] # [{species: "Archosaur", timestamp: 456, cause: "old_age"}]
 
 # --- CACHED STATS (Optimization) ---
 var _cached_herbivore_dps: int = 0
@@ -215,6 +221,12 @@ func try_unlock_research(research_def: ResearchDef) -> bool:
 
 		emit_signal("research_unlocked", research_def.id)
 		
+		# --- HABITAT EXPANSION: Increase limit when unlocking habitat research ---
+		if research_def.type == ResearchDef.ResearchType.HABITAT:
+			max_dino_count += 10
+			if DEBUG_MODE:
+				print("GameManager: Habitat unlocked! New dino limit: ", max_dino_count)
+		
 		# --- BREAKTHROUGH: Spawn 1 free unit when unlocking a species ---
 		if research_def.unlock_species != null:
 			trigger_dino_spawn(research_def.unlock_species)
@@ -237,6 +249,12 @@ func try_unlock_research_with_fossils(research_def: ResearchDef) -> bool:
 		unlocked_research_ids.append(research_def.id)
 		emit_signal("research_unlocked", research_def.id)
 		
+		# --- HABITAT EXPANSION: Increase limit when unlocking habitat research ---
+		if research_def.type == ResearchDef.ResearchType.HABITAT:
+			max_dino_count += 10
+			if DEBUG_MODE:
+				print("GameManager: Habitat unlocked! New dino limit: ", max_dino_count)
+		
 		if research_def.unlock_species != null:
 			trigger_dino_spawn(research_def.unlock_species)
 		return true
@@ -251,10 +269,10 @@ func is_all_research_unlocked() -> bool:
 func can_spawn_dino() -> bool:
 	var count = get_tree().get_nodes_in_group("dinos").size()
 	# Check pending buffer too for strictness
-	if count + pending_dino_load_data.size() >= MAX_DINO_COUNT:
+	if count + pending_dino_load_data.size() >= max_dino_count:
 		# Use TOAST instead of floating text (Always Visible)
 		# Also show debug count to help user understand "24/25" confusion
-		emit_signal("toast_notification", "HABITAT FULL! (%d/%d)" % [count, MAX_DINO_COUNT], Color.RED)
+		emit_signal("toast_notification", "HABITAT FULL! (%d/%d)" % [count, max_dino_count], Color.RED)
 		return false
 	return true
 	
@@ -394,6 +412,7 @@ func get_save_dictionary() -> Dictionary:
 		"quests": QuestManager.get_save_data(),
 		"lifetime_purchases": lifetime_purchases,
 		"prestige_multiplier": prestige_multiplier,
+		"max_dino_count": max_dino_count,
 		# ---------------------
 		
 		"dinos": []
@@ -458,7 +477,23 @@ func load_save_dictionary(data: Dictionary):
 		prestige_multiplier = data["prestige_multiplier"]
 	else:
 		prestige_multiplier = 1.0
-		
+	
+	if "max_dino_count" in data:
+		max_dino_count = data["max_dino_count"]
+	else:
+		max_dino_count = 25 # Default if not in save file
+	
+		#  MIGRATION: Recalculate limit based on unlocked habitats
+	var habitat_ids = ["node_pools", "node_ferns", "node_river", "node_cycads", "node_forest"]
+	var unlocked_habitat_count = 0
+	for habitat_id in habitat_ids:
+		if habitat_id in unlocked_research_ids:
+			unlocked_habitat_count += 1
+	var expected_limit = 25 + (unlocked_habitat_count * 10)
+	if max_dino_count < expected_limit:
+		max_dino_count = expected_limit
+
+
 	if "current_year" in data:
 		current_year = str(data["current_year"]).to_int()
 		emit_signal("year_advanced", current_year)
@@ -559,7 +594,7 @@ func _calculate_offline_earnings(seconds_passed: float):
 		if DEBUG_MODE:
 			print("GameManager: Offline - Earned ", earnings, " DNA. Food consumed.")
 
-func _spawn_dino_from_save(d_data):
+func _spawn_dino_from_save(d_data, offline_seconds: float = 0.0):
 	var id = d_data["species_id"]
 	
 	if id in dino_library:
@@ -589,12 +624,35 @@ func _spawn_dino_from_save(d_data):
 			# 3. Assign Data FIRST (Prevents crash)
 			new_dino.species_data = stats
 			new_dino.position = Vector2(d_data["pos_x"], d_data["pos_y"])
-			new_dino.current_age = d_data["age"]
+			
+			# --- OFFLINE AGING ---
+			var saved_age = d_data["age"]
+			var new_age = saved_age + offline_seconds
+			var lifespan = stats.base_lifespan
+			
+			# Check if dino died while offline
+			var died_offline = new_age >= lifespan
+			
+			if died_offline:
+				# Set age to lifespan (for debug display)
+				new_dino.current_age = lifespan
+				if DEBUG_MODE:
+					print("GameManager: ", stats.species_name, " died offline (age: ", saved_age, " + ", offline_seconds, "s = ", new_age, " >= ", lifespan, ")")
+			else:
+				new_dino.current_age = new_age
 			
 			# 4. Add to Scene
 			container.add_child(new_dino)
 			
-			# 3. EXTRA SAFETY: Check if animations exist before playing
+			# --- SPAWN AS CORPSE IF DIED OFFLINE ---
+			if died_offline:
+				# Call spawn_as_corpse AFTER adding to tree (needs tree access for timer)
+				if new_dino.has_method("spawn_as_corpse"):
+					new_dino.spawn_as_corpse()
+				# Don't notify spawn - this is a corpse, not a living dino
+				return
+			
+			# 5. EXTRA SAFETY: Check if animations exist before playing
 			if new_dino.has_node("AnimatedSprite"):
 				var anim = new_dino.get_node("AnimatedSprite")
 				
@@ -606,7 +664,7 @@ func _spawn_dino_from_save(d_data):
 					if anim.sprite_frames.has_animation("idle"):
 						anim.play("idle")
 
-			# 4. QUEST SYSTEM SIGNAL (Crucial for tracking!)
+			# 6. QUEST SYSTEM SIGNAL (Crucial for tracking!)
 			notify_dino_spawned(new_dino)
 
 	else:
@@ -627,6 +685,21 @@ func process_pending_dinos():
 		_spawn_dino_from_save(d_data)
 
 func notify_dino_spawned(dino_node: Node):
+	# Track lifecycle stats for quests
+	total_dinos_spawned += 1
+	var species_name = ""
+	if "species_data" in dino_node and dino_node.species_data:
+		species_name = dino_node.species_data.species_name
+	
+	dino_spawn_history.append({
+		"species": species_name,
+		"timestamp": Time.get_unix_time_from_system()
+	})
+	
+	# Keep history limited to last 100 entries
+	if dino_spawn_history.size() > 100:
+		dino_spawn_history.pop_front()
+	
 	emit_signal("dino_spawned", dino_node)
 	
 	# Connect to death/removal to keep cache fresh
@@ -637,6 +710,28 @@ func notify_dino_spawned(dino_node: Node):
 	_recalculate_cache()
 
 func notify_dino_died(dino_node: Node):
+	# Track lifecycle stats for quests
+	total_dinos_died += 1
+	var species_name = ""
+	var death_cause = "unknown"
+	
+	if "species_data" in dino_node and dino_node.species_data:
+		species_name = dino_node.species_data.species_name
+	
+	# Try to determine death cause (if DinoUnit has it)
+	if "last_death_cause" in dino_node:
+		death_cause = dino_node.last_death_cause
+	
+	dino_death_history.append({
+		"species": species_name,
+		"timestamp": Time.get_unix_time_from_system(),
+		"cause": death_cause
+	})
+	
+	# Keep history limited to last 100 entries
+	if dino_death_history.size() > 100:
+		dino_death_history.pop_front()
+	
 	emit_signal("dinosaur_died", dino_node)
 	_recalculate_cache()
 
@@ -704,7 +799,9 @@ func get_total_dna_per_second() -> int:
 	var total = 0
 	if vegetation_density > 0:
 		total += _cached_herbivore_dps
-	if critter_density > 0:
+		
+	# LOGIC UPDATE: Carnivores produce DNA if Critters > 0 OR if they can hunt Herbivores
+	if critter_density > 0 or _cached_herbivores.size() > 0:
 		total += _cached_carnivore_dps
 	return total
 

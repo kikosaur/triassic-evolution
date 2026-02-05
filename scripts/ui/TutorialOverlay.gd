@@ -34,23 +34,24 @@ func _on_step_changed(_index, data):
 	var align_mode = data.get("alignment", "center")
 	_align_panel(align_mode)
 
-func _align_panel(mode: String):
-	# Simple presets for Panel position using Anchors
+func _align_panel(_mode: String):
+	# Always position at bottom-center for consistency
 	var panel = $Panel
+	var vp_size = get_viewport_rect().size
 	
-	if mode == "top_center":
-		panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE, Control.PRESET_MODE_KEEP_WIDTH)
-		panel.position.y = 150 # Below Top Bar
-	elif mode == "bottom_left":
-		panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT, Control.PRESET_MODE_KEEP_WIDTH)
-		panel.position.y = get_viewport_rect().size.y - 300
-		panel.position.x = 50
-	elif mode == "top_right":
-		panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_KEEP_WIDTH)
-		panel.position.y = 150
-		panel.position.x = get_viewport_rect().size.x - panel.size.x - 50
-	else: # Center
-		panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER, Control.PRESET_MODE_KEEP_SIZE)
+	# Calculate responsive width (80% of viewport, clamped)
+	var panel_width = clamp(vp_size.x * 0.8, 300, 800)
+	var panel_height = 200
+	
+	# Bottom Center (consistent position for all steps)
+	panel.anchor_left = 0.5
+	panel.anchor_right = 0.5
+	panel.anchor_top = 1.0
+	panel.anchor_bottom = 1.0
+	panel.offset_left = - panel_width / 2
+	panel.offset_right = panel_width / 2
+	panel.offset_top = - panel_height - 50
+	panel.offset_bottom = -50
 
 func _move_highlight(id: String):
 	# Default: Center screen if not found

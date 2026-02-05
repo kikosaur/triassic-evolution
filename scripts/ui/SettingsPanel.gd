@@ -31,16 +31,16 @@ Buy habitat decorations to boost the efficiency of your dinosaurs.
 """
 
 const TERMS_TEXT = """
-[b]TRIASSIC EVOLUTION - TERMS OF USE[/b]
+[b]TRIASSIC DINOSAUR SIMULATION - TERMS OF USE[/b]
 
 [b]1. Introduction[/b]
-Welcome to Triassic Evolution. By playing this game, you join a community of dinosaur enthusiasts!
+Welcome to Triassic Dinosaur Simulation. By playing this game, you join a community of dinosaur enthusiasts!
 
 [b]2. Privacy Policy[/b]
 This application is a student project and does NOT collect, store, or share any personal identifiable information (PII). All game data is stored locally on your device.
 
 [b]3. Fair Play[/b]
-Cheating, hacking, or exploiting bugs to gain unfair advantages (e.g., infinite DNA glitches) removes the fun of evolution. Play fair!
+Cheating, hacking, or exploiting bugs to gain unfair advantages (e.g., infinite DNA glitches) removes the fun of Simulation. Play fair!
 
 [b]4. Intellectual Property[/b]
 All assets, including pixel art, music, and code, are original works or licensed for use. You may share screenshots and videos of your gameplay!
@@ -48,7 +48,7 @@ All assets, including pixel art, music, and code, are original works or licensed
 [b]5. Disclaimer[/b]
 While we strive for accuracy, this is a simulation game. Evolutionary timelines and biological traits are stylized for gameplay purposes and may not reflect 100% scientific accuracy.
 
-[i]Version 2.1.0 - The Evolution Update[/i]
+[i]Version 2.1.2 - The Simulation Update[/i]
 """
 
 func _ready():
