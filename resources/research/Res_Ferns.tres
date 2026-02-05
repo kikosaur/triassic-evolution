@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://bjm8e6r15of0n"]
 
 [ext_resource type="Texture2D" uid="uid://cxds7kiutbgwv" path="res://assets/habitat_traits/H02_Fern_Scrubland.png" id="1_a8we3"]
-[ext_resource type="Resource" uid="uid://ccrmcdysa765t" path="res://resources/research/Res_Eoraptor.tres" id="2_23fqb"]
+[ext_resource type="Resource" uid="uid://ckainrtb3skft" path="res://resources/research/Res_Panphagia.tres" id="2_23fqb"]
 [ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_reiaf"]
 [ext_resource type="Resource" path="res://resources/habitats/Habitat_Ferns.tres" id="4_habitat"]
 

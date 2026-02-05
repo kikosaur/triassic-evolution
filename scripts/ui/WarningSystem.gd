@@ -66,11 +66,14 @@ func _process(delta):
 		issues.append(msg)
 		
 	if GameManager.critter_density <= 0:
-		var msg = "[color=red]CRITICAL:[/color] Critters Depleted! (0%)"
 		if has_carnivores:
-			var time_str = _fmt_time.call(min_carnivore_time)
-			msg += "\nThe Carnivores will die in %s" % time_str
-		issues.append(msg)
+			if has_herbivores:
+				issues.append("[color=orange]WARNING:[/color] Critters Depleted!\nWatch out! Your carnivores will start eating your herbivores.")
+			else:
+				var time_str = _fmt_time.call(min_carnivore_time)
+				issues.append("[color=red]CRITICAL:[/color] Critters Depleted! (0%%)\nThe Carnivores will die in %s" % time_str)
+		else:
+			issues.append("[color=red]CRITICAL:[/color] Critters Depleted! (0%)")
 		
 	# 3. Check Biome Stress
 	var stressed_dinos = []

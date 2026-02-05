@@ -179,6 +179,17 @@ func _process(delta):
 		_handle_movement(delta)
 
 func _handle_starvation(delta):
+	# SPECIAL RULE: Carnivores do NOT starve if they have prey (Herbivores)
+	# even if Critters are 0%. They will hunt instead.
+	if species_data.diet == DinosaurSpecies.Diet.CARNIVORE:
+		if GameManager.critter_density <= 0:
+			if GameManager.has_living_herbivores():
+				# Taking no damage/timer reduction because they are hunting
+				# Reset loop so they don't get stuck? 
+				# Actually, just pausing the starvation timer is enough.
+				# They will eventually eat or if herbivores die, then they starve.
+				return
+
 	starvation_timer -= delta
 	
 	# Visual Warning only when Critical (< 60s)
@@ -524,7 +535,18 @@ func _is_click_on_sprite(mouse_global_pos: Vector2) -> bool:
 	
 	# 3. Calculate the box (Assuming the sprite is Centered)
 	var size = tex.get_size()
-	# If your sprite is centered (default), the box goes from -width/2 to +width/2
-	var rect = Rect2(-size / 2, size)
+	
+	# IMPROVEMENT: Expand hit area
+	var buffer = 10.0 # General padding
+	
+	# Make corpses MUCH easier to click (User Request)
+	if is_dead:
+		buffer = 40.0
+		
+	# Expand the rect
+	var expanded_size = size + Vector2(buffer * 2, buffer * 2)
+	var pos_offset = - size / 2 - Vector2(buffer, buffer)
+	
+	var rect = Rect2(pos_offset, expanded_size)
 	
 	return rect.has_point(local_pos)

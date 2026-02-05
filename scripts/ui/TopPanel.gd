@@ -153,3 +153,45 @@ func _on_fossil_section_input(event: InputEvent):
 				_on_fossil_button_down()
 			else:
 				_on_fossil_button_up()
+
+# --- TOAST NOTIFICATION HANDLER ---
+func _on_toast_notification(text: String, color: Color):
+	var label = Label.new()
+	label.text = text
+	label.add_theme_color_override("font_color", color)
+	
+	# Background Style
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.1, 0.1, 0.1, 0.9) # Dark layout
+	style.corner_radius_top_left = 8
+	style.corner_radius_top_right = 8
+	style.corner_radius_bottom_left = 8
+	style.corner_radius_bottom_right = 8
+	style.content_margin_left = 20
+	style.content_margin_right = 20
+	style.content_margin_top = 10
+	style.content_margin_bottom = 10
+	label.add_theme_stylebox_override("normal", style)
+	
+	# Visibility Settings
+	label.z_index = 4096 # Stay on top of everything
+	
+	# Add to scene
+	add_child(label)
+	
+	# Positioning (Center Screen, slightly up)
+	# Defer position set until size is calculated (next frame usually, or call reset_size)
+	label.reset_size()
+	var vp_size = get_viewport_rect().size
+	label.position = Vector2(
+		(vp_size.x - label.size.x) / 2.0,
+		(vp_size.y / 2.0) - 100 # Slightly above center
+	)
+	
+	# Animation
+	label.modulate.a = 0.0
+	var tween = create_tween()
+	tween.tween_property(label, "modulate:a", 1.0, 0.3)
+	tween.tween_interval(2.0) # Stay visible
+	tween.tween_property(label, "modulate:a", 0.0, 0.5)
+	tween.tween_callback(label.queue_free)

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ResearchDef" load_steps=5 format=3 uid="uid://dbp8euycw0w57"]
 
 [ext_resource type="Texture2D" uid="uid://ksnh5hdlfxt4" path="res://assets/habitat_traits/H01_Ephemeral_Pools.png" id="1_u2cus"]
-[ext_resource type="Resource" uid="uid://cg54mtrh5wsin" path="res://resources/research/Res_SerratedTeeth.tres" id="2_fixed"]
+[ext_resource type="Resource" uid="uid://dscotii4shv6t" path="res://resources/research/Res_Herrerasaurus.tres" id="2_fixed"]
 [ext_resource type="Script" uid="uid://csxuo10krn33h" path="res://scripts/resources/ResearchDef.gd" id="3_1ybv1"]
 [ext_resource type="Resource" path="res://resources/habitats/Habitat_Pools.tres" id="4_habitat"]
 

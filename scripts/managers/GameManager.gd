@@ -355,24 +355,31 @@ func get_nearest_herbivore(hunter_position: Vector2) -> Node2D:
 				
 	return nearest_prey
 
+func has_living_herbivores() -> bool:
+	return _cached_herbivores.size() > 0
+
 func reset_game_state():
 	if DEBUG_MODE:
 		print("GameManager: Resetting game state...")
 		
 	# 1. Reset Economy
 	current_dna = 0
-	fossils = 0
+	# fossils = 0  <-- USER REQUEST: Fossils (Prestige) must REMAIN
 	vegetation_density = 0.0
 	critter_density = 0.0
 	lifetime_purchases.clear()
+	max_dino_count = 25 # Reset Limit (Requested)
 	
 	# 2. Reset Research (Keep Starter Logic)
 	unlocked_research_ids.clear()
 	unlocked_research_ids.append("node_archosaur")
 	
-	# 3. Clear Dinosaurs
+	# 3. Clear Dinosaurs (Active & Buffer)
 	get_tree().call_group("dinos", "queue_free")
 	owned_dinosaurs.clear()
+	pending_dino_load_data.clear() # Fix: Clear pending buffer
+	dino_spawn_history.clear()
+	dino_death_history.clear()
 	
 	# 4. Reset Quests
 	QuestManager.reset_quests()
@@ -390,10 +397,30 @@ func reset_game_state():
 	# 7. CRITICAL FIX: Save the empty state immediately!
 	# Otherwise, reloading the game will load the OLD save file.
 	var empty_state = get_save_dictionary()
+	empty_state["dinos"] = [] # FORCE EMPTY to avoid race condition with queue_free
+	
 	AuthManager.save_game_to_cloud(empty_state)
 	
 	if DEBUG_MODE:
 		print("GameManager: Reset state saved to cloud.")
+		
+	# 8. VERIFICATION (Runs next frame to allow queue_free to finish)
+	get_tree().create_timer(0.1).timeout.connect(_debug_verify_reset)
+
+func _debug_verify_reset():
+	if not DEBUG_MODE: return
+	
+	print("\n--- RESET VERIFICATION ---")
+	print("DNA: ", current_dna, " (Expected: 0)")
+	print("Fossils: ", fossils, " (Expected: Preserved/Non-Zero)")
+	
+	var dino_count = get_tree().get_nodes_in_group("dinos").size()
+	print("Active Dinos: ", dino_count, " (Expected: 0)")
+	
+	print("Research: ", unlocked_research_ids.size(), " (Expected: 1 - 'node_archosaur')")
+	print("Purchases: ", lifetime_purchases.size(), " (Expected: 0)")
+	print("History: ", dino_spawn_history.size(), " (Expected: 0)")
+	print("--------------------------\n")
 
 
 func get_save_dictionary() -> Dictionary:
@@ -517,8 +544,23 @@ func load_save_dictionary(data: Dictionary):
 		var current_time = Time.get_unix_time_from_system()
 		var seconds_passed = current_time - saved_time
 		
-		if seconds_passed > 60: # Only count if gone for more than 1 minute
+		if seconds_passed > 10: # Lowered to 10s for testing (was 60)
+			print("GameManager: Offline for ", seconds_passed, "s. Calculating earnings...")
 			_calculate_offline_earnings(seconds_passed)
+			
+	# 1. IMMEDIATE UPDATE (Fastest possible feedback)
+	emit_signal("habitat_updated", vegetation_density, critter_density)
+	emit_signal("dna_changed", current_dna)
+	emit_signal("fossils_changed", fossils)
+	_check_win_condition()
+
+	# 2. SAFETY BACKUP (In case this ran during a scene transition)
+	get_tree().create_timer(0.1).timeout.connect(func():
+		emit_signal("habitat_updated", vegetation_density, critter_density)
+		emit_signal("dna_changed", current_dna)
+		emit_signal("fossils_changed", fossils)
+		_check_win_condition()
+	)
 			
 func _calculate_offline_earnings(seconds_passed: float):
 	# 1. Cap time to 24 hours
@@ -535,12 +577,16 @@ func _calculate_offline_earnings(seconds_passed: float):
 	var all_dinos = get_tree().get_nodes_in_group("dinos")
 	for dino in all_dinos:
 		if not dino.is_dead and dino.species_data:
+			var rate = dino.species_data.consumption_rate if dino.species_data.consumption_rate != null else 0.05
+			# MULTIPLIER: 0.05 (User Request: Drastically slow down offline consumption)
+			rate *= 0.05
+			
 			if dino.species_data.diet == 0: # Herbivore
 				herb_dps += dino.species_data.passive_dna_yield
-				herb_consumption += 0.002
+				herb_consumption += rate
 			else: # Carnivore
 				carn_dps += dino.species_data.passive_dna_yield
-				carn_consumption += 0.002
+				carn_consumption += rate
 				
 	# 3. ALSO CHECK BUFFERED DINOS (Critical for loading screen)
 	for d_data in pending_dino_load_data:
@@ -550,12 +596,16 @@ func _calculate_offline_earnings(seconds_passed: float):
 			# Load resource just for stats (Cached by Godot usually)
 			var species_res = load(path)
 			if species_res:
+				var rate = species_res.consumption_rate if species_res.consumption_rate != null else 0.05
+				# MULTIPLIER: 0.05 (Consistent with above)
+				rate *= 0.05
+				
 				if species_res.diet == 0: # Herbivore
 					herb_dps += species_res.passive_dna_yield
-					herb_consumption += 0.002
+					herb_consumption += rate
 				else: # Carnivore
 					carn_dps += species_res.passive_dna_yield
-					carn_consumption += 0.002
+					carn_consumption += rate
 	
 	# 3. Calculate Valid Time (Starvation limit)
 	var time_herb = seconds_passed

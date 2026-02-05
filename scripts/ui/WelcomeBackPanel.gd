@@ -28,5 +28,6 @@ func _on_earnings(amount, seconds):
 	else:
 		time_label.text = "Away for " + str(minutes) + " minutes"
 		
-	money_label.text = "+ " + str(amount) + " DNA"
+	money_label.text = "+ " + GameManager.format_number(amount) + " DNA"
+	print("WelcomeBackPanel: Showing! Earnings: ", amount, ", Time: ", seconds)
 	visible = true
