@@ -27,6 +27,10 @@ var base_scale: Vector2 = Vector2.ONE
 var hunger: float = 0.0
 var target_prey: Node2D = null
 
+# Starvation
+var starvation_timer: float = 300.0 # 5 Minutes in seconds
+var starvation_label: Label = null
+
 # Components
 @onready var anim = $AnimatedSprite # CHANGED: Now references AnimatedSprite2D
 var passive_timer: Timer
@@ -134,16 +138,78 @@ func _ready():
 	
 	_pick_random_destination()
 	_setup_passive_timer()
+	_setup_starvation_ui()
+
+func _setup_starvation_ui():
+	starvation_label = Label.new()
+	starvation_label.text = "!"
+	starvation_label.visible = false
+	
+	# robust Alignment settings
+	starvation_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	starvation_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	starvation_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	starvation_label.grow_vertical = Control.GROW_DIRECTION_BOTH
+	
+	# High Visibility
+	starvation_label.z_index = 4096
+	
+	# Styling
+	var settings = LabelSettings.new()
+	settings.font_size = 32
+	settings.outline_size = 4
+	settings.outline_color = Color.BLACK
+	settings.font_color = Color.RED
+	starvation_label.label_settings = settings
+	
+	# Position above dino (Assuming dino center is 0,0)
+	starvation_label.position = Vector2(0, -100)
+	
+	add_child(starvation_label)
 
 func _process(delta):
 	if is_dead: return
 	
 	_handle_aging(delta)
 	_handle_income(delta) # NEW: Continuous Income
+	_handle_starvation(delta) # NEW: Starvation Logic
 	
 	# Only move if not busy eating
 	if not is_eating:
 		_handle_movement(delta)
+
+func _handle_starvation(delta):
+	starvation_timer -= delta
+	
+	# Visual Warning only when Critical (< 60s)
+	if starvation_timer <= 60.0:
+		if not starvation_label.visible:
+			starvation_label.visible = true
+			
+		# Simple Icon, no countdown text (moved to panel)
+		starvation_label.text = "!"
+		
+		# CRITICAL: Update Pivot for correct center-scaling
+		starvation_label.pivot_offset = starvation_label.size / 2.0
+		
+		# Urgent Pulse Animation
+		var time = Time.get_ticks_msec() / 200.0
+		
+		# Color: Flash Red/White
+		var pulse_color = (sin(time) + 1.0) * 0.5
+		starvation_label.modulate = Color(1.0, pulse_color, pulse_color)
+		
+		# Scale: Heartbeat
+		var pulse_scale = 1.0 + (sin(time * 3.0) * 0.2)
+		starvation_label.scale = Vector2(pulse_scale, pulse_scale)
+		
+	else:
+		if starvation_label.visible:
+			starvation_label.visible = false
+			
+	# Death
+	if starvation_timer <= 0:
+		die()
 
 func _handle_income(delta):
 	if not species_data: return
@@ -243,6 +309,7 @@ func _on_tick():
 				_play_eat_animation()
 				# Trigger Bonus (No direct income here anymore)
 				eating_bonus_timer = EATING_BONUS_DURATION
+				starvation_timer = 300.0 # RESET STARVATION
 		else:
 			# Vegetation is 0%. Stop eating, just walk/idle.
 			ate_food = false
@@ -255,6 +322,7 @@ func _on_tick():
 			if ate_food:
 				# Trigger Bonus (No direct income here anymore)
 				eating_bonus_timer = EATING_BONUS_DURATION
+				starvation_timer = 300.0 # RESET STARVATION
 				target_prey = null # Satisfied, stop hunting
 		else:
 			# Critters are 0%. Trigger HUNT MODE.
@@ -291,6 +359,7 @@ func _eat_prey(prey):
 		hunger = 0.0
 		target_prey = null
 		_play_eat_animation()
+		starvation_timer = 300.0 # RESET STARVATION
 		_pick_random_destination()
 
 func _pick_random_destination():
@@ -306,6 +375,7 @@ func die():
 	is_dead = true
 	
 	if passive_timer: passive_timer.stop()
+	if starvation_label: starvation_label.visible = false # Hide warning
 	
 	# IMPROVED DEATH LOGIC
 	# OPTIMIZATION: Remove from group immediately so logic loops skip this corpse

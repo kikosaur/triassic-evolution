@@ -16,12 +16,10 @@ func _ready():
 	visible = false
 	popup.visible = false
 	
-	# Connect Button for hover/click
-	# Connect Button for click only (Mobile friendly & User Request)
+	# Connect Button for Hold-to-View (User Request)
 	var btn = $Button
-	# btn.mouse_entered.connect(_on_hover_start) # Removed for Click-Only
-	# btn.mouse_exited.connect(_on_hover_end) # Removed for Click-Only
-	btn.pressed.connect(_on_click)
+	btn.button_down.connect(_on_press_start)
+	btn.button_up.connect(_on_press_end)
 
 	# Listen for deaths
 	if GameManager.has_signal("dinosaur_died"):
@@ -30,21 +28,58 @@ func _ready():
 func _process(delta):
 	issues.clear()
 	
-	# 1. Check Food Shortage
-	if GameManager.vegetation_density <= 0:
-		issues.append("[color=red]CRITICAL:[/color] Vegetation Depleted! (0%)")
-		
-	if GameManager.critter_density <= 0:
-		issues.append("[color=red]CRITICAL:[/color] Critters Depleted! (0%)")
-		
-	# 2. Check Biome Stress
-	var stressed_dinos = []
+	# 1. Calculate Starvation Times First
+	var min_herbivore_time = 9999.0
+	var min_carnivore_time = 9999.0
+	var has_herbivores = false
+	var has_carnivores = false
+	
 	var all_dinos = get_tree().get_nodes_in_group("dinos")
 	for dino in all_dinos:
 		if is_instance_valid(dino) and not dino.is_dead and dino.species_data:
+			if "starvation_timer" in dino:
+				var t = dino.starvation_timer
+				var diet = dino.species_data.diet
+				
+				if diet == DinosaurSpecies.Diet.HERBIVORE:
+					has_herbivores = true
+					if t < min_herbivore_time:
+						min_herbivore_time = t
+				else:
+					has_carnivores = true
+					if t < min_carnivore_time:
+						min_carnivore_time = t
+
+	# Helper to format time
+	var _fmt_time = func(val: float) -> String:
+		var t_int = max(0, int(val))
+		var mins = t_int / 60
+		var secs = t_int % 60
+		return "%02d:%02d" % [mins, secs]
+
+	# 2. Check Food Shortage + Add Death Timer
+	if GameManager.vegetation_density <= 0:
+		var msg = "[color=red]CRITICAL:[/color] Vegetation Depleted! (0%)"
+		if has_herbivores:
+			var time_str = _fmt_time.call(min_herbivore_time)
+			msg += "\nThe Herbivores will die in %s" % time_str
+		issues.append(msg)
+		
+	if GameManager.critter_density <= 0:
+		var msg = "[color=red]CRITICAL:[/color] Critters Depleted! (0%)"
+		if has_carnivores:
+			var time_str = _fmt_time.call(min_carnivore_time)
+			msg += "\nThe Carnivores will die in %s" % time_str
+		issues.append(msg)
+		
+	# 3. Check Biome Stress
+	var stressed_dinos = []
+	# (dinos iteration removed here since we did it above, but logic requires check)
+	# Re-using the loop above would be efficient but let's keep it simple for now or merge
+	for dino in all_dinos:
+		if is_instance_valid(dino) and not dino.is_dead and dino.species_data:
 			# Check age multiplier (tolerance proxy)
-			# We need to access the variable safely
-			if "age_multiplier" in dino and dino.age_multiplier > 1.1: # 1.1 buffer
+			if "age_multiplier" in dino and dino.age_multiplier > 1.1:
 				var s_name = dino.species_data.species_name
 				if not s_name in stressed_dinos:
 					stressed_dinos.append(s_name)
@@ -53,7 +88,9 @@ func _process(delta):
 		var list_str = ", ".join(stressed_dinos)
 		issues.append("[color=orange]STRESS:[/color] Biome Mismatch:\n" + list_str)
 
-	# 3. Recent Deaths
+	# 4. Recent Deaths
+
+	# 4. Recent Deaths
 	if recent_deaths > 0:
 		# Decay death warning over time
 		death_timer -= delta
@@ -84,12 +121,8 @@ func _on_dino_died(_dino):
 	recent_deaths += 1
 	death_timer = 10.0 # Warning stays for 10 seconds after a death
 
-func _on_hover_start():
+func _on_press_start():
 	popup.visible = true
 	
-func _on_hover_end():
+func _on_press_end():
 	popup.visible = false
-
-func _on_click():
-	# Allow clicking to toggle the info popup
-	popup.visible = not popup.visible

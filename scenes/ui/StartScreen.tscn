@@ -43,15 +43,6 @@ offset_bottom = 89.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ClickZone" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-flat = true
-
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
 layout_mode = 2
 texture = ExtResource("3_1wlrw")
@@ -62,6 +53,15 @@ theme_override_fonts/font = ExtResource("4_nwhq5")
 theme_override_font_sizes/font_size = 20
 text = "- Press Anywhere to Start -"
 horizontal_alignment = 1
+
+[node name="ClickZone" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
 
 [node name="AuthenticationScreen" parent="." instance=ExtResource("5_new_auth")]
 visible = false
