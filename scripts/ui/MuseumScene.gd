@@ -242,7 +242,7 @@ var trait_source_map = {
 var habitat_inhabitants_map = {
 	"Ephemeral Pools": "Archosaur, Lagosuchus, Eoraptor",
 	"Fern Plains": "Archosaur, Lagosuchus, Eoraptor",
-	"Cycad Grove": "Herrerasaurus, Panphagia, Coelophysis",
-	"River Delta": "Herrerasaurus, Panphagia, Coelophysis",
-	"Conifer Forest": "Liliensternus, Plateosaurus, Riojasaurus"
+	"Cycad Grove": "Herrerasaurus, Panphagia, Coelophysis, Liliensternus, Plateosaurus",
+	"River Delta": "Herrerasaurus, Panphagia, Coelophysis, Liliensternus, Plateosaurus",
+	"Conifer Forest": "Riojasaurus"
 }

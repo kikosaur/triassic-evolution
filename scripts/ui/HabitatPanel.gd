@@ -41,8 +41,8 @@ func _on_update(veg, critter):
 
 [color=cyan]How to Increase:[/color]
 • Buy from Habitat Shop
-• Fern Bundle (+10%%)
-• Cycad Crate (+50%%)
+• Fern Bundle
+• Cycad Crate
 
 [color=yellow]Current Density:[/color] %d%%""" % int(veg)
 	
@@ -58,8 +58,8 @@ func _on_update(veg, critter):
 
 [color=cyan]How to Increase:[/color]
 • Buy from Habitat Shop
-• Jar of Beetles (+15%%)
-• Dragonfly Swarm (+60%%)
+• Jar of Beetles
+• Dragonfly Swarm
 
 [color=orange]WARNING:[/color]
 If critters run out, carnivores will hunt your herbivores!
